@@ -1,0 +1,23 @@
+{
+    "jobs": "Jobs",
+    "company": "Company",
+    "subscription": "Subscription",
+    "profile": "Profile",
+    "search_home": "Search job or company...",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "forgot_pass": "Forgot password?",
+    "remember": "Remember me",
+    "LOGIN": "LOGIN",
+    "REGISTER": "REGISTER",
+    "continue": "Or continue with",
+    "confirm": "Confirm Password",
+    "country": "Country",
+    "enter_pass": "Enter your password",
+    "select_country": "Select country",
+    "already_account": "Already have an account? ",
+    "no_account": "Don't have an account? "
+}

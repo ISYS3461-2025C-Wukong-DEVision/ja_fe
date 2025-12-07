@@ -6,12 +6,12 @@ import MainLayout from "../layouts/MainLayout";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 
-import Home from "../pages/home";
-import Job from "../pages/job";
-import Company from "../pages/company";
-import Subscription from "../pages/subscription";
-import Profile from "../pages/profile";
-import Notification from "../pages/notification";
+// import Home from "../pages/home";
+// import Job from "../pages/job/index";
+// import Company from "../pages/company/index";
+// import Subscription from "../pages/subscription/index";
+// import Profile from "../pages/profile/index";
+// import Notification from "../pages/notification/index";
 
 const AppRouter = () => {
   return (
@@ -26,12 +26,12 @@ const AppRouter = () => {
 
         {/* MAIN LAYOUT */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/job" element={<Job />} />
-          <Route path="/company" element={<Company />} />
-          <Route path="/subscription" element={<Subscription />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/notification" element={<Notification />} />
+          <Route path="/" element={<>home</>} />
+          <Route path="/job" element={<>job</>} />
+          <Route path="/company" element={<>company</>} />
+          <Route path="/subscription" element={<>subscription</>} />
+          <Route path="/profile" element={<>profile</>} />
+          <Route path="/notification" element={<>notification</>} />
         </Route>
 
       </Routes>

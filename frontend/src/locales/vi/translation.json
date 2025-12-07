@@ -1,0 +1,23 @@
+{
+    "jobs": "Công việc",
+    "company": "Công ty",
+    "subscription": "Đăng ký",
+    "profile": "Hồ sơ",
+    "search_home": "Tìm kiếm công việc hoặc công ty...",
+    "login": "Đăng nhập",
+    "register": "Đăng ký",
+    "logout": "Đăng xuất",
+    "email": "Địa chỉ email",
+    "password": "Mật khẩu",
+    "forgot_pass": "Quên mật khẩu?",
+    "remember": "Ghi nhớ đăng nhập",
+    "LOGIN": "ĐĂNG NHẬP",
+    "REGISTER": "ĐĂNG KÝ",
+    "continue": "Hoặc tiếp tục với",
+    "confirm": "Xác nhận mật khẩu",
+    "country": "Quốc gia",
+    "enter_pass": "Nhập mật khẩu của bạn",
+    "select_country": "Chọn quốc gia",
+    "already_account": "Đã có tài khoản? ",
+    "no_account": "Chưa có tài khoản? "
+}
