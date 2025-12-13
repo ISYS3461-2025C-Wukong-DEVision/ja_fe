@@ -6,12 +6,16 @@ export default {
   ],
   theme: {
     extend: {
+      // Màu sắc tùy chỉnh
       colors: {
         primary: {
           DEFAULT: '#9496FF', //tím
+          extraDark: '#000399',
           dark: '#6062F9',  //tím đậm
+          light: '#A9ABFF', 
         },
       },
+      // Font chữ tùy chỉnh
       fontFamily: {
         allerta: ['Allerta Stencil', 'sans-serif'],
       },
@@ -19,6 +23,7 @@ export default {
   },
   plugins: [
     require('@tailwindcss/forms'),
+    require('@tailwindcss/line-clamp'),
   ],
 }
 

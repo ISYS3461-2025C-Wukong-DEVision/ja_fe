@@ -1,6 +1,7 @@
 // src/components/auth/LoginForm.jsx
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import AuthInput from '../common/authInput';
 
 const LoginForm = () => {
     const { t } = useTranslation();
@@ -23,48 +24,34 @@ const LoginForm = () => {
             <form className='w-[350px]' onSubmit={handleSubmit}>
                 {/* Trường Email */}
                 <div>
-                <label 
-                    htmlFor="email" 
-                    className="block text-sm font-medium text-primary"
-                >
-                    {t('email')}
-                </label>
-                <div className="mt-1">
-                    <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="appearance-none block w-full px-3 py-2 rounded-sm bg-primary/50 shadow-sm placeholder-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-700 border border-primary/50"
-                    placeholder="abc@example.com"
+                    <AuthInput
+                        label="email"
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required={true}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder={"abc@example.com"}
+                        t={t('email')}
                     />
-                </div>
                 </div>
 
                 {/* Trường Mật khẩu */}
                 <div className='mt-6'>
-                <label 
-                    htmlFor="password" 
-                    className="block text-sm font-medium text-primary"
-                >
-                    {t('password')}
-                </label>
-                <div className="mt-1">
-                    <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="appearance-none block w-full px-3 py-2 border border-primary/50 bg-primary/50 rounded-sm shadow-sm placeholder-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700"
-                    placeholder={t('enter_pass')}
+                    <AuthInput
+                        label="password"
+                        id="password"
+                        name="password"
+                        type="password"
+                        autoComplete="current-password"
+                        required={true}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder={t('enter_pass')}
+                        t={t('password')}
                     />
-                </div>
                 </div>
                 {/* Liên kết Quên mật khẩu & remember */}
                 <div className="flex items-center justify-between mt-1">

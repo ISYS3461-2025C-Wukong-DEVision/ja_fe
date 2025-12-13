@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import AuthInput from '../common/authInput';
 
 const RegisterForm = () => {
     const { t } = useTranslation();
@@ -28,71 +29,50 @@ const RegisterForm = () => {
             <form className='w-[350px]' onSubmit={handleSubmit}>
                 {/* Trường Email */}
                 <div>
-                <label 
-                    htmlFor="email" 
-                    className="block text-sm font-medium text-primary"
-                >
-                    {t('email')}
-                </label>
-                <div className="mt-1">
-                    <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="appearance-none block w-full px-3 py-2 rounded-sm bg-primary/50 shadow-sm placeholder-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-700 border border-primary/50"
-                    placeholder="abc@example.com"
+                    <AuthInput
+                        label="email"
+                        id="email"
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        required={true}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder={"abc@expample.com"}
+                        t={t('email')}
                     />
-                </div>
                 </div>
 
                 {/* Trường Mật khẩu */}
                 <div className='mt-6'>
-                    <label 
-                        htmlFor="password" 
-                        className="block text-sm font-medium text-primary"
-                    >
-                        {t('password')}
-                    </label>
-                    <div className="mt-1">
-                        <input
+                    <AuthInput
+                        label="password"
                         id="password"
                         name="password"
                         type="password"
                         autoComplete="current-password"
-                        required
+                        required={true}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="appearance-none block w-full px-3 py-2 border border-primary/50 bg-primary/50 rounded-sm shadow-sm placeholder-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700"
                         placeholder={t('enter_pass')}
-                        />
-                    </div>
+                        t={t('password')}
+                    />
                 </div>
                 
                 {/* Trường Lập Lại Mật khẩu */}
                 <div className='mt-6'>
-                    <label 
-                        htmlFor="password" 
-                        className="block text-sm font-medium text-primary"
-                    >
-                        {t('confirm')}
-                    </label>
-                    <div className="mt-1">
-                        <input
+                    <AuthInput
+                        label="confirm_password"
                         id="confirm_password"
                         name="confirm_password"
                         type="password"
                         autoComplete="current-password"
-                        required
-                        value={password}
+                        required={true}
+                        value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="appearance-none block w-full px-3 py-2 border border-primary/50 bg-primary/50 rounded-sm shadow-sm placeholder-gray-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700"
                         placeholder={t('enter_pass')}
-                        />
-                    </div>
+                        t={t('confirm')}
+                    />
                 </div>
 
                 {/* Chọn quốc gia */}

@@ -37,7 +37,7 @@ const Navbar = () => {
   ];
   
   return (
-    <nav className="w-full h-auto bg-white shadow-md shadow-primary/50">
+    <nav className="w-full h-auto bg-white shadow-md shadow-primary/50 sticky top-0 z-50">
       <div className="mx-auto px-12 flex flex-col items-center justify-between w-full">
         
         {/* HÀNG TRÊN: LOGO, SEARCH, CONTACTS */}
