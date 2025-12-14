@@ -6,6 +6,7 @@ import { getCompaniesMock } from '../services/companyService';
 import LoadingAnimation from '../components/common/loadingAnimation';
 import React, { useState, useEffect} from 'react';
 import { getJobsMock } from '../services/jobService';
+import authService from '../services/authService';
 
 function Home() {
   const { t } = useTranslation();
@@ -14,13 +15,19 @@ function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  Promise.all([getCompaniesMock(), getJobsMock()])
-    .then(([companiesData, jobsData]) => {
-      setCompanies(companiesData);
-      setJobs(jobsData);
-    })
-    .catch(console.error)
-    .finally(() => setLoading(false));
+    if (authService.isAuthenticated()) {
+      console.log('Đã đăng nhập');
+    } else {
+      console.log('Chưa đăng nhập');
+    }
+
+    Promise.all([getCompaniesMock(), getJobsMock()])
+      .then(([companiesData, jobsData]) => {
+        setCompanies(companiesData);
+        setJobs(jobsData);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
 

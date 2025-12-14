@@ -1,11 +1,11 @@
-// src/helper/httpHelper.js
+import authService from '../services/authService';
+
+const BASE_URL = 'http://localhost:8888';
 
 class HttpHelper {
-  constructor(baseURL) {
-    this.baseURL = baseURL;
-  }
+  async request(method, url, body = null, headers = {}, retry = true) {
+    const accessToken = authService.getAccessToken();
 
-  async request(method, url, body = null, headers = {}) {
     const config = {
       method,
       headers: {
@@ -14,22 +14,34 @@ class HttpHelper {
       },
     };
 
+    // Gắn Bearer token (trừ login)
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+
     if (body) {
       config.body = JSON.stringify(body);
     }
 
-    const response = await fetch(`${this.baseURL}${url}`, config);
+    const response = await fetch(`${BASE_URL}${url}`, config);
 
-    // Xử lý lỗi HTTP
+    // ❌ Token hết hạn → thử refresh
+    if (response.status === 401 && retry) {
+      try {
+        await authService.refreshToken();
+        return this.request(method, url, body, headers, false);
+      } catch (err) {
+        authService.logout();
+        throw err;
+      }
+    }
+
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(errorText || `HTTP error! status: ${response.status}`);
+      throw new Error(errorText || 'Request failed');
     }
 
-    // Một số DELETE không trả JSON
-    if (response.status === 204) {
-      return null;
-    }
+    if (response.status === 204) return null;
 
     return response.json();
   }
@@ -55,7 +67,5 @@ class HttpHelper {
   }
 }
 
-// Export instance dùng chung
-const httpHelper = new HttpHelper('http://localhost:8888');
-
+const httpHelper = new HttpHelper();
 export default httpHelper;

@@ -43,32 +43,38 @@ const shootConfetti = () => {
 const initialSubscriptionOptions = [
   {
     name: "Basic Plan",
-    des1: "You can access job postings from 100+ companies and explore thousands of available job opportunities.",
-    des2: "You can search for jobs using basic filters such as job title, employment type, location, and salary range.",
-    des3: "You can apply for jobs directly through the platform with an optional cover letter.",
-    des4: "You can create and manage your personal profile, including education, work experience, and career objectives.",
-    des5: "You can view and track all your current and past job applications in one place.",
-    cost: 0.00,
+    descriptions: [
+      "free_des1",
+      "free_des2",
+      "free_des3",
+      "free_des4",
+      "free_des5",
+    ],
+    cost: 0,
     isApplied: true,
   },
   {
     name: "Premium Plan",
-    des1: "You receive instant notifications whenever a new job is posted that matches your saved preferences.",
-    des2: "You can create and save a personalized search profile based on your skills, desired job titles, employment types, country, and salary range.",
-    des3: "You are automatically matched with relevant job opportunities without needing to search manually every time.",
-    des4: "You can discover highly relevant jobs that closely align with your technical background and career goals.",
-    des5: "Your profile is marked as a premium account, helping you stand out to employers.",
+    descriptions: [
+      "premium_des1",
+      "premium_des2",
+      "premium_des3",
+      "premium_des4",
+      "premium_des5",
+    ],
     cost: 9.99,
     isApplied: false,
   },
   {
     name: "Enterprise Plan",
-    des1: "You receive priority notifications for high-demand job postings before they are shown to other users.",
-    des2: "You can create and manage multiple job search profiles for different roles, locations, or career paths.",
-    des3: "You gain access to detailed insights about job market trends and how well your skills match current demand.",
-    des4: "Your profile is prioritized in recruiter searches, increasing your chances of being noticed by companies.",
-    des5: "You receive dedicated support and advanced customization options tailored to serious job seekers.",
-    cost: 29.99,
+    descriptions: [
+      "enterprise_des1",
+      "enterprise_des2",
+      "enterprise_des3",
+      "enterprise_des4",
+      "enterprise_des5",
+    ],
+    cost: 9.99,
     isApplied: false,
   },
 ];
@@ -126,12 +132,8 @@ const Subscription = () => {
                   <SubscriptionCard
                       key={index}
                       name={option.name}
-                      des1={option.des1}
-                      des2={option.des2}
-                      des3={option.des3}
-                      des4={option.des4}
-                      des5={option.des5}
-                      cost={option.cost}
+                      descriptions={option.descriptions.map((key) => t(key))}
+                      cost={option.cost}  
                       func={() => handleApplyPlan(option.name)}
                       isApplied={option.isApplied}
                       isDisabled={option.name === "Enterprise Plan"}

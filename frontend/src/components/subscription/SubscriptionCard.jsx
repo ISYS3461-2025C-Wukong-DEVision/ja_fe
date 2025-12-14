@@ -1,9 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-const SubscriptionCard = ({name, des1, des2, des3, des4, des5, cost, func, isApplied, isDisabled}) => {
+const SubscriptionCard = ({name, descriptions = [], cost, func, isApplied, isDisabled}) => {
     const {t} = useTranslation();
+    const isPremiumOrEnterprise = name === 'Premium Plan' || name === 'Enterprise Plan';
     return (
-        <div className="border border-gray-100 shadow-md bg-white max-w-[400px] rounded-tl-[50px] rounded-b-[10px] rounded-tr-[10px] hover:shadow-2xl hover:shadow-primary-light transition-shadow duration-300 flex flex-col">
+        <div className="border border-gray-100 shadow-md bg-white min-w-[350px] max-w-[400px] rounded-tl-[50px] rounded-b-[10px] rounded-tr-[10px] hover:shadow-2xl hover:shadow-primary-light transition-shadow duration-300 flex flex-col">
 
             {/* Plan name and cost */}
             <div className="flex flex-col justify-center bg-primary rounded-tl-[50px] rounded-br-[50px] rounded-bl-[10px] rounded-tr-[10px] p-6 text-center h-32">
@@ -14,19 +15,16 @@ const SubscriptionCard = ({name, des1, des2, des3, des4, des5, cost, func, isApp
 
                 {/* Plan benefit description */}
                 <ul className="flex-1 my-7 mx-8 text-primary-extraDark text-xs space-y-4 text-justify">
-                    {[des1, des2, des3, des4, des5].map((des, i) => {
-                        const isPremiumOrEnterprise =
-                        name === "Premium Plan" || name === "Enterprise Plan";
-
-                        return (
+                    {descriptions.map((des, i) => (
                         <li key={i} className="flex items-start gap-2">
-                            <span className="mt-0.5">
-                            {isPremiumOrEnterprise ? "🎉" : "✓"}
-                            </span>
-                            <span className="leading-relaxed">{des}</span>
+                        <span className="mt-0.5">
+                            {isPremiumOrEnterprise ? '🎉' : '✓'}
+                        </span>
+                        <span className="leading-relaxed">
+                            {des}
+                        </span>
                         </li>
-                        );
-                    })}
+                    ))}
                 </ul>
 
                 {/* Handle subscription button */}

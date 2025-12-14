@@ -45,5 +45,21 @@
     "month": "Month",
     "loading": "Loading...",
     "choose_your_subscription_plan": "Choose Your Subscription Plan",
-    "subscription_description": "Get access to famous Company matching, profile CV analytics, and priority support to find the perfect jobs for your career."
+    "success_login": "Login successfully! Hello",
+    "subscription_description": "Get access to famous Company matching, profile CV analytics, and priority support to find the perfect jobs for your career.",
+    "free_des1": "You can access job postings from 100+ companies and explore thousands of available job opportunities.",
+    "free_des2": "You can search for jobs using basic filters such as job title, employment type, location, and salary range.",
+    "free_des3": "You can apply for jobs directly through the platform with an optional cover letter.",
+    "free_des4": "You can create and manage your personal profile, including education, work experience, and career objectives.",
+    "free_des5": "You can view and track all your current and past job applications in one place.",
+    "premium_des1": "You receive instant notifications whenever a new job is posted that matches your saved preferences.",
+    "premium_des2": "You can create and save a personalized search profile based on your skills, desired job titles, employment types, country, and salary range.",
+    "premium_des3": "You are automatically matched with relevant job opportunities without needing to search manually every time.",
+    "premium_des4": "You can discover highly relevant jobs that closely align with your technical background and career goals.",
+    "premium_des5": "Your profile is marked as a premium account, helping you stand out to employers.",
+    "enterprise_des1": "You receive priority notifications for high-demand job postings before they are shown to other users.",
+    "enterprise_des2": "You can create and manage multiple job search profiles for different roles, locations, or career paths.",
+    "enterprise_des3": "You gain access to detailed insights about job market trends and how well your skills match current demand.",
+    "enterprise_des4": "Your profile is prioritized in recruiter searches, increasing your chances of being noticed by companies.",
+    "enterprise_des5": "You receive dedicated support and advanced customization options tailored to serious job seekers."
 }

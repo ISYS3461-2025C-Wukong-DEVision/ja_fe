@@ -45,5 +45,21 @@
     "month": "Tháng",
     "loading": "Đang tải...",
     "choose_your_subscription_plan": "Chọn Gói Đăng Ký Của Bạn",
-    "subscription_description": "Nhận quyền truy cập vào hệ thống đối sánh công ty nổi tiếng, phân tích hồ sơ CV và hỗ trợ ưu tiên để tìm được công việc hoàn hảo cho sự nghiệp của bạn."
+    "success_login" : "Đăng nhập thành công! Chào",
+    "subscription_description": "Nhận quyền truy cập vào hệ thống đối sánh công ty nổi tiếng, phân tích hồ sơ CV và hỗ trợ ưu tiên để tìm được công việc hoàn hảo cho sự nghiệp của bạn.",
+    "free_des1": "Bạn có thể truy cập tin tuyển dụng từ hơn 100 công ty và khám phá hàng ngàn cơ hội việc làm đang có sẵn.",
+    "free_des2": "Bạn có thể tìm kiếm việc làm bằng cách sử dụng các bộ lọc cơ bản như chức danh công việc, loại hình việc làm, địa điểm và mức lương.",
+    "free_des3": "Bạn có thể ứng tuyển trực tiếp vào các vị trí tuyển dụng thông qua nền tảng này, kèm theo thư xin việc (nếu có).",
+    "free_des4": "Bạn có thể tạo và quản lý hồ sơ cá nhân của mình, bao gồm thông tin về học vấn, kinh nghiệm làm việc và mục tiêu nghề nghiệp.",
+    "free_des5": "Bạn có thể xem và theo dõi tất cả các đơn xin việc hiện tại và trước đây của mình ở cùng một nơi.",
+    "premium_des1": "Bạn sẽ nhận được thông báo ngay lập tức mỗi khi có công việc mới được đăng tải phù hợp với các tùy chọn đã lưu của bạn.",
+    "premium_des2": "Bạn có thể tạo và lưu hồ sơ tìm kiếm cá nhân dựa trên kỹ năng, chức danh công việc mong muốn, loại hình việc làm, quốc gia và mức lương mong muốn.",
+    "premium_des3": "Bạn sẽ tự động được kết nối với các cơ hội việc làm phù hợp mà không cần phải tìm kiếm thủ công mỗi lần.",
+    "premium_des4": "Bạn có thể tìm thấy những công việc rất phù hợp, sát với nền tảng kỹ thuật và mục tiêu nghề nghiệp của mình.",
+    "premium_des5": "Hồ sơ của bạn được đánh dấu là tài khoản cao cấp, giúp bạn nổi bật hơn trong mắt nhà tuyển dụng.",
+    "enterprise_des1": "Bạn sẽ nhận được thông báo ưu tiên về các tin tuyển dụng có nhu cầu cao trước khi chúng được hiển thị cho người dùng khác.",
+    "enterprise_des2": "Bạn có thể tạo và quản lý nhiều hồ sơ tìm việc cho các vị trí, địa điểm hoặc lộ trình nghề nghiệp khác nhau.",
+    "enterprise_des3": "Bạn sẽ có được những thông tin chi tiết về xu hướng thị trường việc làm và mức độ phù hợp của kỹ năng của bạn với nhu cầu hiện tại.",
+    "enterprise_des4": "Hồ sơ của bạn sẽ được ưu tiên trong các tìm kiếm của nhà tuyển dụng, giúp tăng cơ hội được các công ty chú ý.",
+    "enterprise_des5": "Bạn sẽ nhận được sự hỗ trợ tận tâm và các tùy chọn tùy chỉnh nâng cao được thiết kế riêng cho những người tìm việc nghiêm túc."
 }

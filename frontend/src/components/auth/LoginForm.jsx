@@ -2,19 +2,36 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AuthInput from '../common/authInput';
+import { useNavigate } from 'react-router-dom';
+import authService from '../../services/authService';
+import toast from 'react-hot-toast';
 
 const LoginForm = () => {
     const { t } = useTranslation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Logic xử lý đăng nhập (gọi API, kiểm tra thông tin,...) sẽ đặt ở đây
-        console.log('Login with:', { email, password });
-        alert(`Đang cố gắng đăng nhập với Email: ${email}`);
-        // Sau khi xử lý, bạn có thể chuyển hướng người dùng
+        setLoading(true);
+
+        try {
+            // Gọi hàm login/mocked login
+            const { user } = await authService.mockLogin(email, password);
+            console.log('Login success:', user);
+            // chuyển hướng
+            navigate('/');
+            toast.success(`${t('success_login')} ${user.email}`);
+        } catch (err) {
+            console.error(err);
+            toast.error(err.message);
+        } finally {
+            setLoading(false);
+        }
     };
+
 
     return (
         <div className="flex flex-col items-center justify-center p-6 space-y-6 min-w-[350px] bg-white relative">

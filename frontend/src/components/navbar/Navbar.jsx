@@ -1,14 +1,29 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { PhoneIcon, MagnifyingGlassIcon, BriefcaseIcon, BuildingOfficeIcon, UserCircleIcon, CreditCardIcon, ChevronDownIcon } from "@heroicons/react/24/outline"; // 👈 Đã thêm ChevronDownIcon
 import { useTranslation } from "react-i18next";
-import { useState } from 'react'; // 👈 Cần thiết cho Dropdown
+import { useState, useEffect } from 'react'; // 👈 Cần thiết cho Dropdown
+import authService from "../../services/authService";
+import { getApplicantByIdMock } from "../../services/applicantService";
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
+  const user = authService.getCurrentUser();
+  const [applicant, setApplicant] = useState({});
+  const isAuth = authService.isAuthenticated()
+
+
+  useEffect(() => {
+    if (!user) return;
+
+    getApplicantByIdMock(user.id)
+      .then(setApplicant)
+      .catch(() => console.log('Applicant not found'));
+  }, [user]);
   
   // State quản lý việc mở/đóng Dropdown
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
+  const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
 
   // Định nghĩa các biến và hằng số
   const searchPlaceholder = t('search_home');
@@ -16,6 +31,11 @@ const Navbar = () => {
   const isVietnamese = currentLang === 'vi';
   const currentPath = location.pathname;
   const isJobPage = currentPath.startsWith('/job'); 
+
+  const handleLogout = async () => {
+    await authService.mockLogout();
+    setIsDropdownOpen2(false);
+  };
 
   // Hàm chuyển đổi ngôn ngữ và đóng dropdown
   const changeLanguage = (newLang) => {
@@ -26,6 +46,15 @@ const Navbar = () => {
   // Hàm hiển thị/ẩn dropdown
   const toggleDropdown = () => {
     setIsDropdownOpen(prev => !prev);
+    if (isDropdownOpen2) {
+      setIsDropdownOpen2(false);
+    }
+  };
+  const toggleDropdown2 = () => {
+    setIsDropdownOpen2(prev => !prev);
+    if (isDropdownOpen) {
+      setIsDropdownOpen(false);
+    }
   };
   
   // Định nghĩa các mục menu (cần dịch thuật)
@@ -78,9 +107,32 @@ const Navbar = () => {
             <PhoneIcon className="w-4 h-4 text-gray-500" />
             <div className="text-sm text-gray-500">1900 6750</div>
             <div className="text-sm text-gray-500 ml-2">|</div>
-            <NavLink to="/login" className="ml-2 text-sm text-gray-500 hover:text-black">
-              {t('login')}
-            </NavLink>
+            {isAuth ? 
+              (
+                <div className="relative ml-2">
+                  <button onClick={toggleDropdown2} className="flex items-center text-sm text-gray-500 hover:text-black">
+                    {`${applicant.first_name} ${applicant.last_name}`}
+                  </button>
+                  {/* KHUNG DROPDOWN (ẨN/HIỆN THEO STATE) */}
+                  {isDropdownOpen2 && (
+                    <div className="absolute right-0 mt w-28 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                      
+                      {/* Logout */}
+                      <button 
+                          onClick={() => handleLogout()} 
+                          className="w-full text-left px-3 py-1 text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                          {t('logout')}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <NavLink to="/login" className="ml-2 text-sm text-gray-500 hover:text-black">
+                  {t('login')}
+                </NavLink>
+              )
+            }
             <div className="text-sm text-gray-500 ml-2">|</div>
             
             {/* KHỐI NÚT CHUYỂN ĐỔI NGÔN NGỮ VÀ DROPDOWN */}
@@ -97,7 +149,7 @@ const Navbar = () => {
 
               {/* KHUNG DROPDOWN (ẨN/HIỆN THEO STATE) */}
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                <div className="absolute right-0 mt w-28 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                   
                   {/* Lựa chọn Tiếng Việt */}
                   <button 
