@@ -1,6 +1,6 @@
 import CarouselCard from '../components/common/carouselCard';
 import CompanyIcon from '../components/company/companyIcon';
-import HomeJobCard from '../components/job/homeJobCard';
+import JobCard from '../components/job/JobCard';
 import { useTranslation } from 'react-i18next';
 import { getCompaniesMock } from '../services/companyService';
 import LoadingAnimation from '../components/common/loadingAnimation';
@@ -68,7 +68,7 @@ function Home() {
           <h1 className='text-2xl font-bold text-primary px-1'>{t('latest_jobs')}</h1>
           <div className='grid min-[1500px]:grid-cols-5 gap-4 mt-4 min-[1250px]:grid-cols-4 min-[950px]:grid-cols-3 min-[650px]:grid-cols-2 grid-cols-1'>
             {jobs.map((job) => (
-              <HomeJobCard
+              <JobCard
                 key={job.id}
                 company={job.company}
                 title={job.title}
@@ -81,6 +81,8 @@ function Home() {
                 post_date={job.post_date}
                 expired_date={job.expired_date}
                 is_fresher={job.is_fresher}
+                is_applied={true}
+                is_active= {false}
               />
             ))}
           </div>

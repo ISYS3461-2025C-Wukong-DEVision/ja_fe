@@ -1,0 +1,216 @@
+import { useTranslation } from "react-i18next";
+import { Bars3Icon, ChevronDownIcon, BanknotesIcon, ArrowTrendingUpIcon, MapPinIcon} from "@heroicons/react/24/outline";
+import JobCard from "../../components/job/JobCard";
+import React, {useState, useEffect} from "react";
+import { getJobsMock } from "../../services/jobService";
+import LoadingAnimation from "../../components/common/loadingAnimation";
+import { useSalaryFormatter } from "../../utils/formatSalary";
+import { parseJobDescription } from "../../utils/parseJobDescription";
+
+const Job = () => {
+    const {t} = useTranslation();
+    const [ jobs, setJobs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedJobId, setSelectedJobId] = useState(null);
+    const [selectedJob, setSelectedJob] = useState(null);
+    const formatSalary = useSalaryFormatter();
+
+    const handleSelectJob = (job) => {
+        setSelectedJobId(job.id);
+        setSelectedJob(job);
+    };
+
+    useEffect(() => {
+        Promise.all([getJobsMock()])
+        .then(([jobsData]) => {
+            setJobs(jobsData);
+            setSelectedJob(jobsData[0])
+            setSelectedJobId(jobsData[0].id)
+        })
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    }, []);
+
+    if (loading) 
+        return <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"><LoadingAnimation text={t('loading')} /></div>;
+
+
+    return (
+        <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col justify-start items-center bg-primary/30 w-full p-6 lg:px-36 md:px-16">
+                <div className="flex flex-row justify-center items-center w-full">
+                    <button onClick={console.log("filter job title")} className="flex items-center justify-center py-5 px-4 bg-primary rounded-md hover:bg-primary-dark min-w-[100px] ml-2">
+                        <Bars3Icon className="w-8 h-8 text-white font-bold"/>
+                        <span className="ml-1 text-white whitespace-nowrap">All Category</span>
+                    </button>
+                    <div className="relative w-full flex items-center lg:order-none other-3 mx-2">
+                        {/* SEARCHING FIELD */}
+                        <input
+                            type="text"
+                            placeholder={t('searching')}
+                            className="border border-primary rounded-md px-3 py-6 pr-10 w-full focus:outline-none focus:ring-1 focus:ring-primary-dark [&::placeholder]:italic [&::placeholder]:text-sm"
+                        />
+                        <button onClick={console.log("searching")} className="absolute inset-y-0 right-2 text-center text-white border border-primary bg-primary hover:bg-primary-dark rounded-md my-2 px-6">
+                            {t('search')}
+                        </button>
+                    </div>
+                </div>
+                <div className="flex flex-row justify-start items-center w-full my-3 space-x-4 px-2">
+                    <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
+                        <span className="text-gray-700 whitespace-nowrap">{t('location')}</span>
+                        <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
+                    </button>
+                    <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
+                        <ArrowTrendingUpIcon className="w-4 h-4 mr-1 transition-transform duration-200 text-gray-700" />
+                        <span className="text-gray-700 whitespace-nowrap">{t('type')}</span>
+                        <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
+                    </button>
+                    <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
+                        <BanknotesIcon className="w-4 h-4 mr-1 transition-transform duration-200 text-gray-700" />
+                        <span className="text-gray-700 whitespace-nowrap">{t('salary')}</span>
+                        <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
+                    </button>
+                </div>
+            </div>
+            <div className="flex flex-col xl:flex-row items-start justify-center w-screen p-6 max-xl:space-y-4 lg:px-36 md:px-16">
+                <div className="flex flex-col xl:items-center items-start justify-center w-full xl:w-full xl:max-w-md space-y-3">
+                    <div className="px-2 w-full">
+                        <div className="flex max-w-md text-start text-gray-700 bg-primary/30 p-5 pl-10 rounded-md w-full">{t('result')} 39</div>
+                    </div>
+                    <div className='flex flex-row w-full xl:flex-col xl:w-full xl:h-[75vh] xl:overflow-y-auto overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent'>
+                        {jobs.map((job) => {
+                            const isActive = selectedJobId === job.id;
+
+                            return (
+                            <div
+                                key={job.id}
+                                onClick={() => handleSelectJob(job)}
+                                className="p-2"
+                            >
+                                <JobCard
+                                company={job.company}
+                                title={job.title}
+                                logo={job.logo}
+                                city={job.city}
+                                employmentType={job.employmentType}
+                                minSalary={job.minSalary}
+                                maxSalary={job.maxSalary}
+                                salary_est_type={job.salary_est_type}
+                                post_date={job.post_date}
+                                expired_date={job.expired_date}
+                                is_fresher={job.is_fresher}
+                                is_applied={false}
+                                is_active= {isActive}
+                                />
+                            </div>
+                            );
+                        })}
+                    </div>
+                    <div className="flex items-center justify-center w-full mb-6 xl:mb-px">
+                        Pagination
+                    </div>
+                </div>
+                <div className="flex w-full h-[88vh] xl:px-2">
+                    {/* MAIN CARD */}
+                    <div className="flex-1 border border-gray-300 rounded-md p-4 flex flex-col space-y-6">
+
+                        {/* ================= HEADER (KHÔNG SCROLL) ================= */}
+                        <div className="space-y-6">
+                        <div className="flex sm:flex-row flex-col w-full border border-primary rounded-md justify-between">
+                            <div className="flex items-start justify-start p-2">
+                            {/* Logo */}
+                            <div>
+                                <img
+                                src={selectedJob.logo}
+                                alt={`${selectedJob.company} logo`}
+                                className="w-20 h-20 object-cover rounded mr-4 border border-gray-200"
+                                />
+                            </div>
+
+                            <div className="flex flex-col items-start justify-start">
+                                {/* Công việc */}
+                                <h3 className="text-lg font-bold text-primary-dark line-clamp-2">
+                                {selectedJob.title}
+                                </h3>
+
+                                {/* Tên công ty */}
+                                <h2 className="text-sm font-normal text-gray-600 line-clamp-1">
+                                {selectedJob.company}
+                                </h2>
+
+                                {/* Mức lương */}
+                                <p className="text-primary-dark font-bold text-sm mb-1">
+                                {t("salary")}:{" "}
+                                {formatSalary(
+                                    selectedJob?.salary_est_type,
+                                    selectedJob?.minSalary,
+                                    selectedJob?.maxSalary
+                                )}
+                                </p>
+
+                                {/* Địa điểm */}
+                                <div className="flex items-center text-gray-600 text-sm mb-2">
+                                <MapPinIcon className="h-4 w-4 mr-1 -ml-1 text-gray-600" />
+                                <span>
+                                    {selectedJob.country} - {selectedJob.city}
+                                </span>
+                                </div>
+
+                                {/* Skill */}
+                                <div className="flex flex-wrap gap-2 items-center">
+                                {selectedJob.skill.map((e) => (
+                                    <div
+                                    className="px-4 border border-primary text-primary font-medium rounded-full text-sm whitespace-nowrap"
+                                    >
+                                    {e.name}
+                                    </div>
+                                ))}
+                                </div>
+                            </div>
+                            </div>
+
+                            {/* RIGHT */}
+                            <div className="flex flex-col justify-end items-end p-2 space-y-2">
+                            <div className="text-gray-500 text-xs bg-gray-200 rounded-sm text-center whitespace-nowrap p-1">
+                                Hạn nộp hồ sơ: {selectedJob.expired_date}
+                            </div>
+
+                            <button
+                                onClick={() => console.log("applied")}
+                                className="py-1 px-10 bg-primary-dark text-white rounded-sm text-sm whitespace-nowrap"
+                            >
+                                Nộp hồ sơ
+                            </button>
+                            </div>
+                        </div>
+
+                        <div className="w-full h-px bg-primary" />
+                        </div>
+
+                        {/* ================= DESCRIPTION (SCROLL) ================= */}
+                        <div className="flex-1 overflow-y-auto pr-2 space-y-6 text-left scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+                            {parseJobDescription(selectedJob?.description).map((sec, idx) => (
+                                <div key={idx}>
+                                <h3 className="font-semibold text-base mb-2">
+                                    {sec.title}
+                                </h3>
+
+                                <ul className="list-disc pl-5 space-y-1 text-gray-700 text-sm">
+                                    {sec.items.map((item, i) => (
+                                    <li key={i}>{item}</li>
+                                    ))}
+                                </ul>
+                                </div>
+                            ))}
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    );
+}
+
+export default Job;
