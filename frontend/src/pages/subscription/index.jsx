@@ -74,7 +74,7 @@ const initialSubscriptionOptions = [
       "enterprise_des4",
       "enterprise_des5",
     ],
-    cost: 9.99,
+    cost: 29.99,
     isApplied: false,
   },
 ];

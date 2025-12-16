@@ -1,19 +1,42 @@
 import { useTranslation } from "react-i18next";
-import { Bars3Icon, ChevronDownIcon, BanknotesIcon, ArrowTrendingUpIcon, MapPinIcon} from "@heroicons/react/24/outline";
+import { Bars3Icon, ChevronDownIcon, BanknotesIcon, ArrowTrendingUpIcon, MapPinIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import JobCard from "../../components/job/JobCard";
 import React, {useState, useEffect} from "react";
 import { getJobsMock } from "../../services/jobService";
 import LoadingAnimation from "../../components/common/loadingAnimation";
 import { useSalaryFormatter } from "../../utils/formatSalary";
 import { parseJobDescription } from "../../utils/parseJobDescription";
+import ApplicationCard from "../../components/application/applicationCard";
+import authService from "../../services/authService";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const Job = () => {
     const {t} = useTranslation();
     const [ jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [selectedJobId, setSelectedJobId] = useState(null);
     const [selectedJob, setSelectedJob] = useState(null);
     const formatSalary = useSalaryFormatter();
+    const [isToggle, setIsToggle] = useState(false);
+    const isAuthenticate = !authService.isAuthenticated();
+    const navigate = useNavigate()
+
+    const handleApplied = () => {
+        if (isAuthenticate) {
+            setIsLoading(true);
+
+            setTimeout(() => {
+            navigate("/login");
+            }, 500);
+            toast.error(`${t('need_login')}`);
+            return;
+        }
+
+        setIsToggle(!isToggle);
+    };
+
 
     const handleSelectJob = (job) => {
         setSelectedJobId(job.id);
@@ -34,14 +57,27 @@ const Job = () => {
     if (loading) 
         return <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"><LoadingAnimation text={t('loading')} /></div>;
 
-
     return (
         <div className="flex flex-col justify-center items-center">
+
+            {/* Applied card */}
+            {isToggle && (
+                <div className="fixed inset-0 z-50 bg-black/30 flex flex-col items-center justify-center space-y-4">
+                    <ApplicationCard job_post_id = {selectedJobId} />
+                    <button onClick={() => setIsToggle(!isToggle)} className="p-2 rounded-full border border-gray-100 shadow-md shadow-primary/40 bg-white hover:shadow-lg hover:shadow-primary/70 m-1">
+                        <XMarkIcon className="h-7 w-7 text-primary"/>
+                    </button>
+                </div>)
+            }
+
+            {/* Loading trong view */}
+            {isLoading && (<div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"><LoadingAnimation text={t('loading')} /></div>)}
+
             <div className="flex flex-col justify-start items-center bg-primary/30 w-full p-6 lg:px-36 md:px-16">
                 <div className="flex flex-row justify-center items-center w-full">
-                    <button onClick={console.log("filter job title")} className="flex items-center justify-center py-5 px-4 bg-primary rounded-md hover:bg-primary-dark min-w-[100px] ml-2">
-                        <Bars3Icon className="w-8 h-8 text-white font-bold"/>
-                        <span className="ml-1 text-white whitespace-nowrap">All Category</span>
+                    <button onClick={console.log("filter job title")} className="flex items-center justify-center py-5 px-4 bg-primary rounded-md hover:bg-primary-dark min-w-[100px] ml-2 shrink-0 overflow-hidden h-[72px]">
+                        <Bars3Icon className="sm:w-6 w-px h-6 text-white font-bold shrink-0"/>
+                        <span className="ml-1 text-white whitespace-nowrap">{t('category')}</span>
                     </button>
                     <div className="relative w-full flex items-center lg:order-none other-3 mx-2">
                         {/* SEARCHING FIELD */}
@@ -55,21 +91,23 @@ const Job = () => {
                         </button>
                     </div>
                 </div>
-                <div className="flex flex-row justify-start items-center w-full my-3 space-x-4 px-2">
-                    <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
-                        <span className="text-gray-700 whitespace-nowrap">{t('location')}</span>
-                        <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
-                    </button>
-                    <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
-                        <ArrowTrendingUpIcon className="w-4 h-4 mr-1 transition-transform duration-200 text-gray-700" />
-                        <span className="text-gray-700 whitespace-nowrap">{t('type')}</span>
-                        <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
-                    </button>
-                    <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
-                        <BanknotesIcon className="w-4 h-4 mr-1 transition-transform duration-200 text-gray-700" />
-                        <span className="text-gray-700 whitespace-nowrap">{t('salary')}</span>
-                        <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
-                    </button>
+                <div className="flex flex-wrap justify-start items-center w-full my-3 space-x-4 px-2">
+                    <div className="flex flex-wrap gap-2 items-center">
+                        <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
+                            <span className="text-gray-700 whitespace-nowrap">{t('location')}</span>
+                            <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
+                        </button>
+                        <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
+                            <ArrowTrendingUpIcon className="w-4 h-4 mr-1 transition-transform duration-200 text-gray-700" />
+                            <span className="text-gray-700 whitespace-nowrap">{t('type')}</span>
+                            <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
+                        </button>
+                        <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
+                            <BanknotesIcon className="w-4 h-4 mr-1 transition-transform duration-200 text-gray-700" />
+                            <span className="text-gray-700 whitespace-nowrap">{t('salary')}</span>
+                            <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
+                        </button>
+                    </div>
                 </div>
             </div>
             <div className="flex flex-col xl:flex-row items-start justify-center w-screen p-6 max-xl:space-y-4 lg:px-36 md:px-16">
@@ -172,14 +210,14 @@ const Job = () => {
                             {/* RIGHT */}
                             <div className="flex flex-col justify-end items-end p-2 space-y-2">
                             <div className="text-gray-500 text-xs bg-gray-200 rounded-sm text-center whitespace-nowrap p-1">
-                                Hạn nộp hồ sơ: {selectedJob.expired_date}
+                                {t('expired')}: {selectedJob.expired_date}
                             </div>
 
                             <button
-                                onClick={() => console.log("applied")}
+                                onClick={() => handleApplied()}
                                 className="py-1 px-10 bg-primary-dark text-white rounded-sm text-sm whitespace-nowrap"
                             >
-                                Nộp hồ sơ
+                                {t('apply_now')}
                             </button>
                             </div>
                         </div>

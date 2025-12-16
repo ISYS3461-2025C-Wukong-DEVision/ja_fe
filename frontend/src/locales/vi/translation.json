@@ -29,6 +29,7 @@
     "result": "Kết quả",
     "post_on": "Đăng vào",
     "Expires_on": "Hết hạn vào",
+    "expired": "Hạn nộp hồ sơ",
     "description": "Mô tả",
     "moment": "vừa xong",
     "minutes": " phút trước",
@@ -65,5 +66,7 @@
     "enterprise_des2": "Bạn có thể tạo và quản lý nhiều hồ sơ tìm việc cho các vị trí, địa điểm hoặc lộ trình nghề nghiệp khác nhau.",
     "enterprise_des3": "Bạn sẽ có được những thông tin chi tiết về xu hướng thị trường việc làm và mức độ phù hợp của kỹ năng của bạn với nhu cầu hiện tại.",
     "enterprise_des4": "Hồ sơ của bạn sẽ được ưu tiên trong các tìm kiếm của nhà tuyển dụng, giúp tăng cơ hội được các công ty chú ý.",
-    "enterprise_des5": "Bạn sẽ nhận được sự hỗ trợ tận tâm và các tùy chọn tùy chỉnh nâng cao được thiết kế riêng cho những người tìm việc nghiêm túc."
+    "enterprise_des5": "Bạn sẽ nhận được sự hỗ trợ tận tâm và các tùy chọn tùy chỉnh nâng cao được thiết kế riêng cho những người tìm việc nghiêm túc.",
+    "need_login": "Bạn cần đăng nhập để thực hiện thao tác tiếp theo.",
+    "category": "Danh Mục"
 }

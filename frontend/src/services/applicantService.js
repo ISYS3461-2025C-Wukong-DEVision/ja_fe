@@ -1,4 +1,5 @@
 import { applicants } from "../mocks/applicant.mock";
+import httpHelper from "../Helper/httpHelper";
 const APPLICANT_BASE = '/applicants';
 
 export const getApplicants = () => {
