@@ -8,7 +8,7 @@ export const applicants = [
         phone: "1233 4432",
         country: "Australia",
         city: "Melbourne",
-        address: "",
+        address: "Airport Rd, Clarence Valley Regional Airport",
     },
     {
         id: 2,
