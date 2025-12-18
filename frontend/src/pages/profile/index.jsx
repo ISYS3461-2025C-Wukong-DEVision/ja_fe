@@ -39,7 +39,7 @@ const Profile = () => {
         return <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"><LoadingAnimation text={t('loading')} /></div>;
 
     return(
-        <div className="flex flex-row justify-center items-start p-6 bg-gray-100 space-x-4 pb-12 h-screen">
+        <div className="flex flex-row justify-center items-start p-6 bg-gray-100 space-x-6 pb-12 h-screen">
             <div className='flex flex-col items-center justify-center max-w-[320px] border border-gray-200 rounded-lg shadow-md bg-white pr-4'>
                 <ProfileCard 
                     url={URL} 
@@ -80,12 +80,13 @@ const Profile = () => {
                     </button>
                 </div>
             </div>
-            <div className='flex flex-col max-w-4xl w-full max-h-[80hv] space-y-4 items-center justify-center'>
+            <div className='flex flex-col max-w-4xl w-full max-h-[80hv] items-center justify-center'>
                 <div className='flex flex-row w-full h-[70px] items-center bg-white p-4 shadow-md rounded-md space-x-16'>
                     <button className={`text-primary hover:text-primary-dark ${isProfile ? "text-primary-dark font-extrabold border-b-2 border-primary-dark" : "font-semibold"}`} onClick={() => setIsProfile(!isProfile)}>My Profile CV</button>
                     <button className={`text-primary hover:text-primary-dark ${!isProfile ? "text-primary-dark font-extrabold border-b-2 border-primary-dark" : "font-semibold"}`} onClick={() => setIsProfile(!isProfile)}>Applied Jobs</button>
                 </div>
-                <div className='flex flex-col w-full h-full items-center bg-white shadow-md rounded-md space-y-4'>
+                <span className='text-gray-400 text-sm w-full font-semibold mt-6 mb-1'>GENERAL INFORMATION</span>
+                <div className='flex w-full items-start bg-white shadow-md rounded-md space-y-4'>
                     <ProfileBigCard 
                         url={URL} 
                         percent={percent} 
@@ -96,6 +97,24 @@ const Profile = () => {
                         phone={applicant.phone}
                         email={applicant.email}
                     />
+                    <button className='flex space-x-1 items-center hover:text-primary-dark text-primary'>
+                        <PencilIcon className='h-7 w-7'/>
+                        <span className='italic font-bold text-xl'>
+                            Edit Info
+                        </span>
+                    </button>
+                </div>
+                <span className='text-gray-400 text-sm w-full font-semibold mt-6 mb-1'>EDUCATION & WORK EXPERIENCE</span>
+                <div className='flex flex-col w-full items-start bg-white shadow-md rounded-md space-y-4'>
+                    <span className='text-3xl font-bold px-4 pt-4'>Summary</span>
+                    <span className='italic text-gray-400 font-light px-4'>Provide your work experience and education detail information helps us find easily the jobs that fit for you</span>
+                    <div className='bg-black h-0.5 w-full' />
+                    <div className='flex w-full justify-between items-end'>
+                        <span className='text-2xl font-semibold px-4 pt-6'>Education</span>
+                        <button className='flex items-center hover:text-primary-dark text-primary-dark pr-4 pb-1'>
+                            <PencilIcon className='h-6 w-6'/>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
