@@ -5,10 +5,14 @@ import { getApplicantByIdMock } from "../../services/applicantService";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import LoadingAnimation from '../../components/common/loadingAnimation';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import ProfileBigCard from '../../components/profile/profileDetailCard';
 
 const Profile = () => {
+    const nav = useNavigate();
     const URL = "https://truongthammylali.com/wp-content/uploads/2025/07/co-gai-anime-cute-voi-mai-toc-hong-va-doi-mat-to-tron-toat-len-ve-dang-yeu.jpg";
     const user = authService.getCurrentUser();
+    const isAuth = !authService.isAuthenticated();
     const [applicant, setApplicant] = useState({});
     const name = `${applicant.first_name} ${applicant.last_name}`;
     const [loading, setLoading] = useState(true);
@@ -17,8 +21,14 @@ const Profile = () => {
     const percent = 80;
     
     useEffect(() => {
+        if (isAuth) {
+            setTimeout(() => {
+            nav("/login");
+            }, 500);
+            toast.error(`${t('need_login')}`);
+            return;
+        }
         if (!user) return;
-    
         getApplicantByIdMock(user.id)
           .then(setApplicant)
           .catch(() => console.log('Applicant not found'))
@@ -75,8 +85,17 @@ const Profile = () => {
                     <button className={`text-primary hover:text-primary-dark ${isProfile ? "text-primary-dark font-extrabold border-b-2 border-primary-dark" : "font-semibold"}`} onClick={() => setIsProfile(!isProfile)}>My Profile CV</button>
                     <button className={`text-primary hover:text-primary-dark ${!isProfile ? "text-primary-dark font-extrabold border-b-2 border-primary-dark" : "font-semibold"}`} onClick={() => setIsProfile(!isProfile)}>Applied Jobs</button>
                 </div>
-                <div className='flex flex-col w-full h-full items-center bg-white p-4 shadow-md rounded-md space-y-4'>
-
+                <div className='flex flex-col w-full h-full items-center bg-white shadow-md rounded-md space-y-4'>
+                    <ProfileBigCard 
+                        url={URL} 
+                        percent={percent} 
+                        name={name}
+                        objective={applicant.objective}
+                        size={200}
+                        address={applicant.address}
+                        phone={applicant.phone}
+                        email={applicant.email}
+                    />
                 </div>
             </div>
         </div>
