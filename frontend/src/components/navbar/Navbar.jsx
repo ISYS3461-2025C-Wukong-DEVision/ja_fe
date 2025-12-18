@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useState, useEffect } from 'react'; // 👈 Cần thiết cho Dropdown
 import authService from "../../services/authService";
 import { getApplicantByIdMock } from "../../services/applicantService";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { t, i18n } = useTranslation();
@@ -11,6 +12,7 @@ const Navbar = () => {
   const user = authService.getCurrentUser();
   const [applicant, setApplicant] = useState({});
   const isAuth = authService.isAuthenticated()
+  const navigate = useNavigate()
 
 
   useEffect(() => {
@@ -119,7 +121,7 @@ const Navbar = () => {
                       
                       {/* Logout */}
                       <button 
-                          onClick={() => handleLogout()} 
+                          onClick={() => (handleLogout(), navigate(0))} 
                           className="w-full text-left px-3 py-1 text-sm text-gray-700 hover:bg-gray-100"
                       >
                           {t('logout')}

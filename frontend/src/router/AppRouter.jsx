@@ -10,7 +10,7 @@ import Home from "../pages/home";
 import Job from "../pages/job/index";
 // import Company from "../pages/company/index";
 import Subscription from "../pages/subscription/index";
-// import Profile from "../pages/profile/index";
+import Profile from "../pages/profile/index";
 // import Notification from "../pages/notification/index";
 
 const AppRouter = () => {
@@ -30,7 +30,7 @@ const AppRouter = () => {
           <Route path="/job" element={<Job/>} />
           <Route path="/company" element={<>company</>} />
           <Route path="/subscription" element={<Subscription />} />
-          <Route path="/profile" element={<>profile</>} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/notification" element={<>notification</>} />
         </Route>
 
