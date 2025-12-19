@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { PhoneIcon, MagnifyingGlassIcon, BriefcaseIcon, BuildingOfficeIcon, UserCircleIcon, CreditCardIcon, ChevronDownIcon } from "@heroicons/react/24/outline"; // 👈 Đã thêm ChevronDownIcon
+import { PhoneIcon, MagnifyingGlassIcon, BriefcaseIcon, BuildingOfficeIcon, UserCircleIcon, CreditCardIcon, ChevronDownIcon, BellAlertIcon } from "@heroicons/react/24/outline"; // 👈 Đã thêm ChevronDownIcon
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from 'react'; // 👈 Cần thiết cho Dropdown
 import authService from "../../services/authService";
@@ -33,6 +33,7 @@ const Navbar = () => {
   const isVietnamese = currentLang === 'vi';
   const currentPath = location.pathname;
   const isJobPage = currentPath.startsWith('/job'); 
+  const isNotificationPage = currentPath.startsWith('/notification');
 
   const handleLogout = async () => {
     await authService.mockLogout();
@@ -73,7 +74,7 @@ const Navbar = () => {
         
         {/* HÀNG TRÊN: LOGO, SEARCH, CONTACTS */}
         {/* Bố cục căn giữa các khối khi xuống hàng */}
-        <div className="flex flex-wrap justify-center items-center w-full mt-6 gap-y-4 lg:flex-nowrap lg:justify-between lg:gap-x-4">
+        <div className="flex flex-wrap justify-center items-center w-full mt-6 gap-y-4 lg:flex-nowrap lg:justify-between lg:gap-x-4 xl:px-9">
           
           {/* 1. LOGO */}
           {/* w-full justify-center: căn giữa khi màn hình nhỏ */}
@@ -111,9 +112,12 @@ const Navbar = () => {
             <div className="text-sm text-gray-500 ml-2">|</div>
             {isAuth ? 
               (
-                <div className="relative ml-2">
+                <div className="flex relative ml-2">
                   <button onClick={toggleDropdown2} className="flex items-center text-sm text-gray-500 hover:text-black">
                     {`${applicant.first_name} ${applicant.last_name}`}
+                  </button>
+                  <button onClick={() => navigate('/notification')} className={`ml-1 p-0.5 border border-gray-200 rounded-full shadow ${isNotificationPage ? "bg-primary hover:bg-primary-dark" : ""}`}>
+                    <BellAlertIcon className={`w-4 h-4 ${isNotificationPage ? "text-white" : "text-gray-500 hover:text-black"}`} />
                   </button>
                   {/* KHUNG DROPDOWN (ẨN/HIỆN THEO STATE) */}
                   {isDropdownOpen2 && (
