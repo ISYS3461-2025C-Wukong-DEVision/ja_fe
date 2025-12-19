@@ -4,7 +4,7 @@ export const applicants = [
         email: "example1@gmail.com",
         first_name: "Alice",
         last_name: "Maraket",
-        objective: "Do you think what will I fill in this?",
+        objective: "Fresher Maketing Specialist seeking to leverage academic knowledge and internship experience to contribute to a dynamic marketing team.",
         phone: "1233 4432",
         country: "Australia",
         city: "Melbourne",

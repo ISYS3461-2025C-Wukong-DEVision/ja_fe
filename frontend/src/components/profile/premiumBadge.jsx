@@ -1,6 +1,6 @@
 const PremiumBadge = () => {
   return (
-    <div className="relative group overflow-hidden px-3 py-0.5 rounded-md font-bold text-white text-[10px] tracking-widest shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer
+    <div className="flex items-center relative group overflow-hidden px-3 py-0.5 rounded-md font-bold text-white text-[10px] tracking-widest shadow-lg transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer
       /* Màu nền Gradient Thiên hà */
       bg-gradient-to-b from-[#4158D0] via-[#a878e0] to-[#cebcfc]
       /* Hiệu ứng viền phát sáng */

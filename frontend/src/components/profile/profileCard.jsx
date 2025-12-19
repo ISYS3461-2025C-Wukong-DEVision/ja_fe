@@ -9,7 +9,7 @@ const ProfileCard = ({ url, percent = 80, size = 140, name, objective, isPremium
   const offset = circumference - (percent / 100) * circumference;
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center min-w-[270px]">
         <div className="flex flex-col items-center justify-center p-4">
             <div className="relative" style={{ width: size, height: size }}>
                 {/* SVG Circle */}
@@ -64,8 +64,8 @@ const ProfileCard = ({ url, percent = 80, size = 140, name, objective, isPremium
             </span>
         </div>
         <div className="flex flex-col justify-start items-start space-y-2" style={{ height: size +16 }}>
-            <h3 className="text-primary-dark font-bold text-2xl leading-tight">{name}</h3>
-            <p className="text-gray-500 text">{objective}</p>
+            <h3 className="text-primary-dark font-bold text-xl leading-tight whitespace-nowrap">{name}</h3>
+            <p className="text-gray-500 text line-clamp-2">{objective}</p>
             {isPremium && (<PremiumBadge/>)}
         </div>
     </div>
