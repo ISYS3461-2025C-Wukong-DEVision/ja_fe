@@ -15,9 +15,14 @@ class HttpHelper {
     };
 
     // Gắn Bearer token (trừ login)
-    if (accessToken) {
+    if (
+      accessToken &&
+      typeof accessToken === "string" &&
+      accessToken.split(".").length === 3
+    ) {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
+
 
     if (body) {
       config.body = JSON.stringify(body);

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
+    "module": "es2015",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true
   },

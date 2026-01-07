@@ -14,21 +14,6 @@ export const getJobById = (id) => {
   return httpHelper.get(`${JOB_BASE}/${id}`);
 };
 
-export const createJob = (data) => {
-  return httpHelper.post(JOB_BASE, data);
-};
-
-export const updateJob = (id, data) => {
-  return httpHelper.put(`${JOB_BASE}/${id}`, data);
-};
-
-export const patchJob = (id, data) => {
-  return httpHelper.patch(`${JOB_BASE}/${id}`, data);
-};
-
-export const deleteJob = (id) => {
-  return httpHelper.delete(`${JOB_BASE}/${id}`);
-};
 
 
 /* =========================

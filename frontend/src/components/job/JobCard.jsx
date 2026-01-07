@@ -5,7 +5,7 @@ import { useSalaryFormatter } from '../../utils/formatSalary';
 import { MapPinIcon, BriefcaseIcon } from '@heroicons/react/24/outline';
 
 
-const JobCard = ({company, title, logo, city, employmentType, minSalary, maxSalary, salary_est_type, post_date, expired_date, is_fresher, is_applied, is_active}) => {
+const JobCard = ({company, title, city, employmentType, minSalary, maxSalary, salary_est_type, post_date, expired_date, is_fresher, is_applied, is_active}) => {
     const { t } = useTranslation();
     const { formatByType } = useSalaryFormatter();
   return (
@@ -13,9 +13,6 @@ const JobCard = ({company, title, logo, city, employmentType, minSalary, maxSala
         <div className='flex flex-col'>
             {/* Logo và Tên Công Ty */}
             <div className="flex h-20 items-start justify-start mb-4">
-                <div>
-                    <img src={logo} alt={`${company} logo`} className="w-20 h-20 object-cover rounded mr-4 border border-gray-200" />
-                </div>
                 <div className='flex flex-col items-start justify-between h-full'>
                     <h3 className="text-lg font-bold text-primary line-clamp-2">{title}</h3>
                     <h2 className="text-sm font-normal text-gray-600 line-clamp-1">{company}</h2>

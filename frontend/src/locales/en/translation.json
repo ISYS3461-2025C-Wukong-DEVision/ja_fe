@@ -73,5 +73,6 @@
     "Welcome, there!": "Welcome, there!",
     "Discover opportunities, ...": "Discover opportunities, connect with companies, and take the next step in your career journey.",
     "Fill_profile < 80%": "Update your profile to get more relevant job recommendations.",
-    "Complete_your_profile": "Profile is ready! You can confidently apply for your dream positions."
+    "Complete_your_profile": "Profile is ready! You can confidently apply for your dream positions.",
+    "no_job_selected": "No job selected. Please select a job to view details."
 }

@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Bars3Icon, ChevronDownIcon, BanknotesIcon, ArrowTrendingUpIcon, MapPinIcon, XMarkIcon} from "@heroicons/react/24/outline";
 import JobCard from "../../components/job/jobCard";
 import React, {useState, useEffect} from "react";
-import { getJobsMock } from "../../services/jobService";
+import dayjs from "dayjs";
 import LoadingAnimation from "../../components/common/loadingAnimation";
 import { useSalaryFormatter } from "../../utils/formatSalary";
 import { parseJobDescription } from "../../utils/parseJobDescription";
@@ -11,19 +11,18 @@ import authService from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useJobPost } from "../../components/hook/useJobPost";
+import { div } from "framer-motion/client";
 
 const Job = () => {
+    const {jobs, fetchJobsAdvance, jobLoading, filter, setFilter, selectedJob, fetchJobById} = useJobPost();
+
     const {t} = useTranslation();
-    const [ jobs, setJobs] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedJobId, setSelectedJobId] = useState(null);
-    const [selectedJob, setSelectedJob] = useState(null);
     const { formatByType } = useSalaryFormatter();
     const [isToggle, setIsToggle] = useState(false);
     const isAuthenticate = !authService.isAuthenticated();
     const navigate = useNavigate()
-    const { jobLoading, setFilter, } = useJobPost();
 
     const handleApplied = () => {
         if (isAuthenticate) {
@@ -42,21 +41,15 @@ const Job = () => {
 
     const handleSelectJob = (job) => {
         setSelectedJobId(job.id);
-        setSelectedJob(job);
+        fetchJobById(job.id);
     };
 
     useEffect(() => {
-        Promise.all([getJobsMock()])
-        .then(([jobsData]) => {
-            setJobs(jobsData);
-            setSelectedJob(jobsData[0])
-            setSelectedJobId(jobsData[0].id)
-        })
-        .catch(console.error)
-        .finally(() => setLoading(false));
+        setSelectedJobId(jobs?.data?.content[0]?.id);
+        fetchJobById(jobs?.data?.content[0]?.id);
     }, []);
 
-    if (loading) 
+    if (jobLoading) 
         return <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"><LoadingAnimation text={t('loading')} /></div>;
 
     return (
@@ -118,7 +111,7 @@ const Job = () => {
                         <div className="flex max-w-md text-start text-gray-700 bg-primary/30 p-5 pl-10 rounded-md w-full">{t('result')} 39</div>
                     </div>
                     <div className='flex flex-row w-full xl:flex-col xl:w-full xl:h-[75vh] xl:overflow-y-auto overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent'>
-                        {jobs.map((job) => {
+                        {jobs?.data?.content?.map((job) => {
                             const isActive = selectedJobId === job.id;
 
                             return (
@@ -128,17 +121,16 @@ const Job = () => {
                                 className="p-2"
                             >
                                 <JobCard
-                                company={job.company}
+                                company={job.companyName}
                                 title={job.title}
-                                logo={job.logo}
-                                city={job.city}
-                                employmentType={job.employmentType}
-                                minSalary={job.minSalary}
-                                maxSalary={job.maxSalary}
-                                salary_est_type={job.salary_est_type}
-                                post_date={job.post_date}
-                                expired_date={job.expired_date}
-                                is_fresher={job.is_fresher}
+                                city={`${job.city} - ${job.country}`}
+                                employmentType={job.employmentTypes}
+                                minSalary={job.salaryMin}
+                                maxSalary={job.salaryMax}
+                                salary_est_type={job.salaryEstType}
+                                post_date={job.createdAt}
+                                expired_date={job.expiredAt}
+                                is_fresher={job.isFresher}
                                 is_applied={false}
                                 is_active= {isActive}
                                 />
@@ -150,100 +142,105 @@ const Job = () => {
                         Pagination
                     </div>
                 </div>
-                <div className="flex w-full h-[88vh] xl:px-2">
+                <div className="flex w-full xl:px-2">
                     {/* MAIN CARD */}
                     <div className="flex-1 border border-gray-300 rounded-md p-4 flex flex-col space-y-6">
+                        {selectedJob != null ? (   
+                            <>
+                                {/* ================= HEADER (KHÔNG SCROLL) ================= */}
+                                <div className="space-y-6">
+                                    <div className="flex sm:flex-row flex-col w-full border border-primary rounded-md justify-between">
+                                        <div className="flex items-start justify-start p-2">
 
-                        {/* ================= HEADER (KHÔNG SCROLL) ================= */}
-                        <div className="space-y-6">
-                        <div className="flex sm:flex-row flex-col w-full border border-primary rounded-md justify-between">
-                            <div className="flex items-start justify-start p-2">
-                            {/* Logo */}
-                            <div>
-                                <img
-                                src={selectedJob.logo}
-                                alt={`${selectedJob.company} logo`}
-                                className="w-20 h-20 object-cover rounded mr-4 border border-gray-200"
-                                />
-                            </div>
+                                            <div className="flex flex-col items-start justify-start">
+                                                {/* Công việc */}
+                                                <h3 className="text-lg font-bold text-primary-dark line-clamp-2">
+                                                {selectedJob?.data?.title}
+                                                </h3>
 
-                            <div className="flex flex-col items-start justify-start">
-                                {/* Công việc */}
-                                <h3 className="text-lg font-bold text-primary-dark line-clamp-2">
-                                {selectedJob.title}
-                                </h3>
+                                                {/* Tên công ty */}
+                                                <h2 className="text-sm font-normal text-gray-600 line-clamp-1">
+                                                {selectedJob?.data?.companyName}
+                                                </h2>
 
-                                {/* Tên công ty */}
-                                <h2 className="text-sm font-normal text-gray-600 line-clamp-1">
-                                {selectedJob.company}
-                                </h2>
+                                                {/* Mức lương */}
+                                                <p className="text-primary-dark font-bold text-sm mb-1">
+                                                {t("salary")}:{" "}
+                                                {formatByType(
+                                                    selectedJob?.data?.salaryEstType,
+                                                    selectedJob?.data?.salaryMin,
+                                                    selectedJob?.data?.salaryMax
+                                                )}
+                                                </p>
 
-                                {/* Mức lương */}
-                                <p className="text-primary-dark font-bold text-sm mb-1">
-                                {t("salary")}:{" "}
-                                {formatByType(
-                                    selectedJob?.salary_est_type,
-                                    selectedJob?.minSalary,
-                                    selectedJob?.maxSalary
-                                )}
-                                </p>
+                                                {/* Địa điểm */}
+                                                <div className="flex items-center text-gray-600 text-sm mb-2">
+                                                    <MapPinIcon className="h-4 w-4 mr-1 -ml-1 text-gray-600" />
+                                                    <span>
+                                                        {selectedJob?.data?.country} - {selectedJob?.data?.city}
+                                                    </span>
+                                                </div>
 
-                                {/* Địa điểm */}
-                                <div className="flex items-center text-gray-600 text-sm mb-2">
-                                <MapPinIcon className="h-4 w-4 mr-1 -ml-1 text-gray-600" />
-                                <span>
-                                    {selectedJob.country} - {selectedJob.city}
-                                </span>
-                                </div>
+                                                {/* Skill */}
+                                                <div className="flex flex-wrap gap-2 items-center">
+                                                    {selectedJob?.data?.tags.map((e) => (
+                                                        <div
+                                                        className="px-4 border border-primary text-primary font-medium rounded-full text-sm whitespace-nowrap"
+                                                        >
+                                                            {e.name}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                {/* Skill */}
-                                <div className="flex flex-wrap gap-2 items-center">
-                                {selectedJob.skill.map((e) => (
-                                    <div
-                                    className="px-4 border border-primary text-primary font-medium rounded-full text-sm whitespace-nowrap"
-                                    >
-                                    {e.name}
+                                        {/* RIGHT */}
+                                        <div className="flex flex-col justify-end items-end p-2 space-y-2">
+                                            <div className="text-gray-500 text-xs bg-gray-200 rounded-sm text-center whitespace-nowrap p-1">
+                                                {t('expired')}: {dayjs(selectedJob?.data?.expiredAt).format("DD/MM/YYYY")}
+                                            </div>
+
+                                            <button
+                                                onClick={() => handleApplied()}
+                                                className="py-1 px-10 bg-primary-dark text-white rounded-sm text-sm whitespace-nowrap"
+                                            >
+                                                {t('apply_now')}
+                                            </button>
+                                        </div>
                                     </div>
-                                ))}
+
+                                    <div className="w-full h-px bg-primary" />
                                 </div>
-                            </div>
-                            </div>
 
-                            {/* RIGHT */}
-                            <div className="flex flex-col justify-end items-end p-2 space-y-2">
-                            <div className="text-gray-500 text-xs bg-gray-200 rounded-sm text-center whitespace-nowrap p-1">
-                                {t('expired')}: {selectedJob.expired_date}
-                            </div>
+                                {/* ================= DESCRIPTION (SCROLL) ================= */}
+                                <div className="flex-1 overflow-y-auto pr-2 space-y-6 text-left scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+                                    {parseJobDescription(selectedJob?.data?.description).map((sec, idx) => (
+                                        <div key={idx} className="mb-4">
+                                            {/* Chỉ hiện title nếu có */}
+                                            {sec.title && (
+                                            <h3 className="font-semibold text-base mb-2">
+                                                {sec.title}
+                                            </h3>
+                                            )}
 
-                            <button
-                                onClick={() => handleApplied()}
-                                className="py-1 px-10 bg-primary-dark text-white rounded-sm text-sm whitespace-nowrap"
-                            >
-                                {t('apply_now')}
-                            </button>
-                            </div>
-                        </div>
-
-                        <div className="w-full h-px bg-primary" />
-                        </div>
-
-                        {/* ================= DESCRIPTION (SCROLL) ================= */}
-                        <div className="flex-1 overflow-y-auto pr-2 space-y-6 text-left scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-                            {parseJobDescription(selectedJob?.description).map((sec, idx) => (
-                                <div key={idx}>
-                                <h3 className="font-semibold text-base mb-2">
-                                    {sec.title}
-                                </h3>
-
-                                <ul className="list-disc pl-5 space-y-1 text-gray-700 text-sm">
-                                    {sec.items.map((item, i) => (
-                                    <li key={i}>{item}</li>
+                                            <ul className={`${sec.title ? 'list-disc pl-5' : 'list-none'} space-y-1 text-gray-700 text-sm`}>
+                                            {sec.items.map((item, i) => (
+                                                <li key={i}>
+                                                {/* Dùng Markdown như **text**, hãy dùng thư viện để render */}
+                                                {item} 
+                                                </li>
+                                            ))}
+                                            </ul>
+                                        </div>
                                     ))}
-                                </ul>
                                 </div>
-                            ))}
-                        </div>
-
+                            </>
+                        ) : (
+                            <div className="flex items-center justify-center w-full text-gray-500 border border-gray-500 border-dashed rounded-md p-24 text-center h-60">
+                                {t('no_job_selected')}
+                            </div>
+                        )}
+                        
                     </div>
                 </div>
 
