@@ -8,7 +8,7 @@ const CompanyIcon = ({ name, src, alt, size = 50 }) => {
                 style={{ width: size, height: size }}
                 className="object-cover rounded-sm shadow-sm border border-gray-300"
                 />
-                <span className="text-sm text-gray-700 font-medium text-center">{name}</span>
+                <span className="text-sm text-white font-medium text-center">{name}</span>
             </div>
 
     );

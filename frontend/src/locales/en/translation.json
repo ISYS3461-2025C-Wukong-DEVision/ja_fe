@@ -68,5 +68,10 @@
     "enterprise_des4": "Your profile is prioritized in recruiter searches, increasing your chances of being noticed by companies.",
     "enterprise_des5": "You receive dedicated support and advanced customization options tailored to serious job seekers.",
     "need_login": "You need to login to proceed with the next step.",
-    "category": "All Category"
+    "category": "All Category",
+    "search_company": "Type company name...",
+    "Welcome, there!": "Welcome, there!",
+    "Discover opportunities, ...": "Discover opportunities, connect with companies, and take the next step in your career journey.",
+    "Fill_profile < 80%": "Update your profile to get more relevant job recommendations.",
+    "Complete_your_profile": "Profile is ready! You can confidently apply for your dream positions."
 }

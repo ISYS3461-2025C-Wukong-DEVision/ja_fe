@@ -8,7 +8,8 @@ import Register from "../pages/auth/Register";
 
 import Home from "../pages/home";
 import Job from "../pages/job/index";
-// import Company from "../pages/company/index";
+import Company from "../pages/company/index";
+import CompanyDetail from "../pages/company/CompanyDetail";
 import Subscription from "../pages/subscription/index";
 import Profile from "../pages/profile/index";
 // import Notification from "../pages/notification/index";
@@ -27,8 +28,9 @@ const AppRouter = () => {
         {/* MAIN LAYOUT */}
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/job" element={<Job/>} />
-          <Route path="/company" element={<>company</>} />
+          <Route path="/jobs" element={<Job/>} />
+          <Route path="/companies" element={<Company />} />
+          <Route path="/companies/:id" element={<CompanyDetail />} />
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/notification" element={<>notification</>} />

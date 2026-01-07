@@ -2,7 +2,7 @@
 import httpHelper from '../Helper/httpHelper';
 import {companies} from '../mocks/company.mock';
 
-const COMPANY_BASE = '/companies';
+const COMPANY_BASE = '/company-profile';
 
 export const getCompanies = () => {
   return httpHelper.get(COMPANY_BASE);

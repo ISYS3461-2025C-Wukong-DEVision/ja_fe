@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Bars3Icon, ChevronDownIcon, BanknotesIcon, ArrowTrendingUpIcon, MapPinIcon, XMarkIcon} from "@heroicons/react/24/outline";
-import JobCard from "../../components/job/JobCard";
+import JobCard from "../../components/job/jobCard";
 import React, {useState, useEffect} from "react";
 import { getJobsMock } from "../../services/jobService";
 import LoadingAnimation from "../../components/common/loadingAnimation";
@@ -10,6 +10,7 @@ import ApplicationCard from "../../components/application/applicationCard";
 import authService from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useJobPost } from "../../components/hook/useJobPost";
 
 const Job = () => {
     const {t} = useTranslation();
@@ -18,10 +19,11 @@ const Job = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedJobId, setSelectedJobId] = useState(null);
     const [selectedJob, setSelectedJob] = useState(null);
-    const formatSalary = useSalaryFormatter();
+    const { formatByType } = useSalaryFormatter();
     const [isToggle, setIsToggle] = useState(false);
     const isAuthenticate = !authService.isAuthenticated();
     const navigate = useNavigate()
+    const { jobLoading, setFilter, } = useJobPost();
 
     const handleApplied = () => {
         if (isAuthenticate) {
@@ -93,16 +95,16 @@ const Job = () => {
                 </div>
                 <div className="flex flex-wrap justify-start items-center w-full my-3 space-x-4 px-2">
                     <div className="flex flex-wrap gap-2 items-center">
-                        <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
+                        <button onClick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
                             <span className="text-gray-700 whitespace-nowrap">{t('location')}</span>
                             <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
                         </button>
-                        <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
+                        <button onClick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
                             <ArrowTrendingUpIcon className="w-4 h-4 mr-1 transition-transform duration-200 text-gray-700" />
                             <span className="text-gray-700 whitespace-nowrap">{t('type')}</span>
                             <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
                         </button>
-                        <button onclick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
+                        <button onClick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
                             <BanknotesIcon className="w-4 h-4 mr-1 transition-transform duration-200 text-gray-700" />
                             <span className="text-gray-700 whitespace-nowrap">{t('salary')}</span>
                             <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
@@ -179,7 +181,7 @@ const Job = () => {
                                 {/* Mức lương */}
                                 <p className="text-primary-dark font-bold text-sm mb-1">
                                 {t("salary")}:{" "}
-                                {formatSalary(
+                                {formatByType(
                                     selectedJob?.salary_est_type,
                                     selectedJob?.minSalary,
                                     selectedJob?.maxSalary

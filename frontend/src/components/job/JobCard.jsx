@@ -6,9 +6,10 @@ import { MapPinIcon, BriefcaseIcon } from '@heroicons/react/24/outline';
 
 
 const JobCard = ({company, title, logo, city, employmentType, minSalary, maxSalary, salary_est_type, post_date, expired_date, is_fresher, is_applied, is_active}) => {
-    const { t } = useTranslation(); 
+    const { t } = useTranslation();
+    const { formatByType } = useSalaryFormatter();
   return (
-    <div className={`flex flex-col justify-between border rounded-lg p-4 hover:shadow-lg hover:shadow-primary/40 transition-shadow duration-300 hover:border-primary min-w-[280px] max-w-[450px] h-full ${is_active ? "border-primary-dark border-2" : "border-gray-300"}`}>
+    <div className={`flex flex-col bg-white justify-between border rounded-lg p-4 hover:shadow-lg hover:shadow-primary/40 transition-shadow duration-300 hover:border-primary min-w-[280px] max-w-[450px] h-full ${is_active ? "border-primary-dark border-2" : "border-gray-300"}`}>
         <div className='flex flex-col'>
             {/* Logo và Tên Công Ty */}
             <div className="flex h-20 items-start justify-start mb-4">
@@ -35,7 +36,7 @@ const JobCard = ({company, title, logo, city, employmentType, minSalary, maxSala
 
             {/* Mức Lương */}
             <p className="text-primary-dark font-bold text-lg mb-2">
-                {t('salary')}: {useSalaryFormatter(salary_est_type, minSalary, maxSalary)}
+                {t('salary')}: {formatByType(salary_est_type, minSalary, maxSalary)}
             </p>
 
             {/* Cho phép người mới */}

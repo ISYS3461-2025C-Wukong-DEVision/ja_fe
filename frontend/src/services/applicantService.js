@@ -1,6 +1,6 @@
 import { applicants } from "../mocks/applicant.mock";
 import httpHelper from "../Helper/httpHelper";
-const APPLICANT_BASE = '/applicants';
+const APPLICANT_BASE = '/applicant-profile/profile';
 
 export const getApplicants = () => {
   return httpHelper.get(APPLICANT_BASE);

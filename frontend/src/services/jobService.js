@@ -2,10 +2,12 @@
 import httpHelper from '../Helper/httpHelper';
 import { jobs } from '../mocks/job.mock';
 
-const JOB_BASE = '/jobs';
+const JOB_BASE = '/job-post';
 
-export const getJobs = () => {
-  return httpHelper.get(JOB_BASE);
+export const getJobs = (queryFilter) => {
+  return httpHelper.get(`${JOB_BASE}/search/advance`, {
+    params: queryFilter 
+  });
 };
 
 export const getJobById = (id) => {

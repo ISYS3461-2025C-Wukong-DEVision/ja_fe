@@ -1,6 +1,6 @@
 import authService from '../services/authService';
 
-const BASE_URL = 'http://localhost:8888';
+const BASE_URL = 'https://devision-be.quykhang.cloud/api';
 
 class HttpHelper {
   async request(method, url, body = null, headers = {}, retry = true) {
@@ -41,7 +41,9 @@ class HttpHelper {
       throw new Error(errorText || 'Request failed');
     }
 
-    if (response.status === 204) return null;
+    if (response.status === 204 || response.headers.get("content-length") === "0") {
+      return null;
+    }
 
     return response.json();
   }

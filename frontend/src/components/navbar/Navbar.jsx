@@ -62,8 +62,8 @@ const Navbar = () => {
   
   // Định nghĩa các mục menu (cần dịch thuật)
   const navItemsTranslated = [
-    { name: t('jobs'), path: "/job", icon: <BriefcaseIcon className="w-5 h-5" /> },
-    { name: t('company'), path: "/company", icon: <BuildingOfficeIcon className="w-5 h-5" /> },
+    { name: t('jobs'), path: "/jobs", icon: <BriefcaseIcon className="w-5 h-5" /> },
+    { name: t('company'), path: "/companies", icon: <BuildingOfficeIcon className="w-5 h-5" /> },
     { name: t('subscription'), path: "/subscription", icon: <CreditCardIcon className="w-5 h-5" /> },
     { name: t('profile'), path: "/profile", icon: <UserCircleIcon className="w-5 h-5" /> },
   ];
@@ -79,7 +79,7 @@ const Navbar = () => {
           {/* 1. LOGO */}
           {/* w-full justify-center: căn giữa khi màn hình nhỏ */}
           <NavLink to="/" className="flex items-center w-full justify-center lg:w-auto lg:justify-start flex-shrink-0">
-            <div className="font-allerta text-4xl text-primary-dark">Applicant</div>
+            <div className="font-allerta text-4xl text-primary-dark"><img src="/assets/icons/LogoName2.png" alt="DEVisionJA" className="h-9 w-auto"/></div>
           </NavLink>
           
           {/* 2. SEARCH BAR - ẨN NẾU LÀ TRANG /JOB */}
@@ -121,7 +121,7 @@ const Navbar = () => {
                   </button>
                   {/* KHUNG DROPDOWN (ẨN/HIỆN THEO STATE) */}
                   {isDropdownOpen2 && (
-                    <div className="absolute right-0 mt w-28 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+                    <div className="absolute right-6 top-5 mt w-28 bg-white border border-gray-200 rounded-md shadow-lg z-50">
                       
                       {/* Logout */}
                       <button 

@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import AppRouter from './router/AppRouter.jsx'
 import { Toaster } from 'react-hot-toast';
 
