@@ -11,7 +11,7 @@ import authService from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useJobPost } from "../../components/hook/useJobPost";
-import { div } from "framer-motion/client";
+
 
 const Job = () => {
     const {jobs, fetchJobsAdvance, jobLoading, filter, setFilter, selectedJob, fetchJobById} = useJobPost();
@@ -108,7 +108,7 @@ const Job = () => {
             <div className="flex flex-col xl:flex-row items-start justify-center w-screen p-6 max-xl:space-y-4 lg:px-36 md:px-16">
                 <div className="flex flex-col xl:items-center items-start justify-center w-full xl:w-full xl:max-w-md space-y-3">
                     <div className="px-2 w-full">
-                        <div className="flex max-w-md text-start text-gray-700 bg-primary/30 p-5 pl-10 rounded-md w-full">{t('result')} 39</div>
+                        <div className="flex max-w-md text-start text-gray-700 bg-primary/30 p-5 pl-10 rounded-md w-full">{t('result')} {jobs?.data?.totalElements}</div>
                     </div>
                     <div className='flex flex-row w-full xl:flex-col xl:w-full xl:h-[75vh] xl:overflow-y-auto overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent'>
                         {jobs?.data?.content?.map((job) => {
@@ -152,7 +152,7 @@ const Job = () => {
                                     <div className="flex sm:flex-row flex-col w-full border border-primary rounded-md justify-between">
                                         <div className="flex items-start justify-start p-2">
 
-                                            <div className="flex flex-col items-start justify-start">
+                                            <div className="flex flex-col items-start justify-start space-y-4">
                                                 {/* Công việc */}
                                                 <h3 className="text-lg font-bold text-primary-dark line-clamp-2">
                                                 {selectedJob?.data?.title}

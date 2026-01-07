@@ -369,7 +369,7 @@ const Profile = () => {
                                     <div key={index} className='flex flex-col mb-2'>
                                         <div className='flex'>
                                             <span className='font-semibold text-gray-700 mr-4'>
-                                                {index + 1}. {edu.degreeType} of {edu.fieldOfStudy}
+                                               { `${index + 1}. Degree: ${edu.degreeType}`}
                                             </span>
                                             <button onClick={() => (setEditingEducation(edu), setIsEducationOpen(true))}>
                                                 <PencilIcon className='h-4 w-4 text-primary hover:text-primary-dark mr-2' />
@@ -404,7 +404,7 @@ const Profile = () => {
                                     <div key={index} className='flex flex-col mb-2'>
                                         <div className='flex'>
                                             <span className='font-semibold text-gray-700 mr-4'>
-                                                {index + 1}. {exp.title} at {exp.companyName}
+                                                {index + 1}. {exp.title}
                                             </span>
                                             <button onClick={() => (setEditingWorkExperience(exp), setIsWorkOpen(true))}>
                                                 <PencilIcon className='h-4 w-4 text-primary hover:text-primary-dark mr-2' />

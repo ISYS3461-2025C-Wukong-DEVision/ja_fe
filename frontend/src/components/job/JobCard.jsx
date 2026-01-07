@@ -3,11 +3,26 @@ import { useTranslation } from 'react-i18next';
 import { timeAgo } from '../../utils/time';
 import { useSalaryFormatter } from '../../utils/formatSalary';
 import { MapPinIcon, BriefcaseIcon } from '@heroicons/react/24/outline';
+import dayjs from 'dayjs';
 
 
 const JobCard = ({company, title, city, employmentType, minSalary, maxSalary, salary_est_type, post_date, expired_date, is_fresher, is_applied, is_active}) => {
     const { t } = useTranslation();
     const { formatByType } = useSalaryFormatter();
+    const formatEmploymentType = (type) => {
+        if (!type) return "";
+        return type
+            .toLowerCase()           // full_time
+            .split("_")              // ["full", "time"]
+            .map((word, i) =>
+            i === 0
+                ? word.charAt(0).toUpperCase() + word.slice(1) // "Full"
+                : word               // giữ "time" thường
+            )
+            .join("-");              // "Full-time"
+    };
+    const employmentTypes = (employmentType || []).map(formatEmploymentType).join(", ");
+
   return (
     <div className={`flex flex-col bg-white justify-between border rounded-lg p-4 hover:shadow-lg hover:shadow-primary/40 transition-shadow duration-300 hover:border-primary min-w-[280px] max-w-[450px] h-full ${is_active ? "border-primary-dark border-2" : "border-gray-300"}`}>
         <div className='flex flex-col'>
@@ -28,7 +43,7 @@ const JobCard = ({company, title, city, employmentType, minSalary, maxSalary, sa
             {/* Loại hình làm việc */}
             <div className="flex items-center text-gray-600 mb-2">
                 <BriefcaseIcon className="h-5 w-5 mr-2 text-gray-600" />
-                <span>{parseImploymentType(employmentType)}</span>
+                <span>{employmentTypes}</span>
             </div>
 
             {/* Mức Lương */}
@@ -45,7 +60,7 @@ const JobCard = ({company, title, city, employmentType, minSalary, maxSalary, sa
             
             {/* Ngày hết hạn */}
             <p className="text-red-500 text-sm mb-4">
-                {t('Expires_on')}: {expired_date}
+                {t('Expires_on')}: {dayjs(expired_date).format('DD/MM/YYYY')}
             </p>
         </div>
 

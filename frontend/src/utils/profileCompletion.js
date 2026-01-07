@@ -30,7 +30,7 @@ export const calculateProfileCompletion = (data) => {
       
       // Kiểm tra xem có field nào bị null/trống không
       // Các field: title, description, startedAt, endedAt
-      const isFull = work.title && work.description && work.startedAt && work.endedAt;
+      const isFull = work.title && work.description && work.startedAt;
       
       if (!isFull) {
         totalPercent += (itemWeight / 2); // Nếu có field null -> 5%
