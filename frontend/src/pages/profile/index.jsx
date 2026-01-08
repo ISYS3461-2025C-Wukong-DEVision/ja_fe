@@ -21,9 +21,11 @@ import { useWorkExperience } from '../../components/hook/useWorkExperience';
 import WorkExperienceForm from '../../components/profile/workExperienceForm';
 import { useJobPreference } from '../../components/hook/useJobPreference';
 import JobPreferenceForm from '../../components/profile/jobReferenceForm';
+import { useAuth } from '../../components/hook/useAuth';
 
 
 const Profile = () => {
+    const {user, isAuthenticated, logout} = useAuth();
     const { loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
     const { isSkillOpen, setIsSkillOpen, editingSkill, setEditingSkill, skillHandSave, skill, fetchSkill } = useSkill();
     const { editingEducation, setEditingEducation, educationDelete, educationHandSave, isEducationOpen, setIsEducationOpen } = useEducation();
@@ -45,11 +47,9 @@ const Profile = () => {
             )[0]?.url || "https://truongthammylali.com/wp-content/uploads/2025/07/co-gai-anime-cute-voi-mai-toc-hong-va-doi-mat-to-tron-toat-len-ve-dang-yeu.jpg";
     };
     const URL = getLatestAvatarUrl(profile.mediaList);
-    const user = authService.getCurrentUser();
-    const isAuth = !authService.isAuthenticated();
     const name = `${profile.firstName} ${profile.lastName}`;
     const address = `${profile.address || ''}, ${profile.city || ''}, ${profile.country || ''}`;
-    const applicantId = "00000000-0000-0000-0000-000000000001";
+    const applicantId = user?.id;
 
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState("profile");
