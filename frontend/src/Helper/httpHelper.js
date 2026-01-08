@@ -1,4 +1,5 @@
 import authService from '../services/authService';
+import toast from 'react-hot-toast';
 
 const BASE_URL = 'https://devision-be.quykhang.cloud/api';
 
@@ -6,17 +7,15 @@ class HttpHelper {
   async request(method, url, body = null, headers = {}, retry = true) {
     const accessToken = authService.getAccessToken();
 
-    const isFormData = body instanceof FormData;
-
     const config = {
       method,
       headers: {
-        ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+        'Content-Type': 'application/json',
         ...headers,
       },
     };
 
-    // Gắn Bearer token
+    // Gắn Bearer token (trừ login)
     if (
       accessToken &&
       typeof accessToken === "string" &&
@@ -25,59 +24,55 @@ class HttpHelper {
       config.headers.Authorization = `Bearer ${accessToken}`;
     }
 
+
     if (body) {
-      // 3. NẾU LÀ FORMDATA: Giữ nguyên body, không được stringify
-      config.body = isFormData ? body : JSON.stringify(body);
+      config.body = JSON.stringify(body);
     }
 
-    // Lưu ý: url ở đây sẽ là url đã được nối query string từ hàm get
     const response = await fetch(`${BASE_URL}${url}`, config);
 
-    // ❌ Token hết hạn → thử refresh
-    if (response.status === 401 && retry) {
-      try {
-        await authService.refreshToken();
-        return this.request(method, url, body, headers, false);
-      } catch (err) {
-        authService.logout();
-        throw err;
-      }
+    // ❌ Token hết hạn
+    if (response.status === 401) { // 
+      authService.logout();
+      
+      // Phát một sự kiện tùy chỉnh thay vì gọi toast trực tiếp ở đây
+      const event = new CustomEvent('auth-token-expired');
+      window.dispatchEvent(event);
+      
+      throw new Error('Session expired');
     }
 
     if (!response.ok) {
       const errorText = await response.text();
-      // Thử parse JSON error để hiển thị đẹp hơn
+      let errorMessage = 'Request failed';
+
       try {
-        const jsonError = JSON.parse(errorText);
-        throw new Error(jsonError.message || errorText);
+        // Thử parse text đó sang JSON để lấy trường 'message'
+        const errorJson = JSON.parse(errorText);
+        errorMessage = errorJson.message || errorMessage;
       } catch (e) {
-        throw new Error(errorText || 'Request failed');
+        // Nếu không phải JSON (vd: lỗi 500 server trả về html), dùng text thô
+        errorMessage = errorText || errorMessage;
       }
+
+      throw new Error(errorMessage);
     }
 
     if (response.status === 204 || response.headers.get("content-length") === "0") {
       return null;
     }
 
-    return response.json();
+    // Đọc nội dung dưới dạng text trước để xử lý trường hợp trả về true/false
+    const textData = await response.text();
+    try {
+      return JSON.parse(textData); // Trả về object hoặc giá trị true/false nếu là JSON chuẩn
+    } catch (e) {
+      return textData; // Nếu không phải JSON (vd: text thô), trả về text
+    }
   }
 
-
-  get(url, options = {}) {
-    // Tách params ra, phần còn lại giữ là headers
-    const { params, ...headers } = options;
-
-    let finalUrl = url;
-
-    if (params) {
-      // Dùng URLSearchParams để tạo chuỗi ?key=value&key2=value2
-      const queryString = new URLSearchParams(params).toString();
-      if (queryString) {
-        finalUrl += (finalUrl.includes('?') ? '&' : '?') + queryString;
-      }
-    }
-    // console.log("Final URL: ", finalUrl); 
-    return this.request('GET', finalUrl, null, headers);
+  get(url, headers = {}) {
+    return this.request('GET', url, null, headers);
   }
 
   post(url, body, headers = {}) {

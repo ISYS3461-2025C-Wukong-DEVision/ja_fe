@@ -24,10 +24,12 @@ import JobPreferenceForm from '../../components/profile/jobReferenceForm';
 import { useMedia } from '../../components/hook/useMedia';
 import ProfileMedia from './profileMedia';
 import { REF_MODULE } from '../../services/mediaService';
+import { useAuth } from '../../components/hook/useAuth';
 
 
 const Profile = () => {
-    const { loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
+    const {user, isAuthenticated, logout} = useAuth();
+    const { isProfileOpen, setIsProfileOpen, loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
     const { isSkillOpen, setIsSkillOpen, editingSkill, setEditingSkill, skillHandSave, skill, fetchSkill } = useSkill();
     const { editingEducation, setEditingEducation, educationDelete, educationHandSave, isEducationOpen, setIsEducationOpen } = useEducation();
     const { editingWorkExperience, setEditingWorkExperience, workDelete, workHandSave, isWorkOpen, setIsWorkOpen} = useWorkExperience();
@@ -49,11 +51,9 @@ const Profile = () => {
             )[0]?.url || "https://truongthammylali.com/wp-content/uploads/2025/07/co-gai-anime-cute-voi-mai-toc-hong-va-doi-mat-to-tron-toat-len-ve-dang-yeu.jpg";
     };
     const URL = getLatestAvatarUrl(profile.mediaList);
-    const user = authService.getCurrentUser();
-    const isAuth = !authService.isAuthenticated();
     const name = `${profile.firstName} ${profile.lastName}`;
     const address = `${profile.address || ''}, ${profile.city || ''}, ${profile.country || ''}`;
-    const applicantId = "00000000-0000-0000-0000-000000000001";
+    const applicantId = user?.id;
 
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState("profile");
@@ -126,11 +126,11 @@ const Profile = () => {
         <LayoutGroup>
             <div className="flex flex-row justify-center items-start pt-6 pr-6 pl-6 bg-gray-100 space-x-6 pb-12 min-h-screen overflow-hidden">
                 <AnimatePresence>
-                    {editingProfile && (
+                    {isProfileOpen && (
                         <ProfileForm 
                             initialData={editingProfile} 
                             onSave={handSave} // handSave đã có sẵn trong useProfile
-                            onCancel={() => setEditingProfile(null)} 
+                            onCancel={() => (setEditingProfile(null), setIsProfileOpen(false))} 
                         />
                     )}
                 </AnimatePresence>

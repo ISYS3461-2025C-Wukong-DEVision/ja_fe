@@ -74,5 +74,15 @@
     "Discover opportunities, ...": "Discover opportunities, connect with companies, and take the next step in your career journey.",
     "Fill_profile < 80%": "Update your profile to get more relevant job recommendations.",
     "Complete_your_profile": "Profile is ready! You can confidently apply for your dream positions.",
-    "no_job_selected": "No job selected. Please select a job to view details."
+    "no_job_selected": "No job selected. Please select a job to view details.",
+    "confirm-label": "Confirm",
+    "cancel-label": "Cancel",
+    "validate-label": "Your login session has expired. Try logging in again?",
+    "invalid_email_format": "Invalid email format!",
+    "please_enter_password": "Please enter password!",
+    "please_enter_email": "Please enter email!",
+    "please_select_country": "Please select country!",
+    "passwords_do_not_match": "Password doesn't match!",
+    "show_pass": "Show password",
+    "email_password_incorrect": "Email or password incorrect!"
 }

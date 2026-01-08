@@ -3,25 +3,16 @@ import { PhoneIcon, MagnifyingGlassIcon, BriefcaseIcon, BuildingOfficeIcon, User
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from 'react'; // 👈 Cần thiết cho Dropdown
 import authService from "../../services/authService";
-import { getApplicantByIdMock } from "../../services/applicantService";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../hook/useAuth";
 
 const Navbar = () => {
+  const {user, isAuthenticated, logout} = useAuth();
   const { t, i18n } = useTranslation();
   const location = useLocation();
-  const user = authService.getCurrentUser();
-  const [applicant, setApplicant] = useState({});
-  const isAuth = authService.isAuthenticated()
+  const isAuth = isAuthenticated;
   const navigate = useNavigate()
 
-
-  useEffect(() => {
-    if (!user) return;
-
-    getApplicantByIdMock(user.id)
-      .then(setApplicant)
-      .catch(() => console.log('Applicant not found'));
-  }, [user]);
   
   // State quản lý việc mở/đóng Dropdown
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
@@ -34,11 +25,6 @@ const Navbar = () => {
   const currentPath = location.pathname;
   const isJobPage = currentPath.startsWith('/job'); 
   const isNotificationPage = currentPath.startsWith('/notification');
-
-  const handleLogout = async () => {
-    await authService.mockLogout();
-    setIsDropdownOpen2(false);
-  };
 
   // Hàm chuyển đổi ngôn ngữ và đóng dropdown
   const changeLanguage = (newLang) => {
@@ -114,7 +100,7 @@ const Navbar = () => {
               (
                 <div className="flex relative ml-2">
                   <button onClick={toggleDropdown2} className="flex items-center text-sm text-gray-500 hover:text-black">
-                    {`${applicant.first_name} ${applicant.last_name}`}
+                    {`${user.name}`}
                   </button>
                   <button onClick={() => navigate('/notification')} className={`ml-1 p-0.5 border border-gray-200 rounded-full shadow ${isNotificationPage ? "bg-primary hover:bg-primary-dark" : ""}`}>
                     <BellAlertIcon className={`w-4 h-4 ${isNotificationPage ? "text-white" : "text-gray-500 hover:text-black"}`} />
@@ -125,7 +111,7 @@ const Navbar = () => {
                       
                       {/* Logout */}
                       <button 
-                          onClick={() => (handleLogout(), navigate(0))} 
+                          onClick={() => (logout(), navigate(0))} 
                           className="w-full text-left px-3 py-1 text-sm text-gray-700 hover:bg-gray-100"
                       >
                           {t('logout')}

@@ -12,11 +12,13 @@ import Company from "../pages/company/index";
 import CompanyDetail from "../pages/company/CompanyDetail";
 import Subscription from "../pages/subscription/index";
 import Profile from "../pages/profile/index";
+import ToastListener from "../components/common/ToastListener";
 // import Notification from "../pages/notification/index";
 
 const AppRouter = () => {
   return (
     <BrowserRouter>
+      <ToastListener/>
       <Routes>
 
         {/* AUTH LAYOUT */}
