@@ -1,6 +1,6 @@
 import { ATTACHMENT_TYPE } from "./constants";
 
-const getLatestMediaByType = (mediaList = [], type) => {
+export const getLatestMediaByType = (mediaList = [], type) => {
     return mediaList.reduce((latest, current) => {
         if (current.attachmentType !== type) return latest;
 

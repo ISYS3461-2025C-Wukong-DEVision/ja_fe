@@ -11,10 +11,15 @@ import authService from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useJobPost } from "../../components/hook/useJobPost";
-
+import FilterCard from "../../components/job/filterCard";
+import Pagination from "../../components/common/Pagination";
+import { useCompany } from "../../components/hook/useCompany";
+import { getLatestMediaByType } from "../../utils/companyMapper";
+import { g } from "framer-motion/client";
 
 const Job = () => {
     const {jobs, fetchJobsAdvance, jobLoading, filter, setFilter, selectedJob, fetchJobById} = useJobPost();
+    const {selectedCompany, fetchCompanyById } = useCompany();
 
     const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
@@ -42,12 +47,9 @@ const Job = () => {
     const handleSelectJob = (job) => {
         setSelectedJobId(job.id);
         fetchJobById(job.id);
+        fetchCompanyById(job.companyId);
     };
-
-    useEffect(() => {
-        setSelectedJobId(jobs?.data?.content[0]?.id);
-        fetchJobById(jobs?.data?.content[0]?.id);
-    }, []);
+    const companyLogo = getLatestMediaByType(selectedCompany?.data?.mediaList, 'AVATAR');
 
     if (jobLoading) 
         return <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"><LoadingAnimation text={t('loading')} /></div>;
@@ -68,42 +70,12 @@ const Job = () => {
             {/* Loading trong view */}
             {isLoading && (<div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"><LoadingAnimation text={t('loading')} /></div>)}
 
-            <div className="flex flex-col justify-start items-center bg-primary/30 w-full p-6 lg:px-36 md:px-16">
-                <div className="flex flex-row justify-center items-center w-full">
-                    <button onClick={console.log("filter job title")} className="flex items-center justify-center py-5 px-4 bg-primary rounded-md hover:bg-primary-dark min-w-[100px] ml-2 shrink-0 overflow-hidden h-[72px]">
-                        <Bars3Icon className="sm:w-6 w-px h-6 text-white font-bold shrink-0"/>
-                        <span className="ml-1 text-white whitespace-nowrap">{t('category')}</span>
-                    </button>
-                    <div className="relative w-full flex items-center lg:order-none other-3 mx-2">
-                        {/* SEARCHING FIELD */}
-                        <input
-                            type="text"
-                            placeholder={t('searching')}
-                            className="border border-primary rounded-md px-3 py-6 pr-10 w-full focus:outline-none focus:ring-1 focus:ring-primary-dark [&::placeholder]:italic [&::placeholder]:text-sm"
-                        />
-                        <button onClick={console.log("searching")} className="absolute inset-y-0 right-2 text-center text-white border border-primary bg-primary hover:bg-primary-dark rounded-md my-2 px-6">
-                            {t('search')}
-                        </button>
-                    </div>
-                </div>
-                <div className="flex flex-wrap justify-start items-center w-full my-3 space-x-4 px-2">
-                    <div className="flex flex-wrap gap-2 items-center">
-                        <button onClick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
-                            <span className="text-gray-700 whitespace-nowrap">{t('location')}</span>
-                            <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
-                        </button>
-                        <button onClick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
-                            <ArrowTrendingUpIcon className="w-4 h-4 mr-1 transition-transform duration-200 text-gray-700" />
-                            <span className="text-gray-700 whitespace-nowrap">{t('type')}</span>
-                            <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
-                        </button>
-                        <button onClick={console.log("filter location")} className="flex items-center bg-white rounded-full px-3 border border-gray-50 hover:bg-gray-50">
-                            <BanknotesIcon className="w-4 h-4 mr-1 transition-transform duration-200 text-gray-700" />
-                            <span className="text-gray-700 whitespace-nowrap">{t('salary')}</span>
-                            <ChevronDownIcon className="w-4 h-4 ml-1 transition-transform duration-200 text-gray-700" />
-                        </button>
-                    </div>
-                </div>
+            <div className="flex-1 justify-center items-center bg-primary/30 w-full p-6 lg:px-36 md:px-16">
+                <FilterCard
+                    filters={filter}
+                    setFilters={setFilter}
+                    t={(key) => key}
+                />
             </div>
             <div className="flex flex-col xl:flex-row items-start justify-center w-screen p-6 max-xl:space-y-4 lg:px-36 md:px-16">
                 <div className="flex flex-col xl:items-center items-start justify-center w-full xl:w-full xl:max-w-md space-y-3">
@@ -139,7 +111,11 @@ const Job = () => {
                         })}
                     </div>
                     <div className="flex items-center justify-center w-full mb-6 xl:mb-px">
-                        Pagination
+                        <Pagination 
+                            filters={filter} 
+                            setFilters={setFilter} 
+                            totalPages={jobs?.data?.totalPages || 1} 
+                        />
                     </div>
                 </div>
                 <div className="flex w-full xl:px-2">
@@ -151,7 +127,14 @@ const Job = () => {
                                 <div className="space-y-6">
                                     <div className="flex sm:flex-row flex-col w-full border border-primary rounded-md justify-between">
                                         <div className="flex items-start justify-start p-2">
+                                            {/* RIGHT: company image */}
+                                            <img
+                                                src={companyLogo?.url || '/d.png'}
+                                                alt={selectedCompany?.data?.name || 'Company Logo'}
+                                                className="h-16 w-16 object-cover rounded-sm mr-3 mt-1 ml-1"
+                                            />
 
+                                            {/* LEFT */}
                                             <div className="flex flex-col items-start justify-start space-y-4">
                                                 {/* Công việc */}
                                                 <h3 className="text-lg font-bold text-primary-dark line-clamp-2">
@@ -183,8 +166,9 @@ const Job = () => {
 
                                                 {/* Skill */}
                                                 <div className="flex flex-wrap gap-2 items-center">
-                                                    {selectedJob?.data?.tags.map((e) => (
+                                                    {selectedJob?.data?.tags.map((e, index) => (
                                                         <div
+                                                        key={index}
                                                         className="px-4 border border-primary text-primary font-medium rounded-full text-sm whitespace-nowrap"
                                                         >
                                                             {e.name}
