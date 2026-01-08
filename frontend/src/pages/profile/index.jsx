@@ -53,7 +53,7 @@ const Profile = () => {
     const isAuth = !authService.isAuthenticated();
     const name = `${profile.firstName} ${profile.lastName}`;
     const address = `${profile.address || ''}, ${profile.city || ''}, ${profile.country || ''}`;
-    const applicantId = "00000000-0000-0000-0000-000000000003";
+    const applicantId = "00000000-0000-0000-0000-000000000001";
 
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState("profile");
