@@ -2,9 +2,10 @@ import { getApplicantById, updateApplicant, createApplicant } from "../../servic
 import { useState, useEffect } from "react";
 
 export const useProfile = () => {
-    const [profile, setProfile] = useState({})
+    const [profile, setProfile] = useState(null)
     const [loading, setLoading] = useState(false)
     const [editingProfile, setEditingProfile] = useState(null)
+    const [isProfileOpen, setIsProfileOpen] = useState(false)
 
 
     //Logic edit & create profile
@@ -34,6 +35,7 @@ export const useProfile = () => {
 
     return {
         loading, profile, fetchProfile, 
-        handSave, editingProfile, setEditingProfile
+        handSave, editingProfile, setEditingProfile,
+        isProfileOpen, setIsProfileOpen
     }
 }

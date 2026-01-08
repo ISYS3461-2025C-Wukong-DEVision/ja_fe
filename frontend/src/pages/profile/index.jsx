@@ -26,7 +26,7 @@ import { useAuth } from '../../components/hook/useAuth';
 
 const Profile = () => {
     const {user, isAuthenticated, logout} = useAuth();
-    const { loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
+    const { isProfileOpen, setIsProfileOpen, loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
     const { isSkillOpen, setIsSkillOpen, editingSkill, setEditingSkill, skillHandSave, skill, fetchSkill } = useSkill();
     const { editingEducation, setEditingEducation, educationDelete, educationHandSave, isEducationOpen, setIsEducationOpen } = useEducation();
     const { editingWorkExperience, setEditingWorkExperience, workDelete, workHandSave, isWorkOpen, setIsWorkOpen} = useWorkExperience();
@@ -122,11 +122,11 @@ const Profile = () => {
         <LayoutGroup>
             <div className="flex flex-row justify-center items-start pt-6 pr-6 pl-6 bg-gray-100 space-x-6 pb-12 min-h-screen overflow-hidden">
                 <AnimatePresence>
-                    {editingProfile && (
+                    {isProfileOpen && (
                         <ProfileForm 
                             initialData={editingProfile} 
                             onSave={handSave} // handSave đã có sẵn trong useProfile
-                            onCancel={() => setEditingProfile(null)} 
+                            onCancel={() => (setEditingProfile(null), setIsProfileOpen(false))} 
                         />
                     )}
                 </AnimatePresence>
@@ -260,7 +260,7 @@ const Profile = () => {
 
                         {/* Nút PencilIcon ở góc trên bên phải */}
                         <button 
-                            onClick={() => setEditingProfile({...profile, id: applicantId})} // kích hoạt chế độ edit
+                            onClick={() => (setEditingProfile(profile), setIsProfileOpen(true))} // kích hoạt chế độ edit
                             className="absolute top-4 right-4 p-2 text-primary hover:text-primary-dark transition-colors z-10"
                         >
                             <PencilIcon className="h-6 w-6" />
