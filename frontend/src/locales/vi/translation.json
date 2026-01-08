@@ -74,5 +74,15 @@
     "Discover opportunities, ...": "Khám phá cơ hội, kết nối với các công ty và bước tiếp theo trong hành trình sự nghiệp của bạn.",
     "Fill_profile < 80%": "Cập nhật hồ sơ để nhận thêm các đề xuất việc làm phù hợp nhất.",
     "Complete_your_profile": "Hồ sơ đã sẵn sàng! Bạn có thể tự tin ứng tuyển vào các vị trí mơ ước.",
-    "no_job_selected": "Không có công việc nào được chọn. Vui lòng chọn một công việc để xem chi tiết."
+    "no_job_selected": "Không có công việc nào được chọn. Vui lòng chọn một công việc để xem chi tiết.",
+    "confirm-label": "Xác nhận",
+    "cancel-label": "Huỷ bỏ",
+    "validate-label": "Phiên đăng nhập hết hạn. Đăng nhập lại?",
+    "invalid_email_format": "Email không hợp lệ!",
+    "please_enter_password": "Hãy nhập mật khẩu!",
+    "please_enter_email": "Hãy nhập email!",
+    "please_select_country": "Hãy chọn quốc gia!",
+    "passwords_do_not_match": "Mật khẩu không khớp!",
+    "show_pass": "Hiển thị mật khẩu",
+    "email_password_incorrect": "Email hoặc mật khẩu không đúng!"
 }

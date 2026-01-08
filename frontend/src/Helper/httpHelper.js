@@ -1,4 +1,5 @@
 import authService from '../services/authService';
+import toast from 'react-hot-toast';
 
 const BASE_URL = 'https://devision-be.quykhang.cloud/api';
 
@@ -30,27 +31,44 @@ class HttpHelper {
 
     const response = await fetch(`${BASE_URL}${url}`, config);
 
-    // ❌ Token hết hạn → thử refresh
-    if (response.status === 401 && retry) {
-      try {
-        await authService.refreshToken();
-        return this.request(method, url, body, headers, false);
-      } catch (err) {
-        authService.logout();
-        throw err;
-      }
+    // ❌ Token hết hạn
+    if (response.status === 401) { // 
+      authService.logout();
+      
+      // Phát một sự kiện tùy chỉnh thay vì gọi toast trực tiếp ở đây
+      const event = new CustomEvent('auth-token-expired');
+      window.dispatchEvent(event);
+      
+      throw new Error('Session expired');
     }
 
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(errorText || 'Request failed');
+      let errorMessage = 'Request failed';
+
+      try {
+        // Thử parse text đó sang JSON để lấy trường 'message'
+        const errorJson = JSON.parse(errorText);
+        errorMessage = errorJson.message || errorMessage;
+      } catch (e) {
+        // Nếu không phải JSON (vd: lỗi 500 server trả về html), dùng text thô
+        errorMessage = errorText || errorMessage;
+      }
+
+      throw new Error(errorMessage);
     }
 
     if (response.status === 204 || response.headers.get("content-length") === "0") {
       return null;
     }
 
-    return response.json();
+    // Đọc nội dung dưới dạng text trước để xử lý trường hợp trả về true/false
+    const textData = await response.text();
+    try {
+      return JSON.parse(textData); // Trả về object hoặc giá trị true/false nếu là JSON chuẩn
+    } catch (e) {
+      return textData; // Nếu không phải JSON (vd: text thô), trả về text
+    }
   }
 
   get(url, headers = {}) {

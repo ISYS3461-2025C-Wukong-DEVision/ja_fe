@@ -1,6 +1,6 @@
 import CarouselCard from '../components/common/carouselCard';
 import CompanyIcon from '../components/company/companyIcon';
-import JobCard from '../components/job/jobCard';
+import JobCard from '../components/job/JobCard';
 import { useTranslation } from 'react-i18next';
 import { getCompaniesMock } from '../services/companyService';
 import LoadingAnimation from '../components/common/loadingAnimation';
@@ -95,7 +95,6 @@ function Home() {
                   title={job.title}
                   logo={job.logo}
                   city={job.city}
-                  employmentType={job.employmentType}
                   minSalary={job.minSalary}
                   maxSalary={job.maxSalary}
                   salary_est_type={job.salary_est_type}

@@ -1,21 +1,22 @@
-// authInput.jsx
-import React from 'react';
+import React, { forwardRef } from 'react'; // 1. Phải import forwardRef
 
-const AuthInput = ({
+// 2. Bọc toàn bộ component bằng forwardRef
+const AuthInput = forwardRef(({
   label,
   id,
   name,
-  type = 'text', // Giá trị mặc định là 'text'
+  type = 'text',
   autoComplete,
   required = false,
   value,
   onChange,
   placeholder,
-  t, // Dùng cho i18n
-}) => {
+  t,
+  className, // Nhận className từ cha để hiển thị viền đỏ
+  ...props
+}, ref) => {
   return (
     <div>
-      {/* Label: Dùng prop 'label' và 't' cho i18n */}
       <label
         htmlFor={id}
         className="block text-sm font-medium text-primary"
@@ -24,7 +25,6 @@ const AuthInput = ({
       </label>
       
       <div className="mt-1">
-        {/* Input: Dùng các prop để kết nối với state của component cha */}
         <input
           id={id}
           name={name}
@@ -32,13 +32,16 @@ const AuthInput = ({
           autoComplete={autoComplete}
           required={required}
           value={value}
+          ref={ref} // 3. Bây giờ ref này đã có giá trị từ forwardRef
           onChange={onChange}
-          className="appearance-none block w-full px-3 py-2 rounded-sm bg-primary/50 shadow-sm placeholder-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-700 border border-primary/50"
+          // 4. Thêm ${className} vào đây để nhận viền đỏ từ RegisterForm
+          className={`appearance-none block w-full px-3 py-2 rounded-sm bg-primary/50 shadow-sm placeholder-gray-50 focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-700 border border-primary/50 ${className}`}
           placeholder={placeholder}
+          {...props} // 5. Đẩy onKeyDown và các prop khác vào đây
         />
       </div>
     </div>
   );
-};
+}); // Kết thúc bọc forwardRef
 
 export default AuthInput;
