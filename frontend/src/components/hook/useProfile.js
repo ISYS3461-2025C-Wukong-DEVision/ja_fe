@@ -1,8 +1,9 @@
 import { getApplicantById, updateApplicant, createApplicant } from "../../services/applicantService";
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 export const useProfile = () => {
-    const [profile, setProfile] = useState(null)
+    const [profile, setProfile] = useState({})
     const [loading, setLoading] = useState(false)
     const [editingProfile, setEditingProfile] = useState(null)
     const [isProfileOpen, setIsProfileOpen] = useState(false)
@@ -19,7 +20,7 @@ export const useProfile = () => {
                 setProfile(create);
             }
             setEditingProfile(null);
-        } catch (error) { alert("Saved failed: " + error.message); }
+        } catch (error) { toast.error("Saved failed: Your objecttive is too long."); }
     };
 
     //Fetch profile 

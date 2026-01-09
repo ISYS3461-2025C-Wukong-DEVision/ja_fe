@@ -91,7 +91,7 @@ const RegisterForm = () => {
         setErrors(newErrors);
         if (hasError) return;
 
-        const formData = { email, password, country };
+        const formData = { email, password, role: "USER", firstname: "Unknown", lastName: "User", objective: "This user is too lazy to add detail to his/her objective", phone: "None", country, city: "Happy City", address: "123 Street" };
         const result = await signup(formData);
         
         if (result) {

@@ -1,13 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { getLatestMediaByType } from "../../utils/companyMapper";
 import { REF_MODULE } from "../../services/mediaService";
-import { useMedia } from "../../components/hook/useMedia";
-import { useProfile } from "../../components/hook/useProfile";
+import { useTranslation } from "react-i18next";
 
 const ProfileMedia = ({ attachments, applicantId, url, handleUploadMedia, handlePostMediaForApplicantProfile, refreshProfile, refreshAvatar }) => {
-    const { fetchAttachments } = useMedia();
-    const { fetchProfile } = useProfile();
     const [currentAvatar, setCurrentAvatar] = useState(url);
+    const { t } = useTranslation();
     
     // State lưu object ảnh tạm thời sau khi upload
     const [tempAvatar, setTempAvatar] = useState(null);
@@ -70,8 +68,8 @@ const ProfileMedia = ({ attachments, applicantId, url, handleUploadMedia, handle
                 setTempAvatar(null);
 
                 // Fetch ngầm bên dưới để đồng bộ data (không ảnh hưởng UI nữa)
-                await fetchAttachments(REF_MODULE.APPLICANT, applicantId);
-                await fetchProfile(applicantId);
+                await refreshAvatar(REF_MODULE.APPLICANT, applicantId);
+                await refreshProfile(applicantId);
 
             } catch (error) {
                 console.error("Post media failed", error);

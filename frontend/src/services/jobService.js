@@ -5,9 +5,7 @@ import { jobs } from '../mocks/job.mock';
 const JOB_BASE = '/job-post';
 
 export const getJobs = (queryFilter) => {
-  return httpHelper.get(`${JOB_BASE}/search/advance`, {
-    params: queryFilter 
-  });
+  return httpHelper.get(`${JOB_BASE}/search/advance`, queryFilter);
 };
 
 export const getJobById = (id) => {

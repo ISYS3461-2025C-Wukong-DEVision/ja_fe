@@ -25,11 +25,6 @@ export const deleteMediaById = (mediaId) => {
 };
 
 // Get attachment by refModule and refId
-export const getAttachments = (refModule, refId) => {
-  return httpHelper.get(`${MEDIA_BASE}`, {
-    params: {
-      refModule: refModule, // Ví dụ: 'APPLICANT'
-      refId: refId
-    }
-  });
+export const getAttachments = (formData) => {
+  return httpHelper.get(`${MEDIA_BASE}`, formData);
 };

@@ -82,6 +82,7 @@ const EducationForm = ({ userId, initialData, onSave, onCancel }) => {
                             placeholder="3.8"
                             value={formData.gpa}
                             onChange={e => setFormData({...formData, gpa: e.target.value})}
+                            required
                         />
                     </div>
                 </div>

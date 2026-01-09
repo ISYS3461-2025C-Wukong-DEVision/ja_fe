@@ -129,14 +129,30 @@ const ProfileForm = ({ initialData, onSave, onCancel }) => {
 
                 {/* Objective */}
                 <div className="space-y-1">
-                    <label className="text-sm font-semibold text-gray-700">Professional Objective</label>
+                    <div className="flex justify-between items-center">
+                        <label className="text-sm font-semibold text-gray-700">Professional Objective</label>
+                        {/* Bộ đếm ký tự */}
+                        <span className={`text-xs ${formData.objective?.length >= 255 ? 'text-red-500 font-bold' : 'text-gray-400'}`}>
+                            {formData.objective?.length || 0}/255
+                        </span>
+                    </div>
+                    
                     <textarea 
                         rows="4"
-                        className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none resize-none" 
+                        className={`w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-primary outline-none resize-none transition-all ${
+                            formData.objective?.length >= 255 ? 'border-orange-400' : 'border-gray-300'
+                        }`} 
                         placeholder="Tell us about your career goals..."
                         value={formData.objective}
                         onChange={e => setFormData({...formData, objective: e.target.value})}
                     />
+                    
+                    {/* Thông báo nhỏ khi chạm giới hạn (Optional) */}
+                    {formData.objective?.length >= 255 && (
+                        <p className="text-[10px] text-orange-500 mt-1 italic">
+                            Maximum length reached (255 characters).
+                        </p>
+                    )}
                 </div>
 
                 {/* Actions */}

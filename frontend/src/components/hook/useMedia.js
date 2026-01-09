@@ -56,7 +56,12 @@ export const useMedia = () => {
     const fetchAttachments = async (refModule, refId) => {
         setMediaUploading(true);
         try {
-            const response = await getAttachments(refModule, refId);
+            const params = {
+                refModule: refModule,
+                refId: refId
+            };
+        
+            const response = await getAttachments(params);
             
             const finalData = response.data?.items || [];
             setMedia(finalData)

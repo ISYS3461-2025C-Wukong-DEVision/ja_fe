@@ -4,10 +4,10 @@ import { COUNTRIES } from '../../utils/constants';
 
 // Cấu hình Bitmask
 const EMPLOYMENT_TYPES = [
-    { label: 'Full-time', value: 1 },
-    { label: 'Part-time', value: 2 },
-    { label: 'Internship', value: 4 },
-    { label: 'Contract', value: 8 },
+    { label: 'Full-time', value: 'FULL_TIME' },
+    { label: 'Part-time', value: 'PART_TIME' },
+    { label: 'Internship', value: 'INTERNSHIP' },
+    { label: 'Contract', value: 'CONTRACT' },
 ];
 
 
@@ -22,26 +22,18 @@ const JobPreferenceForm = ({userId, initialData, onSave, onCancel }) => {
 
     useEffect(() => {
         if (initialData) {
-            // Hàm chuyển từ bitmask (number) sang array các value để hiển thị checkbox
-            const bitmaskToArray = (mask) => {
-                return EMPLOYMENT_TYPES
-                    .filter(type => (mask & type.value) !== 0)
-                    .map(type => type.value);
-            };
-
+            
             setFormData({
                 country: initialData.country || '',
                 isFresher: initialData.isFresher || false,
-                selectedTypes: bitmaskToArray(initialData.employmentTypes || 0),
+                selectedTypes: initialData.employmentTypes || [],
                 salaryMin: initialData.salaryMin || '',
                 salaryMax: initialData.salaryMax || ''
             });
         }
     }, [initialData]);
 
-    // Hàm chuyển đổi từ Array sang Bitmask trước khi gửi đi
-    const convertToBitmask = (arr) => arr.reduce((acc, val) => acc + val, 0);
-
+    
     const handleTypeChange = (value) => {
         const newTypes = formData.selectedTypes.includes(value)
             ? formData.selectedTypes.filter(t => t !== value)
@@ -63,7 +55,7 @@ const JobPreferenceForm = ({userId, initialData, onSave, onCancel }) => {
         // Chuyển đổi data sang định dạng API mong muốn
         const finalData = {
             ...formData,
-            employmentTypes: convertToBitmask(formData.selectedTypes)
+            employmentTypes: formData.selectedTypes
         };
         
         // Xóa field tạm trước khi gửi
@@ -121,7 +113,7 @@ const JobPreferenceForm = ({userId, initialData, onSave, onCancel }) => {
                     </button>
                 </div>
 
-                {/* Employment Types (Bitmask UI) */}
+                {/* Employment Types */}
                 <div className="space-y-2">
                     <label className="text-sm font-semibold text-gray-700">Employment Types</label>
                     <div className="grid grid-cols-2 gap-3">

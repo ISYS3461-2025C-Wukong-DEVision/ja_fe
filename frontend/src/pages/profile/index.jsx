@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useId } from 'react';
 import ProfileCard from "../../components/profile/profileCard";
-import authService from "../../services/authService";
 import { PencilIcon, TrashIcon, PlusIcon} from "@heroicons/react/24/solid";
 import { CheckCircleIcon, FaceFrownIcon } from "@heroicons/react/24/outline";
 import LoadingAnimation from '../../components/common/loadingAnimation';
@@ -9,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import ProfileBigCard from '../../components/profile/profileDetailCard';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { useSalaryFormatter } from '../../utils/formatSalary';
-import parseEmploymentType from '../../utils/decodeBitmask';
 import { calculateProfileCompletion } from '../../utils/profileCompletion';
 import { useProfile } from '../../components/hook/useProfile';
 import ProfileForm from '../../components/profile/profileForm';
@@ -23,7 +21,6 @@ import { useJobPreference } from '../../components/hook/useJobPreference';
 import JobPreferenceForm from '../../components/profile/jobReferenceForm';
 import { useMedia } from '../../components/hook/useMedia';
 import ProfileMedia from './profileMedia';
-import { REF_MODULE } from '../../services/mediaService';
 import { useAuth } from '../../components/hook/useAuth';
 
 
@@ -39,6 +36,8 @@ const Profile = () => {
     const normalizedJobPreference = profile?.jobPreference && Object.keys(profile.jobPreference).length > 0 ? profile.jobPreference : null;
     const skills = (profile && profile.skills && Array.isArray(profile.skills)) ? profile.skills.map(skill => skill.id) : [];
     const nav = useNavigate();
+
+
     const getLatestAvatarUrl = (mediaList = []) => {
         return mediaList
             .filter(
@@ -50,10 +49,27 @@ const Profile = () => {
                 (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
             )[0]?.url || "https://truongthammylali.com/wp-content/uploads/2025/07/co-gai-anime-cute-voi-mai-toc-hong-va-doi-mat-to-tron-toat-len-ve-dang-yeu.jpg";
     };
-    const URL = getLatestAvatarUrl(profile.mediaList);
-    const name = `${profile.firstName} ${profile.lastName}`;
+
+
+    const parseEmploymentType = (type) => {
+        if (!type || typeof type !== 'string') return "";
+        return type
+            .toLowerCase()           // full_time
+            .split("_")              // ["full", "time"]
+            .map((word, i) =>
+            i === 0
+            ? word.charAt(0).toUpperCase() + word.slice(1) // "Full"
+            : word               // giữ "time" thường
+            )
+            .join("-");              // "Full-time"
+    };
+    const employmentTypes = profile.jobPreference?.employmentTypes || [];
+    const displayString = employmentTypes.map(type => parseEmploymentType(type)).join(", ");
+
+    const URL = getLatestAvatarUrl(profile.mediaList || []);
+    const name = `${profile.firstName || "Unknown"} ${profile?.lastName || "User"}`;
     const address = `${profile.address || ''}, ${profile.city || ''}, ${profile.country || ''}`;
-    const applicantId = user?.id;
+    const applicantId = user?.id || "00000000-0000-0000-0000-000000000002";
 
     const { t } = useTranslation();
     const [activeTab, setActiveTab] = useState("profile");
@@ -65,7 +81,7 @@ const Profile = () => {
 
     useEffect(() => {
         fetchProfile(applicantId)
-        fetchAttachments(REF_MODULE.APPLICANT, applicantId);
+        fetchAttachments("APPLICANT", applicantId);
     }, []);
 
     useEffect(() => {
@@ -126,11 +142,11 @@ const Profile = () => {
         <LayoutGroup>
             <div className="flex flex-row justify-center items-start pt-6 pr-6 pl-6 bg-gray-100 space-x-6 pb-12 min-h-screen overflow-hidden">
                 <AnimatePresence>
-                    {isProfileOpen && (
+                    {editingProfile && (
                         <ProfileForm 
                             initialData={editingProfile} 
                             onSave={handSave} // handSave đã có sẵn trong useProfile
-                            onCancel={() => (setEditingProfile(null), setIsProfileOpen(false))} 
+                            onCancel={() => (setEditingProfile(null))} 
                         />
                     )}
                 </AnimatePresence>
@@ -238,7 +254,7 @@ const Profile = () => {
                                     {/* job references */}
                                     <span><strong>Country: </strong>{profile.jobPreference?.country || "Not specified"}</span>
                                     <span className={`${profile.jobPreference?.isFresher ? 'flex items-center text-green-500' : 'hidden'}`}>Fresher<CheckCircleIcon className='h-4 w-4 inline-block ml-1' /></span>
-                                    <span><strong>Employment Type: </strong>{parseEmploymentType(profile.jobPreference?.employmentTypes)}</span>
+                                    <span><strong>Employment Type: </strong>{displayString || "N/A"}</span>
                                     <span><strong>Salary range: </strong>{formatByValue(profile.jobPreference?.salaryMin, profile.jobPreference?.salaryMax)}</span>
                                 </div>
                             </div>
@@ -343,7 +359,7 @@ const Profile = () => {
                                                 {/* job references */}
                                                 <span><strong>Country: </strong>{profile.jobPreference?.country || "Not specified"}</span>
                                                 <span className={`${profile.jobPreference?.isFresher ? 'flex items-center text-green-500' : 'hidden'}`}>Fresher<CheckCircleIcon className='h-4 w-4 inline-block ml-1' /></span>
-                                                <span><strong>Employment Type: </strong>{parseEmploymentType(profile.jobPreference?.employmentTypes)}</span>
+                                                <span><strong>Employment Type: </strong>{displayString || "N/A"}</span>
                                                 <span><strong>Salary range: </strong>{formatByValue(profile.jobPreference?.salaryMin, profile.jobPreference?.salaryMax)}</span>
                                             </div>
                                         </div>
@@ -368,7 +384,7 @@ const Profile = () => {
                                         <PlusIcon className='h-5 w-5' />
                                     </button>
                                 </div>
-                                <div className='border border-dashed border-gray-400 rounded-md mt-4 flex items-center justify-start italic text-gray-400 p-6 overflow-y-auto'>
+                                <div className='border border-dashed border-gray-400 rounded-md mt-4 flex flex-col items-start justify-start space-y-6 italic text-gray-400 p-6 overflow-y-auto'>
                                     {/* map educations */}
                                     {profile.educations && profile.educations.length > 0 ? (
                                         profile.educations.map((edu, index) => (
@@ -403,7 +419,7 @@ const Profile = () => {
                                         <PlusIcon className='h-5 w-5' />
                                     </button>
                                 </div>
-                                <div className='border border-dashed border-gray-400 rounded-md mt-4 flex items-center justify-start italic text-gray-400 p-6 overflow-y-auto'>
+                                <div className='border border-dashed border-gray-400 rounded-md mt-4 flex flex-col items-start justify-start italic text-gray-400 p-6 overflow-y-auto'>
                                     {/* map experiences */}
                                     {profile.workExperiences && profile.workExperiences.length > 0 ? (
                                         profile.workExperiences.map((exp, index) => (
@@ -440,6 +456,8 @@ const Profile = () => {
                                 handleUploadMedia={handleUploadMedia}
                                 handlePostMediaForApplicantProfile={handlePostMediaForApplicantProfile}
                                 handleDeleteMediaById={handleDeleteMediaById}
+                                refreshAvatar={fetchAttachments}
+                                refreshProfile={fetchProfile}
                             />
                         </div>
                     )}

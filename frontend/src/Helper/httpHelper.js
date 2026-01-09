@@ -7,13 +7,25 @@ class HttpHelper {
   async request(method, url, body = null, headers = {}, retry = true) {
     const accessToken = authService.getAccessToken();
 
+    // Kiểm tra xem body có phải là FormData không
+    const isFormData = body instanceof FormData;
+
     const config = {
       method,
       headers: {
-        'Content-Type': 'application/json',
         ...headers,
       },
     };
+
+    if (!isFormData) {
+      config.headers['Content-Type'] = 'application/json';
+    } else {
+      // Nếu là FormData, để trình duyệt tự xử lý Content-Type (nó sẽ tự thêm boundary)
+      // Xoá header Content-Type nếu lỡ có bị set đè vào
+      if (config.headers['Content-Type']) {
+        delete config.headers['Content-Type'];
+      }
+    }
 
     // Gắn Bearer token (trừ login)
     if (
@@ -26,7 +38,11 @@ class HttpHelper {
 
 
     if (body) {
-      config.body = JSON.stringify(body);
+      if (isFormData) {
+        config.body = body; // Giữ nguyên FormData, KHÔNG stringify
+      } else {
+        config.body = JSON.stringify(body); // JSON bình thường thì stringify
+      }
     }
 
     const response = await fetch(`${BASE_URL}${url}`, config);
@@ -71,9 +87,51 @@ class HttpHelper {
     }
   }
 
-  get(url, headers = {}) {
-    return this.request('GET', url, null, headers);
+  buildQueryString(params) {
+    if (!params || Object.keys(params).length === 0) return '';
+
+    // Lọc bỏ các giá trị null, undefined hoặc rỗng để URL sạch đẹp
+    const cleanParams = Object.entries(params).reduce((acc, [key, value]) => {
+      if (value !== null && value !== undefined && value !== '') {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+
+    const searchParams = new URLSearchParams(cleanParams);
+    
+    // toString() của URLSearchParams sẽ tự động encode (vd: dấu phẩy , thành %2C)
+    // đúng như cái URL mẫu cậu đưa.
+    return searchParams.toString();
   }
+
+  // --- CÁC METHOD ĐƯỢC NÂNG CẤP ---
+
+  // Thêm tham số params vào vị trí thứ 2
+  get(url, params = {}, headers = {}) {
+    let finalUrl = url;
+    const queryString = this.buildQueryString(params);
+
+    if (queryString) {
+      // Kiểm tra xem url gốc đã có ? chưa để nối cho đúng
+      finalUrl += (url.includes('?') ? '&' : '?') + queryString;
+    }
+
+    return this.request('GET', finalUrl, null, headers);
+  }
+
+  // Delete đôi khi cũng cần query params
+  delete(url, params = {}, headers = {}) {
+    let finalUrl = url;
+    const queryString = this.buildQueryString(params);
+
+    if (queryString) {
+      finalUrl += (url.includes('?') ? '&' : '?') + queryString;
+    }
+
+    return this.request('DELETE', finalUrl, null, headers);
+  }
+
 
   post(url, body, headers = {}) {
     return this.request('POST', url, body, headers);
@@ -87,9 +145,6 @@ class HttpHelper {
     return this.request('PATCH', url, body, headers);
   }
 
-  delete(url, headers = {}) {
-    return this.request('DELETE', url, null, headers);
-  }
 }
 
 const httpHelper = new HttpHelper();

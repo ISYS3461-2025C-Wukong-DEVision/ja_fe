@@ -12,6 +12,7 @@ export const useAuth = () => {
     try {
       const userData = await authService.login(email, password); // Gọi hàm login
       setUser(userData);
+      console.log("user: ", userData)
       toast.success('Đăng nhập thành công!');
       return userData;
     } catch (error) {

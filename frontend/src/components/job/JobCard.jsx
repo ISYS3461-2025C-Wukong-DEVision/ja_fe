@@ -1,4 +1,4 @@
-import parseImploymentType from '../../utils/decodeBitmask';
+
 import { useTranslation } from 'react-i18next';
 import { timeAgo } from '../../utils/time';
 import { useSalaryFormatter } from '../../utils/formatSalary';
