@@ -67,7 +67,7 @@ const JobCard = ({company, title, city, employmentType, minSalary, maxSalary, sa
         {/* Ngày Đăng */}
         <div className='flex items-center justify-between w-full'>
             <p className="text-gray-500 text-sm">
-                {timeAgo(post_date)}
+                {timeAgo(post_date, t)}
             </p>
             <div>
                 <div className={`px-2 py-1 bg-primary-dark text-white text-sm rounded-md hover:bg-primary transition cursor-pointer w-max ${is_applied ? "" : "invisible cursor-not-allowed"}`}>

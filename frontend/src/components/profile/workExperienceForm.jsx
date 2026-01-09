@@ -42,7 +42,7 @@ const WorkExperienceForm = ({ userId, initialData, onSave, onCancel }) => {
 
                 {/* Job Title */}
                 <div className="space-y-1">
-                    <label className="text-sm font-semibold text-gray-700">Job Title / Position</label>
+                    <label className="text-sm font-semibold text-gray-700">{'Job Title / Position '}{<span className="text-red-500">*</span>}</label>
                     <input 
                         className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" 
                         placeholder="e.g. Senior Frontend Developer"
@@ -55,7 +55,7 @@ const WorkExperienceForm = ({ userId, initialData, onSave, onCancel }) => {
                 {/* Dates Group */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                        <label className="text-sm font-semibold text-gray-700">Started At</label>
+                        <label className="text-sm font-semibold text-gray-700">{'Started At '}{<span className="text-red-500">*</span>}</label>
                         <input 
                             type="date"
                             className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" 

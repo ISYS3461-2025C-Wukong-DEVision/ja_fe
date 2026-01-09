@@ -15,6 +15,17 @@ export const getLatestMediaByType = (mediaList = [], type) => {
     }, null);
 };
 
+export const getMediaByType = (mediaList = [], type) => {
+    if (!Array.isArray(mediaList)) return [];
+
+    return mediaList
+        .filter(item => item.attachmentType === type)
+        // Sắp xếp từ mới nhất đến cũ nhất (Nếu cậu không cần sắp xếp thì xóa 3 dòng dưới)
+        .sort((a, b) => 
+            new Date(b.createdAt) - new Date(a.createdAt)
+        );
+};
+
 export const mapCompanyFromApi = (response) => {
   const data = response?.data;
   if (!data) return null;

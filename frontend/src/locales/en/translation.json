@@ -84,5 +84,8 @@
     "please_select_country": "Please select country!",
     "passwords_do_not_match": "Password doesn't match!",
     "show_pass": "Show password",
-    "email_password_incorrect": "Email or password incorrect!"
+    "email_password_incorrect": "Email or password incorrect!",
+    "login_msg_part1": "Please, ",
+    "login_action": "login",
+    "login_msg_part2": " to reach our feature."
 }

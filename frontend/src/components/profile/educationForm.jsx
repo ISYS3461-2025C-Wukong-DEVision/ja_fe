@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import DayPicker from '../common/DayPicker';
 
 const EducationForm = ({ userId, initialData, onSave, onCancel }) => {
     // Khởi tạo state cho Education
@@ -44,7 +45,7 @@ const EducationForm = ({ userId, initialData, onSave, onCancel }) => {
 
                 {/* Institution Name */}
                 <div className="space-y-1">
-                    <label className="text-sm font-semibold text-gray-700">Institution / University</label>
+                    <label className="text-sm font-semibold text-gray-700">{'Institution / University '}{<span className="text-red-500">*</span>}</label>
                     <input 
                         className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" 
                         placeholder="e.g. Harvard University"
@@ -57,7 +58,7 @@ const EducationForm = ({ userId, initialData, onSave, onCancel }) => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Degree Type */}
                     <div className="space-y-1">
-                        <label className="text-sm font-semibold text-gray-700">Degree Type</label>
+                        <label className="text-sm font-semibold text-gray-700">{"Degree Type "}{<span className="text-red-500">*</span>}</label>
                         <select 
                             className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none bg-white"
                             value={formData.degreeType}
@@ -72,7 +73,7 @@ const EducationForm = ({ userId, initialData, onSave, onCancel }) => {
 
                     {/* GPA */}
                     <div className="space-y-1">
-                        <label className="text-sm font-semibold text-gray-700">GPA (Optional)</label>
+                        <label className="text-sm font-semibold text-gray-700">{"GPA "} {<span className="text-red-500">*</span>}</label>
                         <input 
                             type="number"
                             step="0.01"
@@ -90,22 +91,18 @@ const EducationForm = ({ userId, initialData, onSave, onCancel }) => {
                 {/* Dates Group */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                        <label className="text-sm font-semibold text-gray-700">Started At</label>
-                        <input 
-                            type="date"
-                            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" 
-                            value={formData.startedAt}
-                            onChange={e => setFormData({...formData, startedAt: e.target.value})}
-                            required
+                        <DayPicker 
+                            label="Started at"
+                            value={formData.startedAt} 
+                            onChange={(val) => setFormData({...formData, startedAt: val})}
+                            required={true}
                         />
                     </div>
                     <div className="space-y-1">
-                        <label className="text-sm font-semibold text-gray-700">Ended At</label>
-                        <input 
-                            type="date"
-                            className="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none" 
-                            value={formData.endedAt}
-                            onChange={e => setFormData({...formData, endedAt: e.target.value})}
+                        <DayPicker 
+                            label="Ended at"
+                            value={formData.endedAt} 
+                            onChange={(val) => setFormData({...formData, endedAt: val})}
                         />
                     </div>
                 </div>
