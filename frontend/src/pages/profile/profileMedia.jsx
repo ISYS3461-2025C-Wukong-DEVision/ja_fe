@@ -117,8 +117,8 @@ const ProfileMedia = ({
             text: `Do you want to delete "${title}"?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6', // Cậu có thể chỉnh màu theo primary của cậu
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#9496FF', // Cậu có thể chỉnh màu theo primary của cậu
+            cancelButtonColor: '#9EA1A5',
             confirmButtonText: 'Yes, delete it!',
             cancelButtonText: 'Cancel'
         });

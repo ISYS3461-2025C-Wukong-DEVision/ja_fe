@@ -105,7 +105,7 @@ const RegisterForm = () => {
             firstname: "Unknown", 
             lastName: "User", 
             objective: "This user is too lazy to add detail to his/her objective", 
-            phone: email, 
+            phone: "None", 
             country, 
             city: "Happy City", 
             address: "123 Street" 

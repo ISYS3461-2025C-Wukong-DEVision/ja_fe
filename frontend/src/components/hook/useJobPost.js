@@ -45,10 +45,7 @@ export const useJobPost = () => {
                 }
             });
 
-            console.log("Calling API with params:", cleanedParams); // Debug xem gửi gì
-
             const data = await getJobs(cleanedParams);
-            console.log("Data: ", data)
             setJobs(data);
         } catch (error) { 
             console.error("Fetch error", error); 

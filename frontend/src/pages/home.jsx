@@ -1,6 +1,5 @@
 import CarouselCard from '../components/common/carouselCard';
 import CompanyIcon from '../components/company/companyIcon';
-import JobCard from '../components/job/JobCard'
 import { useTranslation } from 'react-i18next';
 import { getCompaniesMock } from '../services/companyService';
 import LoadingAnimation from '../components/common/loadingAnimation';

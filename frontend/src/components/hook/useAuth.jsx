@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, createContext, useContext } from 'react';
 import authService from '../../services/authService';
 import { tokenStorage } from '../../utils/tokenStorage';
 import { toast } from 'react-hot-toast';
 
-export const useAuth = () => {
+const AuthContext = createContext();
+
+export const AuthProvider = ({children}) => {
   const [user, setUser] = useState(tokenStorage.getCurrentUser()); // Lấy user từ localStorage khi khởi tạo
   const [loading, setLoading] = useState(false);
 
@@ -58,12 +60,17 @@ export const useAuth = () => {
       }
   };
 
-  return {
-    user,
-    isAuthenticated: !!user,
-    loading,
-    login,
-    logout,
-    signup
-  };
+  return (
+    <AuthContext.Provider value={{ user, setUser, isAuthenticated: !!user, loading, login, logout, signup }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth phải được dùng trong AuthProvider");
+  }
+  return context;
 };

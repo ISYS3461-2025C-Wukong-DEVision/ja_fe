@@ -30,7 +30,7 @@ import Swal from 'sweetalert2';
 
 
 const Profile = () => {
-    const {user, isAuthenticated, logout} = useAuth();
+    const {user, isAuthenticated, setUser} = useAuth();
     const { fetchMyApplied , myApplied } = useApplication();
     const { isPremium, fetchIsPremium, fetchMyTransaction, myTransaction } = usePayment();
     const { loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
@@ -62,8 +62,8 @@ const Profile = () => {
             text: `Do you want to delete "${title}"?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#3085d6', // Cậu có thể chỉnh màu theo primary của cậu
-            cancelButtonColor: '#d33',
+            confirmButtonColor: '#9496FF', // Cậu có thể chỉnh màu theo primary của cậu
+            cancelButtonColor: '#9EA1A5',
             confirmButtonText: 'Yes, delete it!',
             cancelButtonText: 'Cancel'
         });
@@ -126,7 +126,7 @@ const Profile = () => {
     const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {
-        // if(!isAuthenticated) return;
+        if(!isAuthenticated) return;
         fetchProfile(applicantId)
         fetchAttachments("APPLICANT", applicantId);
         fetchIsPremium()
@@ -138,7 +138,7 @@ const Profile = () => {
     }, []);
 
     useEffect(() => {
-        // if(!isAuthenticated) return;
+        if(!isAuthenticated) return;
         const handleResize = () => setIsXL(window.innerWidth >= 1280);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -183,7 +183,7 @@ const Profile = () => {
             transition: { duration: 0.3 } 
         }
     };
-    if (isAuthenticated) {
+    if (!isAuthenticated) {
         return(
             <div className='flex-1 text-center p-16'>
                 <div className="text-gray-600">
@@ -213,6 +213,8 @@ const Profile = () => {
                     {editingProfile && (
                         <ProfileForm 
                             initialData={editingProfile} 
+                            setUser={setUser}
+                            user = {user}
                             onSave={handSave} // handSave đã có sẵn trong useProfile
                             onCancel={() => (setEditingProfile(null))} 
                         />

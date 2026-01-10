@@ -12,6 +12,7 @@ const ApplicationCard = ({ job_post_id, onClose }) => {
     const { fetchAttachments, media } = useMedia();
     const { createApplied } = useApplication();
     const navigate = useNavigate();
+    const [description, setDescription] = useState("");
 
     // State quản lý các ID media được chọn
     const [selectedIds, setSelectedIds] = useState([]);
@@ -55,16 +56,31 @@ const ApplicationCard = ({ job_post_id, onClose }) => {
             return;
         }
 
+        // Biến đổi danh sách ID đã chọn thành danh sách Object chi tiết
+        const selectedMediaObjects = media
+            .filter(item => selectedIds.includes(item.id))
+            .map(item => ({
+                title: item.title,
+                description: item.description || "",
+                attachmentType: item.attachmentType,
+                url: item.url
+            }));
+        
+        const currentDate = new Date().toISOString();
         const payload = {
-            jobPostId: job_post_id,
             applicantId: user.id,
-            media: selectedIds // Backend nhận mảng các ID
+            jobPostId: job_post_id,
+            status: "PENDING", // Luôn là PENDING
+            createdAt: currentDate,
+            description: description, // Nội dung từ textarea
+            mediaList: selectedMediaObjects // Danh sách object chi tiết
         };
+        
 
         const result = await createApplied(payload);
         if (result) {
             toast.success("Applied successfully!");
-            if (onClose) onClose(); // Tắt thẻ sau khi thành công
+            if (onClose) onClose();
         }
     };
 
@@ -125,7 +141,7 @@ const ApplicationCard = ({ job_post_id, onClose }) => {
                         className="text-sm font-medium text-gray-900 truncate hover:text-primary hover:underline"
                         title="Click to preview"
                     >
-                        {item.title || "Untitled Document"}
+                        {item.description || "Untitled Document"}
                     </p>
                     <p className="text-xs text-gray-500">
                         {new Date(item.createdAt).toLocaleDateString()}
@@ -203,6 +219,18 @@ const ApplicationCard = ({ job_post_id, onClose }) => {
                                 </span>
                             </div>
                         )}
+                    </div>
+                    <div className="mt-6">
+                        <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-2 flex items-center">
+                            Short message for company
+                        </h3>
+                        <textarea
+                            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary outline-none transition-all text-sm resize-none"
+                            rows="3"
+                            placeholder="Write a brief introduction or why you're a good fit..."
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        ></textarea>
                     </div>
                 </div>
 

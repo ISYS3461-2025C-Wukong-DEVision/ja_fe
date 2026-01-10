@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const ProfileForm = ({ initialData, onSave, onCancel }) => {
+const ProfileForm = ({ initialData, setUser, user, onSave, onCancel }) => {
     // Khởi tạo state với các field
     const [formData, setFormData] = useState({
         firstName: '',
@@ -31,6 +31,13 @@ const ProfileForm = ({ initialData, onSave, onCancel }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const updatedUser = { 
+            ...user, 
+            name: `${formData.firstName} ${formData.lastName}` 
+        };
+
+        setUser(updatedUser);
         onSave(formData);
     };
 
