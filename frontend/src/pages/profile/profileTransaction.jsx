@@ -65,7 +65,7 @@ const ProfileTransaction = ({fetchMyTransaction, myTransaction}) => {
 
                                 {/* Dòng 4: Date */}
                                 <div className="text-xs text-gray-400 italic">
-                                    <span className="font-semibold text-gray-700 not-italic">Date:</span> {formattedDate}
+                                    <span className="font-semibold text-gray-700 not-italic">Date: </span> {formattedDate}
                                 </div>
                             </div>
                         );

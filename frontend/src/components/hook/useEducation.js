@@ -21,17 +21,14 @@ export const useEducation = () => {
                 }
             }
             setEditingEducation(null);
-        } catch (error) { alert("Saved failed: " + error.message); }
+        } catch (error) { console.error("Saved failed: ", error.message); }
     };
 
-    const educationDelete = async (id, onSuccess) => {
+    const educationDelete = async (userId, id) => {
         try {
-            await deleteEducation(id);
-            if (onSuccess) {
-                await onSuccess();
-            }
+            await deleteEducation(userId, id);
         } catch (error) {
-            alert("Delete failed: " + error.message);
+            console.error("Delete failed: ", error.message);
         }
     }
 

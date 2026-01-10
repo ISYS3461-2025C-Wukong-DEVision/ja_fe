@@ -2,7 +2,7 @@ import { getApplications, createApplication } from "../../services/applicationSe
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
-export const useApplocation = () => {
+export const useApplication = () => {
     const [myApplied, setMyApplied] = useState([])
     const [create, setCreate] = useState({})
 

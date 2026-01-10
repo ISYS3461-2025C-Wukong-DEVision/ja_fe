@@ -14,7 +14,7 @@ export const usePayment = () => {
             const reponse = await getMyTransaction()
             setMyTransaction(reponse?.data)
         } catch (error) {
-            toast.error(error.message)
+            console.error(error.message)
         } finally { setPaymentLoading(false); }
     }
 
@@ -24,7 +24,7 @@ export const usePayment = () => {
             const reponse = await getHistorySubscription()
             setMyHistory(reponse?.data)
         } catch (error) {
-            toast.error(error.message)
+            console.error(error.message)
         } finally { setPaymentLoading(false); }
     }
 
@@ -67,13 +67,9 @@ export const usePayment = () => {
         } finally { setPaymentLoading(false); }
     }
 
-    useEffect(() => {
-        fetchIsPremium()
-    }, [])
-
     return {
         myTransaction, paymentLoading, myHistory, isPremium,
         fetchMyTransaction, fetchMyHistory, 
-        postInitPay, postPay, postCancel
+        postInitPay, postPay, postCancel, fetchIsPremium
     }
 }

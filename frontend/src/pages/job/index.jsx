@@ -1,13 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { Bars3Icon, ChevronDownIcon, BanknotesIcon, ArrowTrendingUpIcon, MapPinIcon, XMarkIcon} from "@heroicons/react/24/outline";
-import JobCard from "../../components/job/jobCard";
+import JobCard from "../../components/job/JobCard";
 import React, {useState, useEffect} from "react";
 import dayjs from "dayjs";
 import LoadingAnimation from "../../components/common/loadingAnimation";
 import { useSalaryFormatter } from "../../utils/formatSalary";
 import { parseJobDescription } from "../../utils/parseJobDescription";
 import ApplicationCard from "../../components/application/applicationCard";
-import authService from "../../services/authService";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useJobPost } from "../../components/hook/useJobPost";
@@ -15,34 +14,16 @@ import FilterCard from "../../components/job/filterCard";
 import Pagination from "../../components/common/Pagination";
 import { useCompany } from "../../components/hook/useCompany";
 import { getLatestMediaByType } from "../../utils/companyMapper";
-import { g } from "framer-motion/client";
 
 const Job = () => {
     const {jobs, fetchJobsAdvance, jobLoading, filter, setFilter, selectedJob, fetchJobById} = useJobPost();
     const {selectedCompany, fetchCompanyById } = useCompany();
-
     const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [selectedJobId, setSelectedJobId] = useState(null);
     const { formatByType } = useSalaryFormatter();
     const [isToggle, setIsToggle] = useState(false);
-    const isAuthenticate = !authService.isAuthenticated();
     const navigate = useNavigate()
-
-    const handleApplied = () => {
-        if (isAuthenticate) {
-            setIsLoading(true);
-
-            setTimeout(() => {
-            navigate("/login");
-            }, 500);
-            toast.error(`${t('need_login')}`);
-            return;
-        }
-
-        setIsToggle(!isToggle);
-    };
-
 
     const handleSelectJob = (job) => {
         setSelectedJobId(job.id);
@@ -59,13 +40,11 @@ const Job = () => {
 
             {/* Applied card */}
             {isToggle && (
-                <div className="fixed inset-0 z-50 bg-black/30 flex flex-col items-center justify-center space-y-4">
-                    <ApplicationCard job_post_id = {selectedJobId} />
-                    <button onClick={() => setIsToggle(!isToggle)} className="p-2 rounded-full border border-gray-100 shadow-md shadow-primary/40 bg-white hover:shadow-lg hover:shadow-primary/70 m-1">
-                        <XMarkIcon className="h-7 w-7 text-primary"/>
-                    </button>
-                </div>)
-            }
+                    <ApplicationCard 
+                    job_post_id = {selectedJobId} 
+                    onClose = {() => setIsToggle(false)}
+                    />
+            )}
 
             {/* Loading trong view */}
             {isLoading && (<div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"><LoadingAnimation text={t('loading')} /></div>)}
@@ -93,7 +72,7 @@ const Job = () => {
                                 className="p-2"
                             >
                                 <JobCard
-                                company={job.companyName}
+                                company={job.companyName || "Company Name"}
                                 title={job.title}
                                 city={`${job.city} - ${job.country}`}
                                 employmentType={job.employmentTypes}
@@ -131,7 +110,7 @@ const Job = () => {
                                             <img
                                                 src={companyLogo?.url || '/d.png'}
                                                 alt={selectedCompany?.data?.name || 'Company Logo'}
-                                                className="h-16 w-16 object-cover rounded-sm mr-3 mt-1 ml-1"
+                                                className="h-16 w-16 object-cover rounded-sm mr-3 mt-1 ml-1 border border-gray-300"
                                             />
 
                                             {/* LEFT */}
@@ -143,7 +122,7 @@ const Job = () => {
 
                                                 {/* Tên công ty */}
                                                 <h2 className="text-sm font-normal text-gray-600 line-clamp-1">
-                                                {selectedJob?.data?.companyName}
+                                                {selectedJob?.data?.companyName || "Company Name"}
                                                 </h2>
 
                                                 {/* Mức lương */}
@@ -171,7 +150,7 @@ const Job = () => {
                                                         key={index}
                                                         className="px-4 border border-primary text-primary font-medium rounded-full text-sm whitespace-nowrap"
                                                         >
-                                                            {e.name}
+                                                            {e.name || "Undifined"}
                                                         </div>
                                                     ))}
                                                 </div>
@@ -185,7 +164,7 @@ const Job = () => {
                                             </div>
 
                                             <button
-                                                onClick={() => handleApplied()}
+                                                onClick={() => setIsToggle(true)}
                                                 className="py-1 px-10 bg-primary-dark text-white rounded-sm text-sm whitespace-nowrap"
                                             >
                                                 {t('apply_now')}

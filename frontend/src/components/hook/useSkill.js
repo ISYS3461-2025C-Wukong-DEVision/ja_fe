@@ -14,10 +14,6 @@ export const useSkill = () => {
         } catch (error) {console.error("Fetch error", error); }
     }
 
-    useEffect(() => {
-        fetchSkill()
-    }, [])
-
     //Logic edit skill
     const skillHandSave = async (id, formData, onSuccess) => {
         try {

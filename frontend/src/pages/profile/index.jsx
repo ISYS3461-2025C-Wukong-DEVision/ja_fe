@@ -24,17 +24,21 @@ import ProfileMedia from './profileMedia';
 import { useAuth } from '../../components/hook/useAuth';
 import { usePayment } from '../../components/hook/usePayment';
 import ProfileTransaction from './profileTransaction';
+import { useApplication } from '../../components/hook/useApplication';
+import ProfileJobApplied from './profileJobApplied';
+import Swal from 'sweetalert2';
 
 
 const Profile = () => {
     const {user, isAuthenticated, logout} = useAuth();
-    const { isPremium, fetchMyTransaction, myTransaction, paymentLoading } = usePayment();
-    const { isProfileOpen, setIsProfileOpen, loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
+    const { fetchMyApplied , myApplied } = useApplication();
+    const { isPremium, fetchIsPremium, fetchMyTransaction, myTransaction } = usePayment();
+    const { loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
     const { isSkillOpen, setIsSkillOpen, editingSkill, setEditingSkill, skillHandSave, skill, fetchSkill } = useSkill();
     const { editingEducation, setEditingEducation, educationDelete, educationHandSave, isEducationOpen, setIsEducationOpen } = useEducation();
     const { editingWorkExperience, setEditingWorkExperience, workDelete, workHandSave, isWorkOpen, setIsWorkOpen} = useWorkExperience();
     const { editingJobPreference, setEditingJobPreference, jobPreferenceHandSave, isJobPreferenceOpen, setIsJobPreferenceOpen } = useJobPreference();
-    const { mediaUploading, media, fetchAttachments, handleUploadMedia, handlePostMediaForApplicantProfile, handleDeleteMediaById } = useMedia();
+    const { media, fetchAttachments, handleUploadMedia, handlePostMediaForApplicantProfile, handleDeleteMediaById } = useMedia();
     const normalizedJobPreference = profile?.jobPreference && Object.keys(profile.jobPreference).length > 0 ? profile.jobPreference : null;
     const skills = (profile && profile.skills && Array.isArray(profile.skills)) ? profile.skills.map(skill => skill.id) : [];
     const nav = useNavigate();
@@ -50,6 +54,47 @@ const Profile = () => {
                 (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
             )[0]?.url || "https://truongthammylali.com/wp-content/uploads/2025/07/co-gai-anime-cute-voi-mai-toc-hong-va-doi-mat-to-tron-toat-len-ve-dang-yeu.jpg";
     };
+
+
+    const handleDelete = async (title, id, type = "work") => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: `Do you want to delete "${title}"?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6', // Cậu có thể chỉnh màu theo primary của cậu
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        });
+
+        // Nếu người dùng xác nhận (nhấn nút Confirm)
+        if (result.isConfirmed) {
+            try {
+                if (type == "education") {
+                    await educationDelete(applicantId, id)
+                    await fetchProfile(applicantId)
+                } else {
+                    await workDelete(applicantId, id)
+                    await fetchProfile(applicantId)
+                }
+
+                window.scrollTo({
+                    top: 0, 
+                    behavior: 'smooth' // 'smooth' giúp cuộn mượt mà, 'auto' nếu muốn nhảy ngay lập tức
+                });
+                // Thông báo thành công
+                Swal.fire(
+                    'Deleted!',
+                    `${title} has been deleted.`,
+                    'success'
+                );
+            } catch (error) {
+                toast.error(`Delete failed: ${error.message}`);
+            }
+        }
+    };
+
 
 
     const parseEmploymentType = (type) => {
@@ -81,9 +126,11 @@ const Profile = () => {
     const [hasMounted, setHasMounted] = useState(false);
 
     useEffect(() => {
-        if(!isAuthenticated) return;
+        // if(!isAuthenticated) return;
         fetchProfile(applicantId)
         fetchAttachments("APPLICANT", applicantId);
+        fetchIsPremium()
+        fetchSkill()
     }, []);
 
     useEffect(() => {
@@ -91,7 +138,7 @@ const Profile = () => {
     }, []);
 
     useEffect(() => {
-        if(!isAuthenticated) return;
+        // if(!isAuthenticated) return;
         const handleResize = () => setIsXL(window.innerWidth >= 1280);
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
@@ -136,18 +183,21 @@ const Profile = () => {
             transition: { duration: 0.3 } 
         }
     };
-    if (!isAuthenticated) {
+    if (isAuthenticated) {
         return(
             <div className='flex-1 text-center p-16'>
-                <p className="text-gray-600">
+                <div className="text-gray-600">
                     <p className="text-gray-600 text-xl">
                         {t('login_msg_part1')}
-                        <span onClick={() => nav("/login")} className="underline text-primary hover:text-primary-dark cursor-pointer">
+                        <span 
+                            onClick={() => nav("/login")} 
+                            className="underline text-primary hover:text-primary-dark cursor-pointer mx-1"
+                        >
                             {t('login_action')}
                         </span>
                         {t('login_msg_part2')}
                     </p>
-                </p>
+                </div>
             </div>
         );
     }
@@ -460,7 +510,7 @@ const Profile = () => {
                                                                 <button onClick={() => (setEditingEducation(edu), setIsEducationOpen(true))}>
                                                                     <PencilIcon className='h-4 w-4 text-primary hover:text-primary-dark mr-2' />
                                                                 </button>
-                                                                <button>
+                                                                <button onClick={() => handleDelete(edu.degreeType, edu.id, "education")}>
                                                                     <TrashIcon className='h-4 w-4 text-red-500 hover:text-red-700' />
                                                                 </button>
                                                             </div>
@@ -495,7 +545,7 @@ const Profile = () => {
                                                                 <button onClick={() => (setEditingWorkExperience(exp), setIsWorkOpen(true))}>
                                                                     <PencilIcon className='h-4 w-4 text-primary hover:text-primary-dark mr-2' />
                                                                 </button>
-                                                                <button>
+                                                                <button onClick={() => handleDelete(exp.title, exp.id)}>
                                                                     <TrashIcon className='h-4 w-4 text-red-500 hover:text-red-700' />
                                                                 </button>
                                                             </div>
@@ -527,12 +577,11 @@ const Profile = () => {
                                 )}
 
                                 {activeTab === "jobs" && (
-                                    <div className='flex flex-col w-full bg-white shadow-md rounded-md p-6 text-left'>
-                                        <span className='text-2xl font-bold mb-4'>Applied Jobs</span>
-                                        <div className='border border-dashed border-gray-400 rounded-md p-6 italic text-gray-400'>
-                                            No applied jobs to display.
-                                        </div>
-                                    </div>
+                                    <ProfileJobApplied 
+                                        fetchMyApplied={fetchMyApplied}
+                                        myApplied={myApplied}
+                                        applicantId={applicantId}
+                                    />
                                 )}
 
                                 {activeTab === "transaction" && (

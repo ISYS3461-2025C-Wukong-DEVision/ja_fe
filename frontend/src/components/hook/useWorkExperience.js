@@ -21,17 +21,14 @@ export const useWorkExperience = () => {
                 }
             }
             setEditingWorkExperience(null);
-        } catch (error) { alert("Saved failed: " + error.message); }
+        } catch (error) { console.error("Saved failed: ", error.message); }
     };
 
-    const workDelete = async (id, onSuccess) => {
+    const workDelete = async (userId, id) => {
         try {
-            await deleteWorkExperience(id);
-            if (onSuccess) {
-                await onSuccess();
-            }
+            await deleteWorkExperience(userId, id);
         } catch (error) {
-            alert("Delete failed: " + error.message)
+            console.error("Delete failed: ", error.message)
         }
     }
 

@@ -10,6 +10,6 @@ export const updateWorkExperience = (userId, id, data) => {
   return httpHelper.put(`${APPLICANT_BASE}/${userId}/work-experience/${id}`, data);
 };
 
-export const deleteWorkExperience = (id) => {
-  return httpHelper.delete(`${APPLICANT_BASE}/${id}`);
+export const deleteWorkExperience = (userId, id) => {
+  return httpHelper.delete(`${APPLICANT_BASE}/${userId}/work-experience/${id}`);
 };
