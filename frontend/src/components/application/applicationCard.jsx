@@ -71,7 +71,6 @@ const ApplicationCard = ({ job_post_id, onClose }) => {
             applicantId: user.id,
             jobPostId: job_post_id,
             status: "PENDING", // Luôn là PENDING
-            createdAt: currentDate,
             description: description, // Nội dung từ textarea
             mediaList: selectedMediaObjects // Danh sách object chi tiết
         };

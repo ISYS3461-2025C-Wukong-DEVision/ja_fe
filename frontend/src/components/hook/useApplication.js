@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 
 export const useApplication = () => {
     const [myApplied, setMyApplied] = useState([])
-    const [create, setCreate] = useState({})
 
     const fetchMyApplied = async (id) => {
         try {
@@ -16,7 +15,7 @@ export const useApplication = () => {
         }
     }
 
-    const createApplied = async () => {
+    const createApplied = async (create) => {
         try {
             const reponse = await createApplication(create) 
             toast.success("Apply job successfully")
@@ -27,6 +26,6 @@ export const useApplication = () => {
     }
 
     return {
-        myApplied, fetchMyApplied, setCreate, create, createApplied 
+        myApplied, fetchMyApplied, createApplied 
     }
 }

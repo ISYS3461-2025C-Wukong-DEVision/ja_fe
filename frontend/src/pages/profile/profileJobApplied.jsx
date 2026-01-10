@@ -10,11 +10,11 @@ const ProfileJobApplied = ({fetchMyApplied, myApplied, applicantId}) => {
     const getStatusStyles = (status) => {
         switch (status?.toUpperCase()) {
         case 'ARCHIVED':
-            return { text: 'Success', class: 'bg-green-100 text-green-700 border-green-200' };
+            return { text: status, class: 'bg-green-100 text-green-700 border-green-200' };
         case 'PENDING':
-            return { text: 'Failed', class: 'bg-yellow-100 text-yellow-700 border-yellow-200' };
+            return { text: status, class: 'bg-yellow-100 text-yellow-700 border-yellow-200' };
         default:
-            return { text: 'Pending', class: 'bg-blue-100 text-blue-700 border-blue-200' };
+            return { text: status, class: 'bg-blue-100 text-blue-700 border-blue-200' };
         }
     };
 
@@ -25,35 +25,39 @@ const ProfileJobApplied = ({fetchMyApplied, myApplied, applicantId}) => {
     return (
         <div className='flex flex-col w-full bg-white shadow-md rounded-md p-6 text-left'>
             <span className='text-2xl font-bold mb-4'>My Job Application</span>
-            <div className='flex flex-col justify-center items-start space-y-6 border border-dashed border-gray-400 rounded-md p-6'>
+            <div className='flex flex-col justify-center items-start space-y-6 border border-dashed border-gray-400 rounded-md p-6 min-h-48'>
                 {myApplied && myApplied.length > 0 ? (
                     myApplied.map((trans, index) => {
-                        // Xử lý dữ liệu cho từng item trong vòng lặp
+                        // Xử lý style và format ngày tháng
                         const statusStyle = getStatusStyles(trans.status);
                         const formattedDate = dayjs(trans.createdAt)
                             .tz("Asia/Ho_Chi_Minh")
                             .format('DD/MM/YYYY HH:mm:ss');
 
                         return (
-                            <div key={trans.id || index} className="w-full bg-gray-50 border border-gray-200 rounded-lg p-5 space-y-3">
-                                {/* Dòng 1: Transaction ID */}
-                                <div className="text-sm text-gray-500 truncate">
-                                    <span className="font-semibold text-gray-700">Job id: </span> {trans.jobId}
+                            <div key={trans.id || index} className="w-full bg-white shadow-[0_0_15px_rgba(0,0,0,0.1)] rounded-md cursor-pointer hover:shadow-[0_0_30px_rgba(0,0,0,0.1)] hover:shadow-primary p-5 flex items-center justify-between">
+                                
+                                {/* Bên trái: Title và Date (ml-6) */}
+                                <div className="flex flex-col ml-6">
+                                    {/* Title */}
+                                    <div className="text-lg font-bold text-gray-900">
+                                        {/* Sử dụng optional chaining ?. để tránh lỗi nếu jobPost null */}
+                                        {trans.jobPost?.title || "No Title"} 
+                                    </div>
+                                    
+                                    {/* Date */}
+                                    <div className="text-xs text-gray-500 italic mt-1">
+                                        {formattedDate}
+                                    </div>
                                 </div>
 
-                                {/* Dòng 2: Amount & Status */}
-                                <div className="flex justify-between items-center">
-                                    <div className="text-lg font-bold text-gray-900">
-                                        Amount: {trans.amount} {trans.currency === 'string' ? 'USA' : trans.currency}
-                                    </div>
-                                    <span className={`px-3 py-1 rounded-full text-xs font-medium border ${statusStyle.class}`}>
+                                {/* Bên phải: Status (với các margin responsive) */}
+                                <div className="lg:mr-36 md:mr-24 sm:mr-12 mr-6">
+                                    <span className={`px-5 py-2 rounded-lg text-sm font-semibold border ${statusStyle.class}`}>
                                         {statusStyle.text}
                                     </span>
                                 </div>
-                                {/* Dòng 4: Date */}
-                                <div className="text-xs text-gray-400 italic">
-                                    <span className="font-semibold text-gray-700 not-italic">Date: </span> {formattedDate}
-                                </div>
+                                
                             </div>
                         );
                     })
