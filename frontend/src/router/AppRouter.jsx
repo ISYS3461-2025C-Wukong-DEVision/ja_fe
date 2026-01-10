@@ -13,7 +13,7 @@ import CompanyDetail from "../pages/company/CompanyDetail";
 import Subscription from "../pages/subscription/index";
 import Profile from "../pages/profile/index";
 import ToastListener from "../components/common/ToastListener";
-// import Notification from "../pages/notification/index";
+import Notification from "../pages/notification/index";
 
 const AppRouter = () => {
   return (
@@ -35,7 +35,7 @@ const AppRouter = () => {
           <Route path="/companies/:id" element={<CompanyDetail />} />
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/notification" element={<>notification</>} />
+          <Route path="/notification" element={<Notification />} />
         </Route>
 
       </Routes>

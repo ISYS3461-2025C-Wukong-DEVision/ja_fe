@@ -1,22 +1,27 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
-const Pagination = ({ filters, setFilters, totalPages }) => {
-    const currentPage = filters.pageNumber || 1;
+const Pagination = ({ filters, setFilters, totalPages, type = 'job' }) => {
+    // Xác định key dựa trên type
+    const pageKey = type === 'job' ? 'pageNumber' : 'page_no';
+    
+    // Lấy trang hiện tại từ đúng key
+    const currentPage = filters[pageKey] || 1;
 
     // Hàm thay đổi trang
     const handlePageChange = (page) => {
         if (page >= 1 && page <= totalPages && page !== currentPage) {
-            setFilters((prev) => ({ ...prev, pageNumber: page }));
             
-            // Cuộn lên đầu trang cho trải nghiệm người dùng tốt hơn
+            // Cập nhật đúng key tương ứng
+            setFilters((prev) => ({ ...prev, [pageKey]: page }));
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
 
-    // Logic tạo dải số trang (hiện 2 trang lân cận và trang đầu/cuối)
+    // ... Logic getPageNumbers giữ nguyên ...
     const getPageNumbers = () => {
         const pages = [];
-        const range = 2; // Số lượng trang hiển thị xung quanh trang hiện tại
+        const range = 2; 
 
         for (let i = 1; i <= totalPages; i++) {
             if (
@@ -32,15 +37,13 @@ const Pagination = ({ filters, setFilters, totalPages }) => {
                 pages.push('...');
             }
         }
-        // Loại bỏ các dấu '...' trùng lặp
         return pages.filter((item, index) => pages.indexOf(item) === index);
     };
 
-    if (totalPages <= 1) return null; // Không hiện nếu chỉ có 1 trang
+    if (totalPages <= 1) return null;
 
     return (
         <div className="flex items-center justify-center space-x-2 my-8">
-            {/* Nút Previous */}
             <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
@@ -49,7 +52,6 @@ const Pagination = ({ filters, setFilters, totalPages }) => {
                 <ChevronLeftIcon className="w-5 h-5 text-gray-600" />
             </button>
 
-            {/* Dải số trang */}
             <div className="flex items-center space-x-1">
                 {getPageNumbers().map((page, index) => (
                     <button
@@ -69,7 +71,6 @@ const Pagination = ({ filters, setFilters, totalPages }) => {
                 ))}
             </div>
 
-            {/* Nút Next */}
             <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}

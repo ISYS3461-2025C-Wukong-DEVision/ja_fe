@@ -46,57 +46,79 @@ const RegisterForm = () => {
         let hasError = false;
         let newErrors = { email: '', password: '', confirmPassword: '', country: false };
 
-        if (!validateEmail(email)) {
-            newErrors.email = t('invalid_email_format');
-            setPassword('');
-            setConfirmPassword('');
-            hasError = true;
-        }
+        // 1. Validate Email
         if (!email) {
-            newErrors.password = t('please_enter_email');
-            setPassword('');
-            setConfirmPassword('');
+            newErrors.email = t('please_enter_email');
+            hasError = true;
+        } else if (!validateEmail(email)) {
+            newErrors.email = t('invalid_email_format');
             hasError = true;
         }
 
+        // 2. Validate Password (Các điều kiện cậu vừa thêm)
         if (!password) {
             newErrors.password = t('please_enter_password');
-            setPassword('');
-            setConfirmPassword('');
+            hasError = true;
+        } else if (password.length < 8) {
+            newErrors.password = t('Password_need_more_8');
+            hasError = true;
+        } else if (!/\d/.test(password)) {
+            newErrors.password = t('Password_need_at_least_1_number');
+            hasError = true;
+        } else if (!/[!@#$%^&*(),.?":{}|<>?]/.test(password)) {
+            newErrors.password = t('Password_need_at_least_1_special_character');
+            hasError = true;
+        } else if (!/[A-Z]/.test(password)) {
+            newErrors.password = t('Password_need_at_least_1_capitalized_letter');
             hasError = true;
         }
 
+        // 3. Validate Confirm Password
         if (!confirmPassword) {
             newErrors.confirmPassword = t('please_enter_password');
-            setPassword('');
-            setConfirmPassword('');
             hasError = true;
-        }
-
-        if (password && confirmPassword && password !== confirmPassword) {
-            toast.error(t('passwords_do_not_match'));
+        } else if (password !== confirmPassword) {
             newErrors.confirmPassword = t('passwords_do_not_match');
-            setPassword('');
-            setConfirmPassword('');
             hasError = true;
         }
 
+        // 4. Validate Country
         if (country === t("select_country")) {
             newErrors.country = true;
-            setPassword('');
-            setConfirmPassword('');
             hasError = true;
         }
 
         setErrors(newErrors);
-        if (hasError) return;
 
-        const formData = { email, password, role: "USER", firstname: "Unknown", lastName: "User", objective: "This user is too lazy to add detail to his/her objective", phone: "None", country, city: "Happy City", address: "123 Street" };
+        // Nếu có lỗi thì dừng lại ngay, KHÔNG xóa password lúc này để user còn biết đường sửa
+        if (hasError) {
+            // Chỉ xóa nếu cậu muốn ép user nhập lại từ đầu, nhưng thường là không nên
+            setPassword('');
+            setConfirmPassword('');
+            return; 
+        }
+
+        const formData = { 
+            email, 
+            password, 
+            role: "APPLICANT", 
+            firstname: "Unknown", 
+            lastName: "User", 
+            objective: "This user is too lazy to add detail to his/her objective", 
+            phone: "None", 
+            country, 
+            city: "Happy City", 
+            address: "123 Street" 
+        };
+
+        // Gọi API
         const result = await signup(formData);
         
         if (result) {
+            toast.success(t('register_success'));
             navigate('/login', { state: { fromRegister: true } });
         } else {
+            // Khi API lỗi (email trùng...), lúc này mới cần xóa pass để bảo mật
             setPassword('');
             setConfirmPassword('');
         }

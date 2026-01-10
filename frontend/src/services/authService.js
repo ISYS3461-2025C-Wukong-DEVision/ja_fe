@@ -30,7 +30,6 @@ const authService = {
             };
 
             tokenStorage.setAuth({ accessToken: token, user: finalUser });
-            toast.success("Success: ", loginMessage);
             return finalUser;
         } catch (error) {
             console.error("Fetch profile failed, using basic info", error);

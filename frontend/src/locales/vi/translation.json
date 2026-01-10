@@ -87,5 +87,7 @@
     "email_password_incorrect": "Email hoặc mật khẩu không đúng!",
     "login_msg_part1": "Vui lòng, ",
     "login_action": "đăng nhập",
-    "login_msg_part2": " để sử dụng tính năng của chúng tôi."
+    "login_msg_part2": " để sử dụng tính năng của chúng tôi.",
+    "premium_slogan1": "Bạn đã đi được một chặng đường tuyệt vời 🚀",
+    "premium_slogan2": " ở đây để giúp bạn đi nhanh hơn, xa hơn và rõ ràng hơn."
 }

@@ -1,5 +1,3 @@
-
-import { u } from "framer-motion/client";
 import { uploadMedia, postMediaForApplicantProfile, deleteMediaById, getAttachments } from "../../services/mediaService";
 import { useEffect, useState } from "react";
 

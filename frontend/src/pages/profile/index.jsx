@@ -22,10 +22,13 @@ import JobPreferenceForm from '../../components/profile/jobReferenceForm';
 import { useMedia } from '../../components/hook/useMedia';
 import ProfileMedia from './profileMedia';
 import { useAuth } from '../../components/hook/useAuth';
+import { usePayment } from '../../components/hook/usePayment';
+import ProfileTransaction from './profileTransaction';
 
 
 const Profile = () => {
     const {user, isAuthenticated, logout} = useAuth();
+    const { isPremium, fetchMyTransaction, myTransaction, paymentLoading } = usePayment();
     const { isProfileOpen, setIsProfileOpen, loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
     const { isSkillOpen, setIsSkillOpen, editingSkill, setEditingSkill, skillHandSave, skill, fetchSkill } = useSkill();
     const { editingEducation, setEditingEducation, educationDelete, educationHandSave, isEducationOpen, setIsEducationOpen } = useEducation();
@@ -219,60 +222,67 @@ const Profile = () => {
                             layout // Tự động animate kích thước khi tráo đổi
                             className='flex flex-col items-center justify-center max-w-[350px] border border-gray-200 rounded-lg shadow-md bg-white pr-4'
                         >
-                            <ProfileCard url={URL} percent={percent} name={name} objective={profile.objective} size={100} isPremium={true} />
+                            <ProfileCard url={URL} percent={percent} name={name} objective={profile.objective} size={100} isPremium={isPremium} />
                             <span className={`pl-4 -mt-4 text-sm ${percent < 80 ? 'text-red-500' : 'text-green-500'}`}>{percent < 80 ? t("Fill_profile < 80%") : t("Complete_your_profile")}</span>
                             <div className='w-full pl-4'>
                                 <div className='w-full h-px bg-primary-extraDark my-4'/>
                             </div>
-                            <div className='flex flex-col w-full py-2 pl-4 text-left'>
-                                <div className='flex w-full mb-4 items-center justify-between px-4'>
-                                    <span className='text-xl font-semibold'>
-                                        Skill (Tags)
-                                    </span>
-                                    <div className='flex items-center space-x-4'>
+                            {isPremium ? (
+                                <div className='flex flex-col w-full py-2 pl-4 text-left'>
+                                    <div className='flex w-full mb-4 items-center justify-between px-4'>
+                                        <span className='text-xl font-semibold'>
+                                            Skill (Tags)
+                                        </span>
+                                        <div className='flex items-center space-x-4'>
+                                            <button 
+                                                className='flex items-center text-primary hover:text-primary-dark'
+                                                onClick={() => (setEditingSkill(skills), setIsSkillOpen(true))}
+                                                >
+                                                <span className='font-semibold text-sm'>Add</span>
+                                                <PlusIcon className='h-3 w-3' />
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className='border border-dashed border-gray-400 rounded-md p-2 text-center text-gray-400'>
+                                        {/* map skills name */}
+                                        {profile.skills && profile.skills.length > 0 ? (
+                                            profile.skills.map((skill, index) => (
+                                                <div key={index} className='inline-block border border-primary text-primary-dark rounded-full px-4 py-1 m-2 text-sm font-medium'>
+                                                    <span>
+                                                        {skill.name}
+                                                    </span>
+                                                </div>
+                                            ))
+                                        ) : (
+                                            <div>No skills added yet.</div>
+                                        )}
+                                    </div>
+
+                                    <div className='flex w-full mb-4 items-center justify-between px-4 mt-12'>
+                                        <span className='text-xl font-semibold'>
+                                            Job Preference
+                                        </span>
                                         <button 
-                                            className='flex items-center text-primary hover:text-primary-dark'
-                                            onClick={() => (setEditingSkill(skills), setIsSkillOpen(true))}
-                                            >
-                                            <span className='font-semibold text-sm'>Add</span>
-                                            <PlusIcon className='h-3 w-3' />
+                                            onClick={() => (setEditingJobPreference(normalizedJobPreference), setIsJobPreferenceOpen(true))}
+                                            className='flex items-center text-primary hover:text-primary-dark space-x-0.5'>
+                                            <span className='font-semibold text-sm'>Edit</span>
+                                            <PencilIcon className='h-3 w-3' />
                                         </button>
                                     </div>
+                                    <div className='flex flex-col items-start justify-center space-y-1 border border-dashed border-gray-400 rounded-md px-6 py-2 text-gray-700 mb-2'>
+                                        {/* job references */}
+                                        <span><strong>Country: </strong>{profile.jobPreference?.country || "Not specified"}</span>
+                                        <span className={`${profile.jobPreference?.isFresher ? 'flex items-center text-green-500' : 'hidden'}`}>Fresher<CheckCircleIcon className='h-4 w-4 inline-block ml-1' /></span>
+                                        <span><strong>Employment Type: </strong>{displayString || "N/A"}</span>
+                                        <span><strong>Salary range: </strong>{formatByValue(profile.jobPreference?.salaryMin, profile.jobPreference?.salaryMax)}</span>
+                                    </div>
                                 </div>
-                                <div className='border border-dashed border-gray-400 rounded-md p-2 text-center text-gray-400'>
-                                    {/* map skills name */}
-                                    {profile.skills && profile.skills.length > 0 ? (
-                                        profile.skills.map((skill, index) => (
-                                            <div key={index} className='inline-block border border-primary text-primary-dark rounded-full px-4 py-1 m-2 text-sm font-medium'>
-                                                <span>
-                                                    {skill.name}
-                                                </span>
-                                            </div>
-                                        ))
-                                    ) : (
-                                        <div>No skills added yet.</div>
-                                    )}
+                            ):(
+                                <div className='flex flex-col text-left justify-center p-4 space-y-3'>
+                                    <span className='text-sm text-gray-600 font-light text-justify'>{t('premium_slogan1')}</span>
+                                    <span className='font-light text-sm text-gray-600 text-justify'><strong className='text-primary cursor-pointer font-medium' onClick={() => nav('/subscription')}>DEVisionJA Premium</strong>{t('premium_slogan2')}</span>
                                 </div>
-
-                                <div className='flex w-full mb-4 items-center justify-between px-4 mt-12'>
-                                    <span className='text-xl font-semibold'>
-                                        Job Preference
-                                    </span>
-                                    <button 
-                                        onClick={() => (setEditingJobPreference(normalizedJobPreference), setIsJobPreferenceOpen(true))}
-                                        className='flex items-center text-primary hover:text-primary-dark space-x-0.5'>
-                                        <span className='font-semibold text-sm'>Edit</span>
-                                        <PencilIcon className='h-3 w-3' />
-                                    </button>
-                                </div>
-                                <div className='flex flex-col items-start justify-center space-y-1 border border-dashed border-gray-400 rounded-md px-6 py-2 text-gray-700 mb-2'>
-                                    {/* job references */}
-                                    <span><strong>Country: </strong>{profile.jobPreference?.country || "Not specified"}</span>
-                                    <span className={`${profile.jobPreference?.isFresher ? 'flex items-center text-green-500' : 'hidden'}`}>Fresher<CheckCircleIcon className='h-4 w-4 inline-block ml-1' /></span>
-                                    <span><strong>Employment Type: </strong>{displayString || "N/A"}</span>
-                                    <span><strong>Salary range: </strong>{formatByValue(profile.jobPreference?.salaryMin, profile.jobPreference?.salaryMax)}</span>
-                                </div>
-                            </div>
+                            )}
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -299,7 +309,8 @@ const Profile = () => {
                         {[
                             { id: "profile", label: "My Profile CV" },
                             { id: "jobs", label: "Applied Jobs" },
-                            { id: "media", label: "Media Management" }
+                            { id: "media", label: "Media Management" },
+                            { id: "transaction", label: "Transaction History"}
                         ].map((tab) => (
                             <button
                                 key={tab.id}
@@ -361,12 +372,12 @@ const Profile = () => {
                                                 address={address} 
                                                 phone={profile.phone} 
                                                 email={profile.email} 
-                                                isPremium={true} />
+                                                isPremium={isPremium} />
                                         </motion.div>
 
                                         {/* PROFILE FILTER Ở GIỮA */}
                                         <AnimatePresence mode="popLayout">
-                                            {!isXL && (
+                                            {!isXL & isPremium && (
                                                 <motion.div
                                                     key="filter-card"
                                                     layout="position"
@@ -522,6 +533,13 @@ const Profile = () => {
                                             No applied jobs to display.
                                         </div>
                                     </div>
+                                )}
+
+                                {activeTab === "transaction" && (
+                                    <ProfileTransaction
+                                        fetchMyTransaction={fetchMyTransaction}
+                                        myTransaction={myTransaction}
+                                    />
                                 )}
                             </motion.div>
                         </AnimatePresence>

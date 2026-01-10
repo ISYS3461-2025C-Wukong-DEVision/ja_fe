@@ -72,7 +72,7 @@ const ProfileCard = ({ url, percent = 80, size = 140, name, objective, isPremium
         <h3 className="text-[#1A1A40] font-bold text-xl leading-tight whitespace-nowrap">
           {name}
         </h3>
-        <p className="text-gray-500 text-sm line-clamp-2 max-w-[180px]">
+        <p className={`text-gray-500 text-sm ${isPremium ? "line-clamp-2" : "line-clamp-3"} max-w-[180px]`}>
           {objective}
         </p>
         {isPremium && <PremiumBadge />}
