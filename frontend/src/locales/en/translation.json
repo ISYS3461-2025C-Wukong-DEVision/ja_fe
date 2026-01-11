@@ -97,5 +97,14 @@
     "verified": "Authenticating...",
     "connect": "We are connecting your Google account.",
     "connect2": "Please do not close your browser.",
-    "sorry": "Sorry, we are not currently support login by"
+    "sorry": "Sorry, we are not currently support login by",
+    "payment_success": "Payment successful!",
+    "payment_success2": "Updating your account...",
+    "payment_cancel": "Payment cancelled!",
+    "payment_cancel2": "You have canceled the payment process or an error occurred.",
+    "already_applied": "Have applied",
+    "request1": "Please, login to enjoy our",
+    "request2": "!",
+    "after": "Later",
+    "countinue": "Login now"
 }

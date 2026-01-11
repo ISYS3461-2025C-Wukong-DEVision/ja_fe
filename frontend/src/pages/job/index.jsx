@@ -14,9 +14,12 @@ import FilterCard from "../../components/job/filterCard";
 import Pagination from "../../components/common/Pagination";
 import { useCompany } from "../../components/hook/useCompany";
 import { getLatestMediaByType } from "../../utils/companyMapper";
+import { useAuth } from "../../components/hook/useAuth";
 
 const Job = () => {
-    const {jobs, fetchJobsAdvance, jobLoading, filter, setFilter, selectedJob, fetchJobById} = useJobPost();
+    const {jobs, fetchJobsAdvance, jobLoading, filter, setFilter, selectedJob, fetchJobById, isApplied, fetchMyAppliedJob} = useJobPost();
+    const { user, isAuthenticated } = useAuth()
+    const applicantId = user?.id;
     const {selectedCompany, fetchCompanyById } = useCompany();
     const {t} = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +34,12 @@ const Job = () => {
         fetchCompanyById(job.companyId);
     };
     const companyLogo = getLatestMediaByType(selectedCompany?.data?.mediaList, 'AVATAR');
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchMyAppliedJob(applicantId, selectedJob?.data?.id)
+        }
+    },[selectedJob])
 
     if (jobLoading) 
         return <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"><LoadingAnimation text={t('loading')} /></div>;
@@ -164,10 +173,18 @@ const Job = () => {
                                             </div>
 
                                             <button
-                                                onClick={() => setIsToggle(true)}
-                                                className="py-1 px-10 bg-primary-dark text-white rounded-sm text-sm whitespace-nowrap"
+                                                // 1. Chặn click nếu đã apply
+                                                disabled={isApplied} 
+                                                // 2. Nếu đã apply thì không chạy hàm setIsToggle
+                                                onClick={() => isApplied && setIsToggle(true)}
+                                                className={`py-1 px-10 rounded-sm text-sm whitespace-nowrap transition-all duration-200 
+                                                    ${isApplied 
+                                                        ? "bg-gray-400 opacity-70 cursor-not-allowed text-gray-100" // Style khi disable
+                                                        : "bg-primary-dark text-white hover:bg-primary active:scale-95" // Style khi bình thường
+                                                    }`}
                                             >
-                                                {t('apply_now')}
+                                                {/* 3. Đổi text dựa trên isApplied */}
+                                                {isApplied ? t('already_applied') : t('apply_now')}
                                             </button>
                                         </div>
                                     </div>

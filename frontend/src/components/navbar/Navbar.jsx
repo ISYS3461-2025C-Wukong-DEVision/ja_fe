@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hook/useAuth";
 
 const Navbar = () => {
-  const {user, isAuthenticated, logout} = useAuth();
+  const {user, isAuthenticated, logout, isPremium, fetchIsPremium} = useAuth();
   const { t, i18n } = useTranslation();
   const location = useLocation();
   const isAuth = isAuthenticated;
@@ -53,6 +53,15 @@ const Navbar = () => {
     { name: t('subscription'), path: "/subscription", icon: <CreditCardIcon className="w-5 h-5" /> },
     { name: t('profile'), path: "/profile", icon: <UserCircleIcon className="w-5 h-5" /> },
   ];
+
+
+
+  useEffect(() => {
+    if (!isAuth) return;
+    fetchIsPremium()
+  },[])
+
+
   
   return (
     <nav className="w-full h-auto bg-white shadow-md shadow-primary/50 sticky top-0 z-50">
@@ -102,8 +111,25 @@ const Navbar = () => {
                   <button onClick={toggleDropdown2} className="flex items-center text-sm text-gray-500 hover:text-black">
                     {`${user.name}`}
                   </button>
-                  <button onClick={() => navigate('/notification')} className={`ml-1 p-0.5 border border-gray-200 rounded-full shadow ${isNotificationPage ? "bg-primary hover:bg-primary-dark" : ""}`}>
-                    <BellAlertIcon className={`w-4 h-4 ${isNotificationPage ? "text-white" : "text-gray-500 hover:text-black"}`} />
+                  <button 
+                      disabled={!isPremium} 
+                      onClick={() => navigate('/notification')} 
+                      className={`ml-1 p-0.5 border rounded-full shadow transition-all
+                          ${!isPremium 
+                              ? "bg-gray-200 border-gray-300 cursor-not-allowed opacity-60" 
+                              : isNotificationPage 
+                                  ? "bg-primary hover:bg-primary-dark border-primary" 
+                                  : "bg-white border-gray-200 hover:border-gray-400"
+                          }`}
+                  >
+                      <BellAlertIcon className={`w-4 h-4 
+                          ${!isPremium 
+                              ? "text-gray-400" 
+                              : isNotificationPage 
+                                  ? "text-white" 
+                                  : "text-gray-500 hover:text-black"
+                          }`} 
+                      />
                   </button>
                   {/* KHUNG DROPDOWN (ẨN/HIỆN THEO STATE) */}
                   {isDropdownOpen2 && (

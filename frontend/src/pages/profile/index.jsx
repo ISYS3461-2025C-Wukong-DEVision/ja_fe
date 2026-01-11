@@ -30,10 +30,10 @@ import Swal from 'sweetalert2';
 
 
 const Profile = () => {
-    const {user, isAuthenticated, setUser} = useAuth();
+    const {user, isAuthenticated, setUser, isPremium, fetchIsPremium} = useAuth();
     const { fetchMyApplied , myApplied } = useApplication();
-    const { isPremium, fetchIsPremium, fetchMyTransaction, myTransaction } = usePayment();
-    const { loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile, isProfileOpen, setIsProfileOpen } = useProfile();
+    const { fetchMyTransaction, myTransaction } = usePayment();
+    const { loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
     const { isSkillOpen, setIsSkillOpen, editingSkill, setEditingSkill, skillHandSave, skill, fetchSkill } = useSkill();
     const { editingEducation, setEditingEducation, educationDelete, educationHandSave, isEducationOpen, setIsEducationOpen } = useEducation();
     const { editingWorkExperience, setEditingWorkExperience, workDelete, workHandSave, isWorkOpen, setIsWorkOpen} = useWorkExperience();
@@ -210,13 +210,15 @@ const Profile = () => {
         <LayoutGroup>
             <div className="flex flex-row justify-center items-start pt-6 pr-6 pl-6 bg-gray-100 space-x-6 pb-12 min-h-screen overflow-hidden">
                 <AnimatePresence>
-                    {isProfileOpen && (
+                    {editingProfile && (
                         <ProfileForm 
                             initialData={editingProfile} 
                             setUser={setUser}
                             user = {user}
-                            onSave={() => (handSave, setIsProfileOpen(false))} 
-                            onCancel={() => (setIsProfileOpen(false))} 
+                            onSave={handSave} 
+                            onCancel={() => (setEditingProfile(null))} 
+                            fetchProfile={fetchProfile}
+                            applicantId={applicantId}
                         />
                     )}
                 </AnimatePresence>
@@ -416,11 +418,7 @@ const Profile = () => {
                                             className='relative flex w-full items-start bg-white shadow-md rounded-md p-2'
                                         >
                                             <button 
-                                                onClick={() => (
-                                                    setEditingProfile(profile && Object.keys(profile).length > 0 
-                                                                        ? { ...profile, id: applicantId } 
-                                                                        : null), 
-                                                    setIsProfileOpen(true))} 
+                                                onClick={() => (setEditingProfile({...profile, id:applicantId}))} 
                                                 className="absolute top-4 right-4 p-2 text-primary hover:text-primary-dark transition-colors z-10"
                                             >
                                                 <PencilIcon className="h-6 w-6" />

@@ -97,5 +97,14 @@
     "verified": "Đang xác thực...",
     "connect": "Chúng tôi đang kết nối tài khoản Google của bạn.",
     "connect2": "Vui lòng không tắt trình duyệt.",
-    "sorry": "Xin lỗi, hiện tại chưa hỗ trợ đăng nhập bằng"
+    "sorry": "Xin lỗi, hiện tại chưa hỗ trợ đăng nhập bằng",
+    "payment_success": "Thanh toán thành công!",
+    "payment_success2": "Đang cập nhật tài khoản của bạn...",
+    "payment_cancel": "Thanh toán bị hủy",
+    "payment_cancel2": "Bạn đã hủy quá trình thanh toán hoặc có lỗi xảy ra.",
+    "already_applied": "Đã nộp đơn",
+    "request1": "Vui lòng đăng nhập để tận hưởng",
+    "request2": " của chúng tôi!",
+    "after": "Để sau",
+    "countinue": "Đăng nhập ngay"
 }

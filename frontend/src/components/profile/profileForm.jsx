@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { tokenStorage } from '../../utils/tokenStorage';
 
-const ProfileForm = ({ initialData, setUser, user, onSave, onCancel }) => {
+const ProfileForm = ({ initialData, setUser, onSave, onCancel, user, fetchProfile, applicantId }) => {
     // Khởi tạo state với các field
     const [formData, setFormData] = useState({
         firstName: '',
@@ -28,20 +28,26 @@ const ProfileForm = ({ initialData, setUser, user, onSave, onCancel }) => {
                 objective: initialData.objective || ''
             });
         }
+        console.log(initialData)
     }, [initialData]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => { // Thêm async
         e.preventDefault();
-        const reponse = onSave(formData);
+        
+        // 1. Gọi API save và chờ nó xong (await)
+        await onSave(formData); 
+        
+        // 2. Sau khi save xong mới fetch lại data mới nhất
+        await fetchProfile(applicantId);
 
-        const updatedUser = { 
-            ...user, 
+        // 3. Cập nhật User context/localStorage
+        const updatedUser = {
+            ...user,
             name: `${formData.firstName} ${formData.lastName}`,
-            id: reponse.id
+            email: formData.email
         };
-
         setUser(updatedUser);
-        tokenStorage.setUser({user: updatedUser})
+        tokenStorage.setUser(updatedUser);
     };
 
     return (

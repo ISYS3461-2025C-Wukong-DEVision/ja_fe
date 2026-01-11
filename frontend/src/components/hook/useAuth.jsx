@@ -1,6 +1,7 @@
-import { useState, createContext, useContext } from 'react';
+import { useState, createContext, useContext, useEffect } from 'react';
 import authService from '../../services/authService';
 import { tokenStorage } from '../../utils/tokenStorage';
+import { usePayment } from './usePayment';
 import { toast } from 'react-hot-toast';
 
 const AuthContext = createContext();
@@ -8,6 +9,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({children}) => {
   const [user, setUser] = useState(tokenStorage.getCurrentUser()); // Lấy user từ localStorage khi khởi tạo
   const [loading, setLoading] = useState(false);
+  const {isPremium, fetchIsPremium} = usePayment()
 
   const login = async (email, password) => {
     setLoading(true);
@@ -17,7 +19,7 @@ export const AuthProvider = ({children}) => {
       toast.success('Đăng nhập thành công!');
       return userData;
     } catch (error) {
-      toast.error(error.message || 'Đăng nhập thất bại');
+      toast.error('Đăng nhập thất bại, kiểm tra lại tài khoản và mật khẩu của bạn');
       return null;
     } finally {
       setLoading(false);
@@ -93,7 +95,7 @@ export const AuthProvider = ({children}) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, isAuthenticated: !!user, loading, login, logout, signup, initiateGoogleLogin, handleGoogleCallback }}>
+    <AuthContext.Provider value={{ user, setUser, isAuthenticated: !!user, loading, login, logout, signup, initiateGoogleLogin, handleGoogleCallback, isPremium, fetchIsPremium }}>
       {children}
     </AuthContext.Provider>
   );

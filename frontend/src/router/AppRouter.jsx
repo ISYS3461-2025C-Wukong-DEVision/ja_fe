@@ -15,6 +15,9 @@ import Profile from "../pages/profile/index";
 import ToastListener from "../components/common/ToastListener";
 import Notification from "../pages/notification/index";
 import GoogleCallback from "../components/auth/GoogleCallback";
+import PaymentCancel from "../pages/subscription/paymentCancel";
+import PaymentSuccess from "../pages/subscription/paymentSuccess";
+import JobDetail from "../pages/job/JobDetail";
 
 const AppRouter = () => {
   return (
@@ -32,12 +35,15 @@ const AppRouter = () => {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/jobs" element={<Job/>} />
+          <Route path="/jobs/:id" element={<JobDetail />} />
           <Route path="/companies" element={<Company />} />
           <Route path="/companies/:id" element={<CompanyDetail />} />
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/api/auth/oauth2/callback/google" element={<GoogleCallback />} />
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+          <Route path="/payment/cancel" element={<PaymentCancel />}/>
         </Route>
 
       </Routes>

@@ -58,8 +58,10 @@ class HttpHelper {
 
     const response = await fetch(`${BASE_URL}${url}`, config);
 
+    const isLoginRequest = url.toLowerCase().includes('/login') || url.toLowerCase().includes('/signin');
+
     // ❌ Token hết hạn
-    if (response.status === 401) { // 
+    if (response.status === 401 && !isLoginRequest) { // 
       authService.logout();
       
       // Phát một sự kiện tùy chỉnh thay vì gọi toast trực tiếp ở đây

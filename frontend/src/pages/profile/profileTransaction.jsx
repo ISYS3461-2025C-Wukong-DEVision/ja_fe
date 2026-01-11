@@ -31,7 +31,7 @@ const ProfileTransaction = ({fetchMyTransaction, myTransaction}) => {
     return (
         <div className='flex flex-col w-full bg-white shadow-md rounded-md p-6 text-left'>
             <span className='text-2xl font-bold mb-4'>Transaction</span>
-            <div className='flex flex-col justify-center items-start space-y-6 border border-dashed border-gray-400 rounded-md p-6'>
+            <div className='flex flex-col justify-start items-start space-y-6 border border-dashed border-gray-400 rounded-md p-6 min-h-44 max-h-[40vh] overflow-y-auto'>
                 {myTransaction && myTransaction.length > 0 ? (
                     myTransaction.map((trans, index) => {
                         // Xử lý dữ liệu cho từng item trong vòng lặp
@@ -39,6 +39,7 @@ const ProfileTransaction = ({fetchMyTransaction, myTransaction}) => {
                         const formattedDate = dayjs(trans.createdAt)
                             .tz("Asia/Ho_Chi_Minh")
                             .format('DD/MM/YYYY HH:mm:ss');
+                        const displayAmount = Number(trans?.amount || 0) / 100;
 
                         return (
                             <div key={trans.id || index} className="w-full bg-gray-50 border border-gray-200 rounded-lg p-5 space-y-3">
@@ -50,7 +51,7 @@ const ProfileTransaction = ({fetchMyTransaction, myTransaction}) => {
                                 {/* Dòng 2: Amount & Status */}
                                 <div className="flex justify-between items-center">
                                     <div className="text-lg font-bold text-gray-900">
-                                        Amount: {trans.amount} {trans.currency === 'string' ? 'USA' : trans.currency}
+                                        Amount: {displayAmount.toFixed(2)} {trans.currency === 'string' ? 'USA' : trans?.currency.toUpperCase()}
                                     </div>
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium border ${statusStyle.class}`}>
                                         {statusStyle.text}
@@ -71,7 +72,7 @@ const ProfileTransaction = ({fetchMyTransaction, myTransaction}) => {
                         );
                     })
                 ) : (
-                    <div className="flex flex-col text-center justify-center h-full w-full  italic text-gray-400 min-h-44 max-h-[70hv]">
+                    <div className="flex flex-col text-center justify-center h-full w-full  italic text-gray-400">
                         No Transaction is made before.
                     </div>
                 )}

@@ -14,20 +14,33 @@ export const getCurrentSubscription = () => {
     return httpHelper.get(`${SUBSCRIPTION_BASE}/current`)
 }
 
-export const postInit = (success, cancel) => {
-    const dataform = {
-        redirectSuccessUrl: success,
-        redirectCancelUr: cancel,
-    }
-    return httpHelper.post(`${SUBSCRIPTION_BASE}/init`, dataform)
+export const postInit = () => {
+    // Lấy địa chỉ gốc hiện tại (VD: http://localhost:8081 hoặc https://myapp.vercel.app)
+    const currentUrl = window.location.origin;
+
+    const payload = {
+        // Nếu thành công -> Quay về trang success của bạn
+        redirectSuccessUrl: `${currentUrl}/payment/success`, // Sửa path theo route bạn đã định nghĩa
+        
+        // Nếu hủy -> Quay về trang cancel hoặc trang chủ
+        redirectCancelUrl: `${currentUrl}/payment/cancel`   
+    };
+
+    return httpHelper.post(`${SUBSCRIPTION_BASE}/init`, payload)
 }
 
-export const postPayCurrent = (success, cancel) => {
-    const dataform = {
-        redirectSuccessUrl: success,
-        redirectCancelUrl: cancel,
-    }
-    return httpHelper.post(`${SUBSCRIPTION_BASE}/pay-current`, dataform)
+export const postPayCurrent = () => {
+    const currentUrl = window.location.origin;
+
+    const payload = {
+        // Nếu thành công -> Quay về trang success của bạn
+        redirectSuccessUrl: `${currentUrl}/payment/success`, // Sửa path theo route bạn đã định nghĩa
+        
+        // Nếu hủy -> Quay về trang cancel hoặc trang chủ
+        redirectCancelUrl: `${currentUrl}/payment/cancel`   
+    };
+
+    return httpHelper.post(`${SUBSCRIPTION_BASE}/pay-current`, payload)
 }
 
 export const postCancelCurrent = () => {

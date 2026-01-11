@@ -15,14 +15,14 @@ export const useProfile = () => {
             if (editingProfile) {
                 const updated = await updateApplicant(editingProfile.id, formData);
                 setProfile(updated);
-                return updated
+                setEditingProfile(null)
+                return updated; // <--- Return ở đây làm dòng dưới không chạy
             } else {
                 const create = await createApplicant(formData);
                 setProfile(create);
-                return create
+                return create; // <--- Return ở đây
             }
-            setEditingProfile(null);
-        } catch (error) { toast.error("Saved failed: Your objecttive is too long."); }
+        } catch (error) { toast.error("Saved failed..."); }
     };
 
     //Fetch profile 

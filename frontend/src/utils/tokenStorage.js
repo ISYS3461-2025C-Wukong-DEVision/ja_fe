@@ -14,9 +14,13 @@ export const tokenStorage = {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   },
 
-  setUser({ user }) {
-    localStorage.setItem(USER_KEY, JSON.stringify(user))
+ // utils/tokenStorage.js
+  setUser(user) { // Bỏ dấu { }
+      if (!user) return;
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
   },
+
+
 
   /* ======================
      CLEAR AUTH DATA
@@ -40,7 +44,13 @@ export const tokenStorage = {
 
   getCurrentUser() {
     const user = localStorage.getItem(USER_KEY);
-    return user ? JSON.parse(user) : null;
+    // Thêm kiểm tra tránh chữ "undefined" độc hại
+    if (!user || user === "undefined") return null;
+    try {
+        return JSON.parse(user);
+    } catch (e) {
+        return null;
+    }
   },
 
   isAuthenticated() {

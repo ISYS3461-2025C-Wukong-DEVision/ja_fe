@@ -1,14 +1,16 @@
 import { getJobs, getJobById } from "../../services/jobService";
 import { useState, useEffect, use } from "react";
+import { useApplication } from "./useApplication";
 
 export const useJobPost = () => {
+    const {isApplied, fetchMyAppliedJob} = useApplication()
     const [jobs, setJobs] = useState([])
     const [selectedJob, setSelectedJob] = useState(null)
     const [jobLoading, setJobLoading] = useState(false)
     const [filter, setFilter] = useState({
         keyword: '', 
         employmentTypes: '', 
-        location: '', 
+        location: 'Vietnam', 
         salaryMin: 0, 
         salaryMax: 0,
         pageNumber: 1, 
@@ -58,6 +60,7 @@ export const useJobPost = () => {
         try {
             const data = await getJobById(id);
             setSelectedJob(data);
+            return data
         } catch (error) { console.error("Fetch error", error); }
     }
 
@@ -66,6 +69,6 @@ export const useJobPost = () => {
     }, [filter]);
 
     return {
-        jobs, fetchJobsAdvance, jobLoading, filter, setFilter, selectedJob, fetchJobById
+        jobs, fetchJobsAdvance, jobLoading, filter, setFilter, selectedJob, fetchJobById, isApplied, fetchMyAppliedJob
     }
 }

@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { useNavigate } from "react-router-dom";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 const ProfileJobApplied = ({fetchMyApplied, myApplied, applicantId}) => {
+    const navigate = useNavigate()
     const getStatusStyles = (status) => {
         switch (status?.toUpperCase()) {
         case 'ARCHIVED':
@@ -35,29 +37,27 @@ const ProfileJobApplied = ({fetchMyApplied, myApplied, applicantId}) => {
                             .format('DD/MM/YYYY HH:mm:ss');
 
                         return (
-                            <div key={trans.id || index} className="w-full bg-white shadow-[0_0_15px_rgba(0,0,0,0.1)] rounded-md cursor-pointer hover:shadow-[0_0_30px_rgba(0,0,0,0.1)] hover:shadow-primary p-5 flex items-center justify-between">
-                                
-                                {/* Bên trái: Title và Date (ml-6) */}
+                            <div 
+                                key={trans.id || index} 
+                                onClick={() => navigate(`/jobs/${trans.jobPostId}`)}
+                                className="w-full bg-white shadow-[0_0_15px_rgba(0,0,0,0.1)] rounded-md cursor-pointer hover:shadow-[0_0_30px_rgba(0,0,0,0.1)] hover:shadow-primary p-5 flex items-center justify-between transition-all duration-300"
+                            >
+                                {/* Bên trái: Title và Date */}
                                 <div className="flex flex-col ml-6">
-                                    {/* Title */}
                                     <div className="text-lg font-bold text-gray-900">
-                                        {/* Sử dụng optional chaining ?. để tránh lỗi nếu jobPost null */}
                                         {trans.jobPost?.title || "No Title"} 
                                     </div>
-                                    
-                                    {/* Date */}
                                     <div className="text-xs text-gray-500 italic mt-1">
                                         {formattedDate}
                                     </div>
                                 </div>
 
-                                {/* Bên phải: Status (với các margin responsive) */}
+                                {/* Bên phải: Status */}
                                 <div className="lg:mr-36 md:mr-24 sm:mr-12 mr-6">
                                     <span className={`px-5 py-2 rounded-lg text-sm font-semibold border ${statusStyle.class}`}>
                                         {statusStyle.text}
                                     </span>
                                 </div>
-                                
                             </div>
                         );
                     })

@@ -37,30 +37,50 @@ export const usePayment = () => {
         }
     }
 
-    const postInitPay = async (success, cancel) => {
-        setPaymentLoading(true)
+    const postPay = async () => {
+        setPaymentLoading(true);
         try {
-            const reponse = await postInit(success, cancel)
-            return reponse?.data
-        } catch (error) {
-            console.error(error.message)
-        } finally { setPaymentLoading(false); }
-    }
+            
+            const reponse2 = await postInit();
+            const checkoutUrl2 = reponse2?.data?.checkoutSession;
 
-    const postPay = async (success, cancel) => {
-        setPaymentLoading(true)
-        try {
-            const reponse = await postPayCurrent(success, cancel)
-            return reponse?.data
-        } catch (error) {
-            console.error(error.message)
-        } finally { setPaymentLoading(false); }
-    }
+            if (checkoutUrl2) {
+                window.location.href = checkoutUrl2;
+            } else {
+                console.error("Cả hai API đều không trả về link thanh toán");
+            }
 
-    const postCancel= async (success, cancel) => {
+        } catch (error) {
+            console.error("Lỗi Payment:", error.message);
+        } finally {
+            setPaymentLoading(false);
+        }
+    };
+
+    const postPayCurrent = async () => {
+        setPaymentLoading(true);
+        try {
+            
+            const reponse2 = await postInit();
+            const checkoutUrl2 = reponse2?.data?.checkoutSession;
+
+            if (checkoutUrl2) {
+                window.location.href = checkoutUrl2;
+            } else {
+                console.error("Cả hai API đều không trả về link thanh toán");
+            }
+
+        } catch (error) {
+            console.error("Lỗi Payment:", error.message);
+        } finally {
+            setPaymentLoading(false);
+        }
+    };
+
+    const postCancel= async () => {
         setPaymentLoading(true)
         try {
-            const reponse = await postCancelCurrent(success, cancel)
+            const reponse = await postCancelCurrent()
             return reponse?.data
         } catch (error) {
             console.error(error.message)
@@ -70,6 +90,6 @@ export const usePayment = () => {
     return {
         myTransaction, paymentLoading, myHistory, isPremium,
         fetchMyTransaction, fetchMyHistory, 
-        postInitPay, postPay, postCancel, fetchIsPremium
+        postPay, postCancel, fetchIsPremium
     }
 }

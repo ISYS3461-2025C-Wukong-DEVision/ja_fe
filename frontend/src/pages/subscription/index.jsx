@@ -1,111 +1,148 @@
-import React, {useState} from 'react'
-import SubscriptionCard from '../../components/subscription/SubscriptionCard'
-import confetti from "canvas-confetti";
+import React, { useState, useEffect } from 'react';
+import SubscriptionCard from '../../components/subscription/SubscriptionCard';
 import { useTranslation } from 'react-i18next';
 import LoadingAnimation from '../../components/common/loadingAnimation';
+import { usePayment } from '../../components/hook/usePayment';
+import Swal from 'sweetalert2'; // 
+import toast from 'react-hot-toast'; // 
+import { useAuth } from '../../components/hook/useAuth';
+import { useNavigate } from 'react-router-dom';
 
-const shootConfetti = () => {
-  const duration = 1500;
-  const end = Date.now() + duration;
 
-  (function frame() {
-    // trái
-    confetti({
-      particleCount: 4,
-      angle: 60,
-      spread: 55,
-      origin: { x: 0 },
-    });
+const handleCancel = async (onCancel, fetchIsPremium) => {
+  const result = await Swal.fire({  
+      title: 'Are you sure?',
+      text: `Do you want to cancel your Premium plan?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#9496FF',
+      cancelButtonColor: '#9EA1A5',
+      confirmButtonText: 'Yes, Cancel this plan!',
+      cancelButtonText: 'No, I change my mind'
+  });
 
-    // phải
-    confetti({
-      particleCount: 4,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1 },
-    });
-
-    // giữa
-    confetti({
-      particleCount: 6,
-      spread: 80,
-      origin: { x: 0.5, y: 0.7 },
-    });
-
-    if (Date.now() < end) {
-      requestAnimationFrame(frame);
-    }
-  })();
+  if (result.isConfirmed) {
+      try {
+          await onCancel(); // Chờ hủy xong
+          await fetchIsPremium(); // Fetch lại dữ liệu mới nhất
+          
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          Swal.fire('Canceled!', `The premium plan has been canceled.`, 'success');
+      } catch (error) {
+          toast.error(`Cancel failed: ${error.message}`);
+      }
+  }
 };
-
-
 
 const initialSubscriptionOptions = [
   {
     name: "Basic Plan",
-    descriptions: [
-      "free_des1",
-      "free_des2",
-      "free_des3",
-      "free_des4",
-      "free_des5",
-    ],
+    descriptions: ["free_des1", "free_des2", "free_des3", "free_des4", "free_des5"],
     cost: 0,
-    isApplied: true,
+    isApplied: true, // Mặc định, sẽ được cập nhật lại bởi useEffect
   },
   {
     name: "Premium Plan",
-    descriptions: [
-      "premium_des1",
-      "premium_des2",
-      "premium_des3",
-      "premium_des4",
-      "premium_des5",
-    ],
+    descriptions: ["premium_des1", "premium_des2", "premium_des3", "premium_des4", "premium_des5"],
     cost: 9.99,
     isApplied: false,
   },
   {
     name: "Enterprise Plan",
-    descriptions: [
-      "enterprise_des1",
-      "enterprise_des2",
-      "enterprise_des3",
-      "enterprise_des4",
-      "enterprise_des5",
-    ],
+    descriptions: ["enterprise_des1", "enterprise_des2", "enterprise_des3", "enterprise_des4", "enterprise_des5"],
     cost: 29.99,
     isApplied: false,
   },
 ];
 
 const Subscription = () => {
-    const {t} = useTranslation();
+    const { postPay, postCancel } = usePayment();
+    const { isAuthenticated, isPremium, fetchIsPremium } = useAuth()
+
+    const { t } = useTranslation();
     const [plans, setPlans] = useState(initialSubscriptionOptions);
     const [isPageLoading, setIsPageLoading] = useState(false);
+    
+
+    // 2. Fetch trạng thái Premium khi mới vào trang
+    useEffect(() => {
+      if (!isAuthenticated) return;
+      fetchIsPremium();
+    }, []);
+
+    // 3. Đồng bộ giao diện (isApplied) mỗi khi biến isPremium thay đổi
+    useEffect(() => {
+        if (!isAuthenticated) return;
+        setPlans((prevPlans) => 
+            prevPlans.map((plan) => {
+                if (isPremium) {
+                    // Nếu đang Premium -> Highlight gói Premium
+                    return { ...plan, isApplied: plan.name === "Premium Plan" };
+                } else {
+                    // Nếu không -> Highlight gói Basic
+                    return { ...plan, isApplied: plan.name === "Basic Plan" };
+                }
+            })
+        );
+    }, [isPremium]);
 
 
-    const handleApplyPlan = (selectedName) => {
-        // bật loading toàn trang
-        setIsPageLoading(true);
+    const handleApplyPlan = async (selectedName) => {
+        if (!isAuthenticated) {
+          handleRequireLogin()
+          return;
+        }
+        // CASE A: Chọn Basic Plan (Hủy gói)
+        if (selectedName === "Basic Plan") {
+            if (isPremium) {
+                // Chỉ hủy nếu đang là Premium
+                await handleCancel(postCancel, fetchIsPremium);
+            } else {
+                // Nếu đang dùng Basic rồi mà nhấn lại thì không làm gì hoặc thông báo
+                toast.success("You are currently on the Basic Plan.");
+            }
+            return;
+        }
 
-        setTimeout(() => {
-            // apply plan
-            setPlans((prevPlans) =>
-            prevPlans.map((plan) => ({
-                ...plan,
-                isApplied: plan.name === selectedName,
-            }))
-            );
-
-            // confetti
-            if (selectedName === "Premium Plan" || selectedName === "Enterprise Plan") {
-            shootConfetti();
+        // CASE B: Chọn Premium/Enterprise (Thanh toán)
+        if (selectedName === "Premium Plan" || selectedName === "Enterprise Plan") {
+            if (isPremium && selectedName === "Premium Plan") {
+                 toast.success("You are already a Premium member!");
+                 return;
             }
 
-            // tắt loading
-            setIsPageLoading(false);
-        }, 1000);
+            setIsPageLoading(true);
+            try {
+                // Gọi hàm thanh toán (Hàm này sẽ redirect nên không cần tắt loading ngay)
+                await postPay(); 
+            } catch (error) {
+                console.error(error);
+                setIsPageLoading(false); // Chỉ tắt loading nếu lỗi
+            }
+        }
+    };
+
+    const nav = useNavigate();
+
+    const handleRequireLogin = () => {
+        Swal.fire({
+            title: 'Login Required',
+            // Dùng 'html' thay vì 'text' để chỉnh màu
+            html: `${t('request1')} <b style="color: #9496FF">Premium Plan</b>${t('request2')}`,
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#9496FF',
+            cancelButtonColor: '#9EA1A5',
+            confirmButtonText: t('countinue'),
+            cancelButtonText: t('after')
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Đợi 0.5s sau khi bảng đóng rồi mới chuyển trang
+                setTimeout(() => {
+                    nav('/login');
+                }, 500);
+            }
+        });
     };
 
 
@@ -135,7 +172,7 @@ const Subscription = () => {
                       descriptions={option.descriptions.map((key) => t(key))}
                       cost={option.cost}  
                       func={() => handleApplyPlan(option.name)}
-                      isApplied={option.isApplied}
+                      isApplied={option.isApplied} // State này giờ đã được sync với isPremium
                       isDisabled={option.name === "Enterprise Plan"}
                   />
                   ))}
@@ -146,4 +183,4 @@ const Subscription = () => {
 
 }
 
-export default Subscription
+export default Subscription;
