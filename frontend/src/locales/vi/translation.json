@@ -84,10 +84,18 @@
     "please_select_country": "Hãy chọn quốc gia!",
     "passwords_do_not_match": "Mật khẩu không khớp!",
     "show_pass": "Hiển thị mật khẩu",
+    "Password_need_more_8": "Mật khẩu cần ít nhất 8 kí tự!",
+    "Password_need_at_least_1_number": "Mật khẩu cần ít nhất 1 kí tự số!",
+    "Password_need_at_least_1_special_character": "Mật khẩu cần ít nhất 1 kí tự đặt biệt!",
+    "Password_need_at_least_1_capitalized_letter": "Mật khẩu cần ít nhất 1 kí tự in Hoa!",
     "email_password_incorrect": "Email hoặc mật khẩu không đúng!",
     "login_msg_part1": "Vui lòng, ",
     "login_action": "đăng nhập",
     "login_msg_part2": " để sử dụng tính năng của chúng tôi.",
     "premium_slogan1": "Bạn đã đi được một chặng đường tuyệt vời 🚀",
-    "premium_slogan2": " ở đây để giúp bạn đi nhanh hơn, xa hơn và rõ ràng hơn."
+    "premium_slogan2": " ở đây để giúp bạn đi nhanh hơn, xa hơn và rõ ràng hơn.",
+    "verified": "Đang xác thực...",
+    "connect": "Chúng tôi đang kết nối tài khoản Google của bạn.",
+    "connect2": "Vui lòng không tắt trình duyệt.",
+    "sorry": "Xin lỗi, hiện tại chưa hỗ trợ đăng nhập bằng"
 }

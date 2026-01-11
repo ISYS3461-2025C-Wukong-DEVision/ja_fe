@@ -1,37 +1,9 @@
-import CarouselCard from '../components/common/carouselCard';
-import CompanyIcon from '../components/company/companyIcon';
 import { useTranslation } from 'react-i18next';
-import { getCompaniesMock } from '../services/companyService';
-import LoadingAnimation from '../components/common/loadingAnimation';
-import React, { useState, useEffect} from 'react';
-import { getJobsMock } from '../services/jobService';
-import authService from '../services/authService';
+
 
 function Home() {
   const { t } = useTranslation();
-  const [companies, setCompanies] = useState([]);
-  const [ jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (authService.isAuthenticated()) {
-      console.log('Đã đăng nhập');
-    } else {
-      console.log('Chưa đăng nhập');
-    }
-
-    Promise.all([getCompaniesMock(), getJobsMock()])
-      .then(([companiesData, jobsData]) => {
-        setCompanies(companiesData);
-        setJobs(jobsData);
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
-
-
-  if (loading) 
-  return <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center"><LoadingAnimation text={t('loading')} /></div>;
 
   return (
     <div className="relative min-h-[85vh] w-screen overflow-hidden">
@@ -39,7 +11,7 @@ function Home() {
       <div
         className="
           absolute inset-0
-          bg-[url('assets/images/Home.png')]
+          bg-[url('/assets/images/Home.png')]
           bg-cover bg-center bg-no-repeat
           opacity-70
         "

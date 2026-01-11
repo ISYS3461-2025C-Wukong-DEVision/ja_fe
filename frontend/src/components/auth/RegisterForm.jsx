@@ -10,7 +10,7 @@ import LoadingAnimation from '../common/loadingAnimation';
 const RegisterForm = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { signup, loading } = useAuth();
+    const { signup, loading, initiateGoogleLogin } = useAuth();
 
     const emailRef = React.useRef(null);
     const passwordRef = React.useRef(null);
@@ -22,6 +22,8 @@ const RegisterForm = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [country, setCountry] = useState(t("select_country"));
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [fakeLoading, setFakeLoading] = useState(false);
+    const [fakeError, setFakeError] = useState(null);
     
     // State để ẩn/hiện mật khẩu
     const [showPassword, setShowPassword] = useState(false);
@@ -102,13 +104,13 @@ const RegisterForm = () => {
             email, 
             password, 
             role: "APPLICANT", 
-            firstname: "Unknown", 
-            lastName: "User", 
-            objective: "This user is too lazy to add detail to his/her objective", 
-            phone: "None", 
+            firstname: "", 
+            lastName: "", 
+            objective: "", 
+            phone: "", 
             country, 
-            city: "Happy City", 
-            address: "123 Street" 
+            city: "", 
+            address: "" 
         };
 
         // Gọi API
@@ -124,11 +126,34 @@ const RegisterForm = () => {
         }
     };
 
+    const handleUnsupportedLogin = (name) => {
+        setFakeLoading(true); // 1. Hiện Loading của bạn
+
+        setTimeout(() => {
+            setFakeLoading(false); // 2. Tắt Loading
+            setFakeError(name);    // 3. Hiện thông báo 
+
+            // 4. Sau 2 giây tự đóng thông báo lỗi
+            setTimeout(() => {
+                setFakeError(null);
+            }, 2000);
+        }, 1000);
+    };
+
     return (
         <>
-            {loading && (
+            {(loading || fakeLoading) && (
                 <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center">
                     <LoadingAnimation text={t('loading')} />
+                </div>
+            )}
+            {fakeError && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/20">
+                    <div className="bg-white p-6 rounded-xl shadow-2xl border-t-4 border-red-500 animate-bounce min-h-44">
+                        <p className="text-gray-800 font-medium">
+                            ❌ Xin lỗi, hiện tại chưa hỗ trợ đăng nhập bằng <span className="font-bold text-red-600">{fakeError}</span>
+                        </p>
+                    </div>
                 </div>
             )}
             <div className="flex flex-col items-center justify-center p-6 space-y-6 min-w-[350px] bg-white">
@@ -286,9 +311,9 @@ const RegisterForm = () => {
                     </div>
 
                     <div className='flex justify-center gap-8 mt-6'>
-                        <img src='/assets/icons/facebook.png' alt="FB" className='w-12 h-12 cursor-pointer' />
-                        <img src="/assets/icons/google.png" alt="GG" className='w-12 h-12 cursor-pointer' />
-                        <img src="/assets/icons/github.png" alt="GH" className='w-12 h-12 cursor-pointer' />
+                        <img src='/assets/icons/facebook.png' alt="FB" className='w-12 h-12 cursor-pointer' onClick={() => handleUnsupportedLogin('Facebook')} />
+                        <img src="/assets/icons/google.png" alt="GG" className='w-12 h-12 cursor-pointer' onClick={initiateGoogleLogin} disabled={loading} />
+                        <img src="/assets/icons/github.png" alt="GH" className='w-12 h-12 cursor-pointer' onClick={() => handleUnsupportedLogin('GitHub')} />
                     </div>
 
                     <div className="mt-8">

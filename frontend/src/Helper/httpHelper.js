@@ -34,26 +34,26 @@ class HttpHelper {
 
 
         // 👇👇👇 CHÈN ĐOẠN DEBUG NÀY VÀO ĐÂY 👇👇👇
-    console.group(`🔥 HTTP REQUEST: ${method} ${url}`);
-    console.log("🔗 Full URL:", `${BASE_URL}${url}`);
-    console.log("🧢 Headers:", config.headers);
+    // console.group(`🔥 HTTP REQUEST: ${method} ${url}`);
+    // console.log("🔗 Full URL:", `${BASE_URL}${url}`);
+    // console.log("🧢 Headers:", config.headers);
 
     if (body) {
       if (isFormData) {
         config.body = body; // Giữ nguyên FormData, KHÔNG stringify
       } else {
         config.body = JSON.stringify(body); // JSON bình thường thì stringify
-        try {
-            // Parse ngược lại để bạn dễ nhìn cấu trúc object
-            console.log("📦 Body Object (Dễ nhìn):", JSON.parse(config.body)); 
-            // In ra chuỗi thô để check kỹ từng ký tự (quan trọng để soi camelCase/snake_case)
-            console.log("📝 Body Raw String (Gửi đi thật):", config.body); 
-        } catch (e) {
-            console.log("📦 Body:", config.body);
-        }
+        // try {
+        //     // // Parse ngược lại để bạn dễ nhìn cấu trúc object
+        //     console.log("📦 Body Object (Dễ nhìn):", JSON.parse(config.body)); 
+        //     // // In ra chuỗi thô để check kỹ từng ký tự (quan trọng để soi camelCase/snake_case)
+        //     console.log("📝 Body Raw String (Gửi đi thật):", config.body); 
+        // } catch (e) {
+        //     console.log("📦 Body:", config.body);
+        // }
       }
     }
-    console.groupEnd();
+    // console.groupEnd();
     // 👆👆👆 HẾT ĐOẠN DEBUG 👆👆👆
 
     const response = await fetch(`${BASE_URL}${url}`, config);

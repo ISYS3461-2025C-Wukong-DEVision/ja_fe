@@ -14,6 +14,10 @@ export const tokenStorage = {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
   },
 
+  setUser({ user }) {
+    localStorage.setItem(USER_KEY, JSON.stringify(user))
+  },
+
   /* ======================
      CLEAR AUTH DATA
   ====================== */

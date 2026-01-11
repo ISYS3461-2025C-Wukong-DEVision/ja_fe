@@ -39,6 +39,47 @@ const authService = {
         }
     },
 
+    async getGoogleAuthUrl() {
+        // GET /google/url
+        return await httpHelper.get(`${AUTH_BASE}/google/url`);
+    },
+
+    async loginWithGoogle(code) {
+        // GET /oauth2/callback/google?code=...
+        // httpHelper.get tham số thứ 2 là query params
+        const response = await httpHelper.get(`${AUTH_BASE}/oauth2/callback/google`, { code });
+        
+        // Cấu trúc response từ hình Swagger: { token, id, email, role, message }
+        const { token, id, role, email: userEmail } = response;
+
+        // --- Logic chuẩn hóa User giống hệt hàm login thường ---
+        tokenStorage.setAuth({ accessToken: token, user: null });
+
+        try {
+            // Fetch profile chi tiết để lấy tên, quốc gia...
+            const profileData = await getApplicantById(id);
+
+            const finalUser = {
+                id,
+                email: userEmail,
+                role,
+                name: (profileData.firstName && profileData.lastName) 
+                    ? `${profileData.firstName} ${profileData.lastName}` 
+                    : "Unknown User",
+                country: profileData.country || "Vietnam"
+            };
+
+            tokenStorage.setAuth({ accessToken: token, user: finalUser });
+            return finalUser;
+        } catch (error) {
+            console.error("Fetch profile failed after Google login", error);
+            // Fallback nếu không lấy được profile chi tiết
+            const basicUser = { id, email: userEmail, role, name: "Google User", country: "Vietnam" };
+            tokenStorage.setAuth({ accessToken: token, user: basicUser });
+            return basicUser;
+        }
+    },
+
     async validateToken() {
         const token = tokenStorage.getAccessToken();
         if (!token) return false;

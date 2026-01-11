@@ -14,6 +14,7 @@ import Subscription from "../pages/subscription/index";
 import Profile from "../pages/profile/index";
 import ToastListener from "../components/common/ToastListener";
 import Notification from "../pages/notification/index";
+import GoogleCallback from "../components/auth/GoogleCallback";
 
 const AppRouter = () => {
   return (
@@ -36,6 +37,7 @@ const AppRouter = () => {
           <Route path="/subscription" element={<Subscription />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/notification" element={<Notification />} />
+          <Route path="/api/auth/oauth2/callback/google" element={<GoogleCallback />} />
         </Route>
 
       </Routes>

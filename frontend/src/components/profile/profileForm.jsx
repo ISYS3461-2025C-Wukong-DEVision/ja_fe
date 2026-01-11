@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { tokenStorage } from '../../utils/tokenStorage';
 
 const ProfileForm = ({ initialData, setUser, user, onSave, onCancel }) => {
     // Khởi tạo state với các field
@@ -31,14 +32,16 @@ const ProfileForm = ({ initialData, setUser, user, onSave, onCancel }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const reponse = onSave(formData);
 
         const updatedUser = { 
             ...user, 
-            name: `${formData.firstName} ${formData.lastName}` 
+            name: `${formData.firstName} ${formData.lastName}`,
+            id: reponse.id
         };
 
         setUser(updatedUser);
-        onSave(formData);
+        tokenStorage.setUser({user: updatedUser})
     };
 
     return (

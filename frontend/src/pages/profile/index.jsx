@@ -33,7 +33,7 @@ const Profile = () => {
     const {user, isAuthenticated, setUser} = useAuth();
     const { fetchMyApplied , myApplied } = useApplication();
     const { isPremium, fetchIsPremium, fetchMyTransaction, myTransaction } = usePayment();
-    const { loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile } = useProfile();
+    const { loading, profile, fetchProfile, handSave, editingProfile, setEditingProfile, isProfileOpen, setIsProfileOpen } = useProfile();
     const { isSkillOpen, setIsSkillOpen, editingSkill, setEditingSkill, skillHandSave, skill, fetchSkill } = useSkill();
     const { editingEducation, setEditingEducation, educationDelete, educationHandSave, isEducationOpen, setIsEducationOpen } = useEducation();
     const { editingWorkExperience, setEditingWorkExperience, workDelete, workHandSave, isWorkOpen, setIsWorkOpen} = useWorkExperience();
@@ -114,7 +114,7 @@ const Profile = () => {
 
     const URL = getLatestAvatarUrl(profile.mediaList || []);
     const name = `${profile.firstName || "Unknown"} ${profile?.lastName || "User"}`;
-    const address = `${profile.address || ''}, ${profile.city || ''}, ${profile.country || ''}`;
+    const address = `${profile.address || '123 Street'}, ${profile.city || 'Happy City'}, ${profile.country || 'Wonder Land'}`;
     const applicantId = user?.id || "00000000-0000-0000-0000-000000000002";
 
     const { t } = useTranslation();
@@ -210,13 +210,13 @@ const Profile = () => {
         <LayoutGroup>
             <div className="flex flex-row justify-center items-start pt-6 pr-6 pl-6 bg-gray-100 space-x-6 pb-12 min-h-screen overflow-hidden">
                 <AnimatePresence>
-                    {editingProfile && (
+                    {isProfileOpen && (
                         <ProfileForm 
                             initialData={editingProfile} 
                             setUser={setUser}
                             user = {user}
-                            onSave={handSave} // handSave đã có sẵn trong useProfile
-                            onCancel={() => (setEditingProfile(null))} 
+                            onSave={() => (handSave, setIsProfileOpen(false))} 
+                            onCancel={() => (setIsProfileOpen(false))} 
                         />
                     )}
                 </AnimatePresence>
@@ -274,7 +274,14 @@ const Profile = () => {
                             layout // Tự động animate kích thước khi tráo đổi
                             className='flex flex-col items-center justify-center max-w-[350px] border border-gray-200 rounded-lg shadow-md bg-white pr-4'
                         >
-                            <ProfileCard url={URL} percent={percent} name={name} objective={profile.objective} size={100} isPremium={isPremium} />
+                            <ProfileCard 
+                                url={URL} 
+                                percent={percent} 
+                                name={name} 
+                                objective={profile.objective || "This user is too lazy to add detail to his/her objective"} 
+                                size={100} 
+                                isPremium={isPremium} 
+                            />
                             <span className={`pl-4 -mt-4 text-sm ${percent < 80 ? 'text-red-500' : 'text-green-500'}`}>{percent < 80 ? t("Fill_profile < 80%") : t("Complete_your_profile")}</span>
                             <div className='w-full pl-4'>
                                 <div className='w-full h-px bg-primary-extraDark my-4'/>
@@ -409,7 +416,11 @@ const Profile = () => {
                                             className='relative flex w-full items-start bg-white shadow-md rounded-md p-2'
                                         >
                                             <button 
-                                                onClick={() => setEditingProfile({...profile, id: applicantId})} 
+                                                onClick={() => (
+                                                    setEditingProfile(profile && Object.keys(profile).length > 0 
+                                                                        ? { ...profile, id: applicantId } 
+                                                                        : null), 
+                                                    setIsProfileOpen(true))} 
                                                 className="absolute top-4 right-4 p-2 text-primary hover:text-primary-dark transition-colors z-10"
                                             >
                                                 <PencilIcon className="h-6 w-6" />
@@ -419,11 +430,11 @@ const Profile = () => {
                                                 url={URL} 
                                                 percent={percent} 
                                                 name={name} 
-                                                objective={profile.objective} 
+                                                objective={profile.objective || "This user is too lazy to add detail to his/her objective"} 
                                                 size={200} 
                                                 address={address} 
-                                                phone={profile.phone} 
-                                                email={profile.email} 
+                                                phone={profile.phone || "None"} 
+                                                email={profile.email || "example123@gmail.com"} 
                                                 isPremium={isPremium} />
                                         </motion.div>
 

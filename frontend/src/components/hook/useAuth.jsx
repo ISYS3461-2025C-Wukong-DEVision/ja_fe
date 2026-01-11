@@ -60,8 +60,40 @@ export const AuthProvider = ({children}) => {
       }
   };
 
+  const initiateGoogleLogin = async () => {
+    setLoading(true);
+    try {
+      const data = await authService.getGoogleAuthUrl();
+      if (data?.url) {
+        // Redirect sang Google
+        window.location.href = data.url;
+      } else {
+        toast.error("Không lấy được đường dẫn đăng nhập Google");
+      }
+    } catch (error) {
+      toast.error(error.message || 'Lỗi kết nối Google');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleCallback = async (code) => {
+    setLoading(true);
+    try {
+      const userData = await authService.loginWithGoogle(code);
+      setUser(userData);
+      toast.success('Đăng nhập Google thành công!');
+      return userData; // Trả về để component biết đường navigate
+    } catch (error) {
+      toast.error(error.message || 'Đăng nhập Google thất bại');
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, setUser, isAuthenticated: !!user, loading, login, logout, signup }}>
+    <AuthContext.Provider value={{ user, setUser, isAuthenticated: !!user, loading, login, logout, signup, initiateGoogleLogin, handleGoogleCallback }}>
       {children}
     </AuthContext.Provider>
   );

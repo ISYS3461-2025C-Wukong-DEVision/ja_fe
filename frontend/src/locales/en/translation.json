@@ -84,10 +84,18 @@
     "please_select_country": "Please select country!",
     "passwords_do_not_match": "Password doesn't match!",
     "show_pass": "Show password",
+    "Password_need_more_8": "Password need more 8 characters!",
+    "Password_need_at_least_1_number": "Password need at least 1 number",
+    "Password_need_at_least_1_special_character": "Password need at least 1 special character",
+    "Password_need_at_least_1_capitalized_letter": "Password need at least 1 capitalized letter",
     "email_password_incorrect": "Email or password incorrect!",
     "login_msg_part1": "Please, ",
     "login_action": "login",
     "login_msg_part2": " to reach our feature.",
     "premium_slogan1": "You've come a great way 🚀",
-    "premium_slogan2": " is here to help you go faster, further, and more clearly."
+    "premium_slogan2": " is here to help you go faster, further, and more clearly.",
+    "verified": "Authenticating...",
+    "connect": "We are connecting your Google account.",
+    "connect2": "Please do not close your browser.",
+    "sorry": "Sorry, we are not currently support login by"
 }

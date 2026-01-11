@@ -15,9 +15,11 @@ export const useProfile = () => {
             if (editingProfile) {
                 const updated = await updateApplicant(editingProfile.id, formData);
                 setProfile(updated);
+                return updated
             } else {
                 const create = await createApplicant(formData);
                 setProfile(create);
+                return create
             }
             setEditingProfile(null);
         } catch (error) { toast.error("Saved failed: Your objecttive is too long."); }

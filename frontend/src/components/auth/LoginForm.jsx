@@ -4,13 +4,16 @@ import AuthInput from '../common/authInput';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LoadingAnimation from '../common/loadingAnimation';
 import { useAuth } from '../hook/useAuth';
+import TitleLogin from './TitleLogin';
 
 const LoginForm = () => {
-    const { login, loading } = useAuth();
+    const { login, loading, initiateGoogleLogin } = useAuth();
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
     const [isShow, setIsShow] = useState(false)
+    const [fakeLoading, setFakeLoading] = useState(false);
+    const [fakeError, setFakeError] = useState(null);
 
     // Refs để quản lý focus
     const emailRef = useRef(null);
@@ -26,6 +29,20 @@ const LoginForm = () => {
         password: '',
         auth: '' // Dùng để lưu lỗi "Incorrect" chung cho cả 2
     });
+
+    const handleUnsupportedLogin = (name) => {
+        setFakeLoading(true); // 1. Hiện Loading 
+
+        setTimeout(() => {
+            setFakeLoading(false); // 2. Tắt Loading
+            setFakeError(name);    // 3. Hiện thông báo 
+
+            // 4. Sau 2 giây tự đóng thông báo lỗi
+            setTimeout(() => {
+                setFakeError(null);
+            }, 2000);
+        }, 1000);
+    };
 
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
@@ -84,9 +101,18 @@ const LoginForm = () => {
 
     return (
         <>
-            {loading && (
+            {(loading || fakeLoading) && (
                 <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center">
                     <LoadingAnimation text={t('loading')} />
+                </div>
+            )}
+            {fakeError && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/20">
+                    <div className="bg-white p-6 rounded-xl shadow-2xl border-t-4 border-red-500 animate-bounce min-h-44">
+                        <p className="text-gray-800 font-medium">
+                            ❌ {t('sorry')} <span className="font-bold text-red-600">{fakeError}</span>
+                        </p>
+                    </div>
                 </div>
             )}
             <div className="flex flex-col items-center justify-center p-6 space-y-6 min-w-[350px] bg-white relative">
@@ -170,9 +196,9 @@ const LoginForm = () => {
 
                     {/* Social login */}
                     <div className='flex justify-center gap-8 mt-9'>
-                        <button type="button" className='hover:opacity-70 transition'><img src='/assets/icons/facebook.png' alt="Facebook" className='w-12 h-12' /></button>
-                        <button type="button" className='hover:opacity-70 transition'><img src="/assets/icons/google.png" alt="Google" className='w-12 h-12' /></button>
-                        <button type="button" className='hover:opacity-70 transition'><img src="/assets/icons/github.png" alt="GitHub" className='w-12 h-12' /></button>
+                        <button type="button" onClick={() => handleUnsupportedLogin('Facebook')} className='hover:opacity-70 transition'><img src='/assets/icons/facebook.png' alt="Facebook" className='w-12 h-12' /></button>
+                        <button type="button" onClick={initiateGoogleLogin} disabled={loading} className='hover:opacity-70 transition'><img src="/assets/icons/google.png" alt="Google" className='w-12 h-12' /></button>
+                        <button onClick={() => handleUnsupportedLogin('GitHub')} type="button" className='hover:opacity-70 transition'><img src="/assets/icons/github.png" alt="GitHub" className='w-12 h-12' /></button>
                     </div>
 
                     {/* Nút Đăng nhập */}
