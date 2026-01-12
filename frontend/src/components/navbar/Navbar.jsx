@@ -203,7 +203,7 @@ const Navbar = () => {
                     <>
                         {/* A. Phần Link chính */}
                         <div
-                            className={`flex items-center gap-1 px-2 text-sm font-medium 
+                            className={`flex items-center gap-1 px-2 text-sm font-medium pb-2
                                 ${isActive ? "text-primary-dark" : "text-primary hover:text-purple-700 mt-1"}`
                             }
                         >
