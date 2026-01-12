@@ -106,5 +106,7 @@
     "request1": "Please, login to enjoy our",
     "request2": "!",
     "after": "Later",
-    "countinue": "Login now"
+    "countinue": "Login now",
+    "Applied_success": "Applied job successfully!",
+    "Applied_success2": "Please keep your phone number and email address handy, the company may call you at any time."
 }

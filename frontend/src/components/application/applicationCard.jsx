@@ -78,7 +78,7 @@ const ApplicationCard = ({ job_post_id, onClose }) => {
 
         const result = await createApplied(payload);
         if (result) {
-            toast.success("Applied successfully!");
+            navigate("/jobs/applied-success")
             if (onClose) onClose();
         }
     };

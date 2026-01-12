@@ -18,6 +18,7 @@ import GoogleCallback from "../components/auth/GoogleCallback";
 import PaymentCancel from "../pages/subscription/paymentCancel";
 import PaymentSuccess from "../pages/subscription/paymentSuccess";
 import JobDetail from "../pages/job/JobDetail";
+import SuccessApplication from "../pages/job/successApplication";
 
 const AppRouter = () => {
   return (
@@ -36,6 +37,7 @@ const AppRouter = () => {
           <Route path="/" element={<Home />} />
           <Route path="/jobs" element={<Job/>} />
           <Route path="/jobs/:id" element={<JobDetail />} />
+          <Route path="/jobs/applied-success" element={<SuccessApplication />}/>
           <Route path="/companies" element={<Company />} />
           <Route path="/companies/:id" element={<CompanyDetail />} />
           <Route path="/subscription" element={<Subscription />} />
