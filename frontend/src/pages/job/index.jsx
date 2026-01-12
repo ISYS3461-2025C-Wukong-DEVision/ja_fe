@@ -176,7 +176,7 @@ const Job = () => {
                                                 // 1. Chặn click nếu đã apply
                                                 disabled={isApplied} 
                                                 // 2. Nếu đã apply thì không chạy hàm setIsToggle
-                                                onClick={() => isApplied && setIsToggle(true)}
+                                                onClick={() => !isApplied && setIsToggle(true)}
                                                 className={`py-1 px-10 rounded-sm text-sm whitespace-nowrap transition-all duration-200 
                                                     ${isApplied 
                                                         ? "bg-gray-400 opacity-70 cursor-not-allowed text-gray-100" // Style khi disable
