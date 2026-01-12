@@ -1,6 +1,6 @@
 import httpHelper from "../Helper/httpHelper";
-const APPLICANT_BASE = '/applicant-profile/profile';
-const TAG_BASE = '/tag';
+const APPLICANT_BASE = import.meta.env.VITE_APPLICANT_BASE;
+const TAG_BASE = import.meta.env.VITE_TAG_BASE;
 
 
 export const updateSkill = (id, data) => {

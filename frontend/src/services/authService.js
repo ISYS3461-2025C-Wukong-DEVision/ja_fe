@@ -4,7 +4,7 @@ import { tokenStorage } from '../utils/tokenStorage';
 import { getApplicantById } from './applicantService';
 import toast from 'react-hot-toast';
 
-const AUTH_BASE = '/applicant-auth/api/auth';
+const AUTH_BASE = import.meta.env.VITE_AUTH_BASE;
 
 const authService = {
     async login(email, password) {

@@ -1,7 +1,7 @@
 // src/services/userService.js
 import httpHelper from "../Helper/httpHelper";
 
-const USER_BASE = '/users';
+const USER_BASE = import.meta.env.VITE_USER_BASE;
 
 export const getUsers = () => {
   return httpHelper.get(USER_BASE);

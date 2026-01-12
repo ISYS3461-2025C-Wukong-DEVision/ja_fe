@@ -2,7 +2,7 @@
 import httpHelper from '../Helper/httpHelper';
 import { jobs } from '../mocks/job.mock';
 
-const JOB_BASE = '/job-post';
+const JOB_BASE = import.meta.env.VITE_JOB_BASE;
 
 export const getJobs = (queryFilter) => {
   return httpHelper.get(`${JOB_BASE}/search/advance`, queryFilter);

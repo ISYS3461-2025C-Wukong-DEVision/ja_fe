@@ -1,7 +1,7 @@
 import httpHelper from "../Helper/httpHelper";
 
-const MEDIA_BASE = '/media';
-const POST_MEDIA_PROFILE = '/applicant-profile/profile';
+const MEDIA_BASE = import.meta.env.VITE_MEDIA_BASE;
+const POST_MEDIA_PROFILE = import.meta.env.VITE_POST_MEDIA_PROFILE;
 
 export const REF_MODULE = {
   APPLICANT: 'APPLICANT',

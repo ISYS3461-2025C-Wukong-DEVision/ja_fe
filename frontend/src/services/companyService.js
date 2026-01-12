@@ -2,7 +2,7 @@
 import httpHelper from '../Helper/httpHelper';
 import {companies} from '../mocks/company.mock';
 
-const COMPANY_BASE = '/company-profile';
+const COMPANY_BASE = import.meta.env.VITE_COMPANY_BASE;
 
 export const getCompanies = () => {
   return httpHelper.get(COMPANY_BASE);

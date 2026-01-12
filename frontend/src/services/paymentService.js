@@ -1,6 +1,6 @@
 import httpHelper from "../Helper/httpHelper";
-const PAYMENT_BASE = '/payment'
-const SUBSCRIPTION_BASE = '/subscription'
+const PAYMENT_BASE = import.meta.env.VITE_PAYMENT_BASE;
+const SUBSCRIPTION_BASE = import.meta.env.VITE_SUBSCRIPTION_BASE;
 
 export const getMyTransaction = () => {
     return httpHelper.get(`${PAYMENT_BASE}/my-transaction`)

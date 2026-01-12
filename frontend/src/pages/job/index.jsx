@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Bars3Icon, ChevronDownIcon, BanknotesIcon, ArrowTrendingUpIcon, MapPinIcon, XMarkIcon} from "@heroicons/react/24/outline";
-import JobCard from "../../components/job/jobCard";
+import JobCard from "../../components/job/JobCard";
 import React, {useState, useEffect} from "react";
 import dayjs from "dayjs";
 import LoadingAnimation from "../../components/common/loadingAnimation";

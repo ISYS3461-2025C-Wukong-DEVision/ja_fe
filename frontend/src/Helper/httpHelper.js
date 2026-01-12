@@ -1,7 +1,7 @@
 import authService from '../services/authService';
 import toast from 'react-hot-toast';
 
-const BASE_URL = 'https://devision-be.quykhang.cloud/api';
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 class HttpHelper {
   async request(method, url, body = null, headers = {}, retry = true) {

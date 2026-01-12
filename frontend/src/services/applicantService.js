@@ -1,6 +1,6 @@
 import { applicants } from "../mocks/applicant.mock";
 import httpHelper from "../Helper/httpHelper";
-const APPLICANT_BASE = '/applicant-profile/profile';
+const APPLICANT_BASE = import.meta.env.VITE_APPLICANT_BASE
 
 export const getApplicants = () => {
   return httpHelper.get(APPLICANT_BASE);

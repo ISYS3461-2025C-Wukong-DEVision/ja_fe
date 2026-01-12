@@ -1,5 +1,5 @@
 import httpHelper from "../Helper/httpHelper";
-const APPLICANT_BASE = '/applicant-profile/profile';
+const APPLICANT_BASE = import.meta.env.VITE_APPLICANT_BASE;
 
 
 export const createWorkExperience = (id, data) => {
