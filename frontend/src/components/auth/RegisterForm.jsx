@@ -41,6 +41,14 @@ const RegisterForm = () => {
             .toLowerCase()
             .match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
     };
+    const generateRandomPhone = () => {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < 9; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -107,7 +115,7 @@ const RegisterForm = () => {
             firstname: "", 
             lastName: "", 
             objective: "", 
-            phone: "", 
+            phone: generateRandomPhone(), 
             country, 
             city: "", 
             address: "" 
