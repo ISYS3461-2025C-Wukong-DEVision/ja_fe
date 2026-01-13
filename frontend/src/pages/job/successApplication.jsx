@@ -23,7 +23,7 @@ const SuccessApplication = () => {
             }
         }).then(() => {
             // Sau khi hết 2s -> Quay về trang Subscription
-            navigate('-1');
+            navigate(-1);
         });
     }, [navigate]);
 
