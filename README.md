@@ -1,9 +1,9 @@
 # DEVision - Job Applicant Subsystem (Frontend)
 
 ## 📌 Project Overview
-[cite_start]**DEVision** is a career-tech platform designed to connect IT applicants with potential employers[cite: 10, 11]. [cite_start]This repository contains the **Job Applicant Subsystem**, which provides tools for career advancement, including secure registration, job searching, and profile management[cite: 13, 14].
+**DEVision** is a career-tech platform designed to connect IT applicants with potential employers. This repository contains the **Job Applicant Subsystem**, which provides tools for career advancement, including secure registration, job searching, and profile management.
 
-[cite_start]**My Role:** I was responsible for the entire Frontend development, ensuring the system met professional standards for usability and technical architecture[cite: 22, 29, 31].
+**My Role:** I was responsible for the entire Frontend development, ensuring the system met professional standards for usability and technical architecture.
 
 ## 🏗️ Technical Architecture
 Instead of a standard monolithic UI, I implemented a **Layered Frontend Architecture** to ensure high maintainability and clear separation of concerns:
@@ -16,7 +16,7 @@ Instead of a standard monolithic UI, I implemented a **Layered Frontend Architec
 > **Design Choice:** This `Service -> Hook -> UI` pattern was chosen to prioritize modularity, a principle I am currently scaling in my latest **React Native** projects.
 
 ## 🛠️ Tech Stack
-* [cite_start]**Core:** React.js (Vite)[cite: 57].
+* **Core:** React.js (Vite).
 * **Styling:** Tailwind CSS (Responsive Design for Desktop & Mobile).
 * **Authentication:** Secure JWT handling (JWS/JWE).
 * **State Management:** React Hooks & Context API.
